@@ -12,8 +12,9 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
   Script `documentacion/herramientas/sincronizar_github.ps1` (estado / subir / bajar / instalar)
   y guía `documentacion/sincronizar_con_github.md`. Versiones de Odoo y OCA en
   `documentacion/versiones_odoo_y_oca.txt`. Bases, filestore y memoria para la PC original en
-  `C:\ING.SISTEMAS\traslado_odoo\a_pc_original_22-11` (con LEEME). Falta: crear el repositorio
-  en github.com y subir.
+  `C:\ING.SISTEMAS\traslado_odoo\a_pc_original_22-11` (con LEEME). Subido a https://github.com/JhonatanBDev/MIRABILENET-ONE-ODOO
+  (rama main). Falta: dejarlo privado y
+  instalarlo en la PC original.
 - **Cartera de Yapacaní importada en `mira_nativo_test`** desde
   `Static/Datos/datosyapacani_completo.csv`: 37 planes (uno por perfil de Winbox), 184 clientes,
   188 servicios activos prepago (Bs 25 000 al mes), 188 cuentas PPPoE con IP fija y perfil, 173
