@@ -23,8 +23,8 @@ class TestLimpieza(TransactionCase):
         self.assertEqual((filas[0]["usuario_pppoe"], filas[0]["fila"]), ("a1@x", 2))
 
     def test_values_are_cleaned_without_inventing(self):
-        self.assertEqual(limpieza.documento("8086560-1k")[:3], ("8086560", "1K", ""))
-        self.assertEqual(limpieza.documento("9427097 CBBA.")[:3], ("9427097", "", "CB"))
+        self.assertEqual(limpieza.documento("7654321-1k")[:3], ("7654321", "1K", ""))
+        self.assertEqual(limpieza.documento("6543210 CBBA.")[:3], ("6543210", "", "CB"))
         self.assertTrue(limpieza.documento("ACTUALIZAR")[4])
         self.assertEqual(limpieza.mac("OC41E920CC6C(13)")[0], "0C41E920CC6C")
         self.assertEqual(limpieza.mac("E0E8EG9245FD")[0], "")

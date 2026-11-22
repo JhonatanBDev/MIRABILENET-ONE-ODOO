@@ -7,7 +7,7 @@
             <form string="Ubicar cliente">
                 <field name="searched" invisible="1"/>
                 <group>
-                    <field name="query" placeholder="Ej.: 192.168.99.8, 0005@siete, Juan Pérez"/>
+                    <field name="query" placeholder="Ej.: 10.20.30.40, cliente1@red, Juan Pérez"/>
                 </group>
                 <field name="result" nolabel="1" invisible="not searched"/>
                 <field name="service_id" invisible="1"/>

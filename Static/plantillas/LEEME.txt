@@ -43,7 +43,7 @@ Columnas opcionales:
                          prepago: se avisa a todos el «día de emisión (prepago)» de la región.
                          pospago: se cobra cada mes el día del alta.
   IP REMOTA            IP fija del cliente.
-  C.I.                 carnet, con o sin expedido (1234567 SC, 2345678 CBBA, 8086560-1K).
+  C.I.                 carnet, con o sin expedido (1234567 SC, 2345678 CBBA, 7654321-1K).
   TELEFONO             celular de 8 dígitos (se usa también como WhatsApp).
   BARRIO               «B/ VILLA BELEN», «B. Villa Belen» o «Villa Belen» quedan igual.
   DIRECCION            referencia de la casa.
