@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Fuentes de los bloques dinámicos: leen con privilegios solo lo publicado. -->
+    <record id="mn_action_servicios" model="ir.actions.server">
+        <field name="name">MIRABILENET: Servicios (sitio web)</field>
+        <field name="model_id" ref="model_mirabilenet_web_service"/>
+        <field name="state">code</field>
+        <field name="code">response = model.env['website.snippet.filter']._mirabilenet_records('servicios')</field>
+    </record>
+    <record id="mn_filter_servicios" model="website.snippet.filter">
+        <field name="name">MIRABILENET: Servicios</field>
+        <field name="action_server_id" ref="mn_action_servicios"/>
+        <field name="field_names">name,summary</field>
+        <field name="limit">16</field>
+    </record>
+    <record id="mn_action_planes" model="ir.actions.server">
+        <field name="name">MIRABILENET: Planes de internet (sitio web)</field>
+        <field name="model_id" ref="product.model_product_template"/>
+        <field name="state">code</field>
+        <field name="code">response = model.env['website.snippet.filter']._mirabilenet_records('planes')</field>
+    </record>
+    <record id="mn_filter_planes" model="website.snippet.filter">
+        <field name="name">MIRABILENET: Planes de internet</field>
+        <field name="action_server_id" ref="mn_action_planes"/>
+        <field name="field_names">name</field>
+        <field name="limit">16</field>
+    </record>
+    <record id="mn_action_cobertura" model="ir.actions.server">
+        <field name="name">MIRABILENET: Cobertura (sitio web)</field>
+        <field name="model_id" ref="model_mirabilenet_web_coverage"/>
+        <field name="state">code</field>
+        <field name="code">response = model.env['website.snippet.filter']._mirabilenet_records('cobertura')</field>
+    </record>
+    <record id="mn_filter_cobertura" model="website.snippet.filter">
+        <field name="name">MIRABILENET: Cobertura</field>
+        <field name="action_server_id" ref="mn_action_cobertura"/>
+        <field name="field_names">name,detail</field>
+        <field name="limit">16</field>
+    </record>
+    <record id="mn_action_proyectos" model="ir.actions.server">
+        <field name="name">MIRABILENET: Proyectos (sitio web)</field>
+        <field name="model_id" ref="model_mirabilenet_web_project"/>
+        <field name="state">code</field>
+        <field name="code">response = model.env['website.snippet.filter']._mirabilenet_records('proyectos')</field>
+    </record>
+    <record id="mn_filter_proyectos" model="website.snippet.filter">
+        <field name="name">MIRABILENET: Proyectos</field>
+        <field name="action_server_id" ref="mn_action_proyectos"/>
+        <field name="field_names">title,summary</field>
+        <field name="limit">16</field>
+    </record>
+    <record id="mn_action_preguntas" model="ir.actions.server">
+        <field name="name">MIRABILENET: Preguntas frecuentes (sitio web)</field>
+        <field name="model_id" ref="model_mirabilenet_web_faq"/>
+        <field name="state">code</field>
+        <field name="code">response = model.env['website.snippet.filter']._mirabilenet_records('preguntas')</field>
+    </record>
+    <record id="mn_filter_preguntas" model="website.snippet.filter">
+        <field name="name">MIRABILENET: Preguntas frecuentes</field>
+        <field name="action_server_id" ref="mn_action_preguntas"/>
+        <field name="field_names">question</field>
+        <field name="limit">16</field>
+    </record>
+    <record id="mn_action_ventajas" model="ir.actions.server">
+        <field name="name">MIRABILENET: Ventajas (sitio web)</field>
+        <field name="model_id" ref="model_mirabilenet_web_advantage"/>
+        <field name="state">code</field>
+        <field name="code">response = model.env['website.snippet.filter']._mirabilenet_records('ventajas')</field>
+    </record>
+    <record id="mn_filter_ventajas" model="website.snippet.filter">
+        <field name="name">MIRABILENET: Ventajas</field>
+        <field name="action_server_id" ref="mn_action_ventajas"/>
+        <field name="field_names">title,detail</field>
+        <field name="limit">16</field>
+    </record>
+    <record id="mn_action_cifras" model="ir.actions.server">
+        <field name="name">MIRABILENET: Cifras (sitio web)</field>
+        <field name="model_id" ref="model_mirabilenet_web_figure"/>
+        <field name="state">code</field>
+        <field name="code">response = model.env['website.snippet.filter']._mirabilenet_records('cifras')</field>
+    </record>
+    <record id="mn_filter_cifras" model="website.snippet.filter">
+        <field name="name">MIRABILENET: Cifras</field>
+        <field name="action_server_id" ref="mn_action_cifras"/>
+        <field name="field_names">value,label</field>
+        <field name="limit">16</field>
+    </record>
+    <record id="mn_action_aliados" model="ir.actions.server">
+        <field name="name">MIRABILENET: Tecnologías y aliados (sitio web)</field>
+        <field name="model_id" ref="model_mirabilenet_web_ally"/>
+        <field name="state">code</field>
+        <field name="code">response = model.env['website.snippet.filter']._mirabilenet_records('aliados')</field>
+    </record>
+    <record id="mn_filter_aliados" model="website.snippet.filter">
+        <field name="name">MIRABILENET: Tecnologías y aliados</field>
+        <field name="action_server_id" ref="mn_action_aliados"/>
+        <field name="field_names">name,detail</field>
+        <field name="limit">16</field>
+    </record>
+</odoo>

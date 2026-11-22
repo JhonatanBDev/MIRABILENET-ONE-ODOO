@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================= Contingencia ================= -->
+    <record id="mira_siat_event_view_list" model="ir.ui.view">
+        <field name="name">mira.siat.event.list</field>
+        <field name="model">mira.siat.event</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="state == 'open'" decoration-muted="state == 'done'">
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="pos_id"/>
+                <field name="event_type_id"/>
+                <field name="start_at"/>
+                <field name="end_at"/>
+                <field name="invoice_count"/>
+                <field name="state" widget="badge" decoration-danger="state == 'open'"
+                       decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="mira_siat_event_view_form" model="ir.ui.view">
+        <field name="name">mira.siat.event.form</field>
+        <field name="model">mira.siat.event</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" class="oe_highlight"
+                            string="Iniciar contingencia"
+                            invisible="state != 'draft' or kind != 'live'"
+                            confirm="El punto de venta pasará a emitir fuera de línea. ¿Continuar?"/>
+                    <button name="action_start" type="object" class="oe_highlight"
+                            string="Abrir regularización"
+                            invisible="state != 'draft' or kind != 'past'"/>
+                    <button name="action_close" type="object" class="oe_highlight"
+                            string="Cerrar contingencia" invisible="state != 'open'"/>
+                    <button name="action_register" type="object" class="oe_highlight"
+                            string="Registrar evento en el SIN" invisible="state != 'closed'"/>
+                    <button name="action_send_packages" type="object" class="oe_highlight"
+                            string="Enviar paquetes" invisible="state != 'registered'"/>
+                    <button name="action_validate_packages" type="object"
+                            string="Validar recepción de paquetes"
+                            invisible="state != 'registered'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,open,closed,registered,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="pos_id" readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="kind" widget="radio" readonly="state != 'draft'"/>
+                            <field name="event_type_id" readonly="state != 'draft'"
+                                   options="{'no_create': True}"/>
+                            <field name="description" readonly="state != 'draft'"/>
+                            <field name="cafc_id" invisible="kind != 'past'"
+                                   readonly="state != 'draft'" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="start_at" readonly="state != 'draft' or kind != 'past'"
+                                   required="kind == 'past'"/>
+                            <field name="end_at" readonly="state != 'draft' or kind != 'past'"
+                                   required="kind == 'past'"/>
+                            <field name="reception_code"/>
+                            <field name="siat_messages" invisible="not siat_messages"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Facturas fuera de línea" name="invoices">
+                            <field name="invoice_ids" readonly="1">
+                                <list>
+                                    <field name="number"/>
+                                    <field name="partner_id"/>
+                                    <field name="amount_total"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="package_id"/>
+                                    <field name="state" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Paquetes" name="packages">
+                            <field name="package_ids" readonly="1">
+                                <list decoration-danger="state == 'observed'">
+                                    <field name="number"/>
+                                    <field name="invoice_count"/>
+                                    <field name="reception_code"/>
+                                    <field name="siat_messages"/>
+                                    <field name="state" widget="badge"/>
+                                    <button name="action_reconcile" type="object"
+                                            string="Conciliar factura por factura"
+                                            invisible="state != 'observed'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mira_siat_event_action" model="ir.actions.act_window">
+        <field name="name">Contingencias</field>
+        <field name="res_model">mira.siat.event</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Sin contingencias registradas</p>
+            <p>Cree un evento significativo cuando un punto de venta pierda conexión
+               con el SIN: podrá seguir emitiendo fuera de línea y enviar después las
+               facturas por paquete.</p>
+        </field>
+    </record>
+</odoo>

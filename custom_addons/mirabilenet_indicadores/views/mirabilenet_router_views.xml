@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_router_pivot" model="ir.ui.view">
+        <field name="name">mirabilenet.router.pivot.mirabilenet</field>
+        <field name="model">mirabilenet.router</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <pivot string="Routers por región" sample="1">
+                <field name="region_id" type="row"/><field name="state" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_router_graph" model="ir.ui.view">
+        <field name="name">mirabilenet.router.graph.mirabilenet</field>
+        <field name="model">mirabilenet.router</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <graph string="Routers por región" type="bar" stacked="1" sample="1">
+                <field name="region_id"/><field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_router" model="ir.actions.act_window">
+        <field name="name">Routers por estado</field>
+        <field name="res_model">mirabilenet.router</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_router_pivot')}),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_router_graph')})]"/>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">—</p><p>Sin routers en su región.</p></field>
+    </record>
+</odoo>

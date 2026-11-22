@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_move_form_mirabilenet_fiscal" model="ir.ui.view">
+        <field name="name">account.move.form.mirabilenet.fiscal</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="mirabilenet_contratos.view_move_form_mirabilenet"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='mirabilenet_service_id']" position="after">
+                <field name="mirabilenet_fiscal_user_id" invisible="not mirabilenet_fiscal_user_id"/>
+                <field name="mirabilenet_fiscal_error" invisible="not mirabilenet_fiscal_pending"
+                       decoration-danger="1"/>
+                <field name="mirabilenet_fiscal_pending" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

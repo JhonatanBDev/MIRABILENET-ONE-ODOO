@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mirabilenet_fibra" name="Red de fibra"
+              parent="mirabilenet_base.menu_mirabilenet_root" sequence="38"
+              groups="group_mirabilenet_fiber_user"/>
+    <menuitem id="menu_mirabilenet_fiber_locate" name="Ubicar cliente (por IP)"
+              parent="menu_mirabilenet_fibra" action="action_mirabilenet_fiber_locate"
+              sequence="3"/>
+    <menuitem id="menu_mirabilenet_fiber_map" name="Mapa de fibra" parent="menu_mirabilenet_fibra"
+              action="action_mirabilenet_fiber_map" sequence="5"/>
+    <menuitem id="menu_mirabilenet_fiber_nap" name="Cajas NAP" parent="menu_mirabilenet_fibra"
+              action="action_mirabilenet_fiber_nap" sequence="10"/>
+    <menuitem id="menu_mirabilenet_fiber_port_free" name="Puertos libres"
+              parent="menu_mirabilenet_fibra" action="action_mirabilenet_fiber_port_free"
+              sequence="20"/>
+    <menuitem id="menu_mirabilenet_fiber_port" name="Todos los puertos"
+              parent="menu_mirabilenet_fibra" action="action_mirabilenet_fiber_port" sequence="25"/>
+    <menuitem id="menu_mirabilenet_fiber_segment" name="Tramos" parent="menu_mirabilenet_fibra"
+              action="action_mirabilenet_fiber_segment" sequence="30"/>
+    <menuitem id="menu_mirabilenet_fiber_maintenance" name="Averías"
+              parent="menu_mirabilenet_fibra" action="action_mirabilenet_fiber_maintenance"
+              sequence="40"/>
+
+    <menuitem id="menu_mirabilenet_fiber_analysis" name="Cobertura"
+              parent="menu_mirabilenet_fibra" sequence="50"/>
+    <menuitem id="menu_mirabilenet_fiber_occupancy" name="Ocupación por ramal y zona"
+              parent="menu_mirabilenet_fiber_analysis"
+              action="action_mirabilenet_fiber_nap_analysis" sequence="10"/>
+    <menuitem id="menu_mirabilenet_fiber_low_occupancy" name="Zonas con pocos clientes"
+              parent="menu_mirabilenet_fiber_analysis"
+              action="action_mirabilenet_fiber_low_occupancy" sequence="20"/>
+    <menuitem id="menu_mirabilenet_fiber_review" name="Revisar en campo"
+              parent="menu_mirabilenet_fiber_analysis"
+              action="action_mirabilenet_fiber_nap_review" sequence="30"/>
+
+    <menuitem id="menu_mirabilenet_fiber_config" name="Configuración"
+              parent="menu_mirabilenet_fibra" sequence="90"
+              groups="group_mirabilenet_fiber_manager"/>
+    <menuitem id="menu_mirabilenet_fiber_csv_import" name="Importar CSV de NAP y tramos"
+              parent="menu_mirabilenet_fiber_config" action="action_mirabilenet_fiber_csv_import"
+              sequence="10"/>
+    <menuitem id="menu_mirabilenet_fiber_kml_import" name="Importar KML/KMZ"
+              parent="menu_mirabilenet_fiber_config" action="action_mirabilenet_fiber_kml_import"
+              sequence="20"/>
+    <menuitem id="menu_mirabilenet_fiber_settings" name="Ajustes"
+              parent="menu_mirabilenet_fiber_config" action="action_mirabilenet_fiber_settings"
+              sequence="30" groups="base.group_system"/>
+</odoo>

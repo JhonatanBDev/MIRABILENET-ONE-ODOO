@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_customer_list" model="ir.ui.view">
+        <field name="name">res.partner.mirabilenet.customer.list</field>
+        <field name="model">res.partner</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="mirabilenet_code"/>
+                <field name="name"/>
+                <field name="mirabilenet_customer_type"/>
+                <field name="phone" optional="show"/>
+                <field name="mirabilenet_whatsapp" optional="show"/>
+                <field name="mirabilenet_region_id"/>
+                <field name="mirabilenet_zone_id" optional="show"/>
+                <field name="mirabilenet_state" widget="badge"
+                       decoration-success="mirabilenet_state in ('activo', 'reactivado')"
+                       decoration-warning="mirabilenet_state in ('moroso', 'baja_solicitada')"
+                       decoration-danger="mirabilenet_state in ('suspendido', 'cancelado')"/>
+                <field name="user_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_customer_search" model="ir.ui.view">
+        <field name="name">res.partner.mirabilenet.customer.search</field>
+        <field name="model">res.partner</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"
+                       filter_domain="['|', '|', '|', ('name', 'ilike', self), ('mirabilenet_code', 'ilike', self), ('vat', 'ilike', self), ('phone', 'ilike', self)]"/>
+                <field name="mirabilenet_region_id"/>
+                <field name="mirabilenet_zone_id"/>
+                <filter name="activos" string="Activos"
+                        domain="[('mirabilenet_state', 'in', ('activo', 'reactivado'))]"/>
+                <filter name="morosos" string="Morosos"
+                        domain="[('mirabilenet_state', '=', 'moroso')]"/>
+                <filter name="suspendidos" string="Suspendidos"
+                        domain="[('mirabilenet_state', '=', 'suspendido')]"/>
+                <filter name="embudo" string="En el embudo"
+                        domain="[('mirabilenet_state', 'in', ('prospecto', 'evaluacion', 'cotizado', 'instalacion_pendiente'))]"/>
+                <group>
+                    <filter name="por_region" string="Región"
+                            context="{'group_by': 'mirabilenet_region_id'}"/>
+                    <filter name="por_estado" string="Estado comercial"
+                            context="{'group_by': 'mirabilenet_state'}"/>
+                    <filter name="por_tipo" string="Tipo"
+                            context="{'group_by': 'mirabilenet_customer_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_customer_form" model="ir.ui.view">
+        <field name="name">res.partner.mirabilenet.customer.form</field>
+        <field name="model">res.partner</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_mirabilenet_set_state" type="object"
+                            string="Pasar a evaluación" class="btn-primary"
+                            context="{'mirabilenet_target': 'evaluacion'}"
+                            invisible="mirabilenet_state != 'prospecto'"
+                            groups="mirabilenet_isp.group_mirabilenet_customer_manager"/>
+                    <button name="action_mirabilenet_set_state" type="object"
+                            string="Marcar cotizado" class="btn-primary"
+                            context="{'mirabilenet_target': 'cotizado'}"
+                            invisible="mirabilenet_state != 'evaluacion'"
+                            groups="mirabilenet_isp.group_mirabilenet_customer_manager"/>
+                    <button name="action_mirabilenet_set_state" type="object"
+                            string="Instalación pendiente" class="btn-primary"
+                            context="{'mirabilenet_target': 'instalacion_pendiente'}"
+                            invisible="mirabilenet_state != 'cotizado'"
+                            groups="mirabilenet_isp.group_mirabilenet_customer_manager"/>
+                    <button name="action_mirabilenet_set_state" type="object"
+                            string="Activar" class="btn-primary"
+                            context="{'mirabilenet_target': 'activo'}"
+                            invisible="mirabilenet_state not in ('instalacion_pendiente', 'moroso', 'reactivado', 'baja_solicitada')"
+                            groups="mirabilenet_isp.group_mirabilenet_customer_manager"/>
+                    <button name="action_mirabilenet_set_state" type="object"
+                            string="Reactivar" class="btn-primary"
+                            context="{'mirabilenet_target': 'reactivado'}"
+                            invisible="mirabilenet_state != 'suspendido'"
+                            groups="mirabilenet_isp.group_mirabilenet_customer_manager"/>
+                    <button name="action_mirabilenet_set_state" type="object"
+                            string="Marcar moroso"
+                            context="{'mirabilenet_target': 'moroso'}"
+                            invisible="mirabilenet_state not in ('activo', 'reactivado')"
+                            groups="mirabilenet_isp.group_mirabilenet_customer_manager"/>
+                    <button name="action_mirabilenet_set_state" type="object"
+                            string="Suspender"
+                            context="{'mirabilenet_target': 'suspendido'}"
+                            invisible="mirabilenet_state not in ('activo', 'moroso')"
+                            groups="mirabilenet_isp.group_mirabilenet_customer_manager"/>
+                    <button name="action_mirabilenet_set_state" type="object"
+                            string="Baja solicitada"
+                            context="{'mirabilenet_target': 'baja_solicitada'}"
+                            invisible="mirabilenet_state not in ('activo', 'moroso', 'suspendido')"
+                            groups="mirabilenet_isp.group_mirabilenet_customer_manager"/>
+                    <button name="action_mirabilenet_set_state" type="object"
+                            string="Cancelar cliente"
+                            confirm="¿Cancelar a este cliente? Es un estado final."
+                            context="{'mirabilenet_target': 'cancelado'}"
+                            invisible="mirabilenet_state not in ('prospecto', 'evaluacion', 'cotizado', 'instalacion_pendiente', 'suspendido', 'baja_solicitada')"
+                            groups="mirabilenet_isp.group_mirabilenet_customer_manager"/>
+                    <field name="mirabilenet_state" widget="statusbar" readonly="1"
+                           statusbar_visible="prospecto,evaluacion,cotizado,instalacion_pendiente,activo"/>
+                </header>
+                <sheet>
+                    <field name="mirabilenet_is_customer" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" string="Nombre o razón social"/>
+                        <h1><field name="name" required="1"/></h1>
+                        <field name="mirabilenet_code" placeholder="Se asigna al guardar"/>
+                    </div>
+                    <group>
+                        <group string="Cliente">
+                            <field name="mirabilenet_customer_type" required="1"/>
+                            <field name="is_company" string="Es una empresa"/>
+                            <field name="vat" string="Documento o NIT"/>
+                            <field name="phone"/>
+                            <field name="mirabilenet_whatsapp"/>
+                            <field name="email"/>
+                            <field name="mirabilenet_contact_verified"/>
+                        </group>
+                        <group string="Ubicación">
+                            <field name="mirabilenet_region_id" required="1"
+                                   options="{'no_create': True}"/>
+                            <field name="mirabilenet_zone_id" options="{'no_create': True}"/>
+                            <field name="mirabilenet_branch_id" options="{'no_create': True}"/>
+                            <field name="street" string="Dirección"/>
+                            <field name="partner_latitude" string="Latitud"/>
+                            <field name="partner_longitude" string="Longitud"/>
+                        </group>
+                        <group string="Comercial">
+                            <field name="user_id" string="Vendedor"/>
+                            <field name="mirabilenet_requires_invoice"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Contactos autorizados">
+                            <field name="child_ids" context="{'default_type': 'contact'}">
+                                <list editable="bottom">
+                                    <field name="name" required="1"/>
+                                    <field name="function" string="Cargo"/>
+                                    <field name="phone"/>
+                                    <field name="email"/>
+                                    <field name="mirabilenet_authorized_support"/>
+                                    <field name="mirabilenet_authorized_payments"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notas">
+                            <field name="comment"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_customer" model="ir.actions.act_window">
+        <field name="name">Clientes</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('mirabilenet_is_customer', '=', True)]</field>
+        <field name="context">{'default_mirabilenet_is_customer': True}</field>
+        <field name="search_view_id" ref="view_mirabilenet_customer_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_mirabilenet_customer_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_mirabilenet_customer_form')})]"/>
+    </record>
+</odoo>

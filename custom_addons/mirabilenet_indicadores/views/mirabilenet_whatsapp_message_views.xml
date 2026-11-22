@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_message_pivot" model="ir.ui.view">
+        <field name="name">mirabilenet.whatsapp.message.pivot.mirabilenet</field>
+        <field name="model">mirabilenet.whatsapp.message</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <pivot string="Avisos de WhatsApp" sample="1">
+                <field name="region_id" type="row"/><field name="state" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_message_graph" model="ir.ui.view">
+        <field name="name">mirabilenet.whatsapp.message.graph.mirabilenet</field>
+        <field name="model">mirabilenet.whatsapp.message</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <graph string="Avisos de WhatsApp" type="bar" stacked="1" sample="1">
+                <field name="region_id"/><field name="state"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_message" model="ir.actions.act_window">
+        <field name="name">Avisos de WhatsApp enviados</field>
+        <field name="res_model">mirabilenet.whatsapp.message</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('state', 'in', ('enviado', 'entregado', 'leido'))]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_message_pivot')}),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_message_graph')})]"/>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">—</p><p>Ningún aviso enviado en su región. Solo cuentan los enviados, entregados o leídos.</p></field>
+    </record>
+</odoo>

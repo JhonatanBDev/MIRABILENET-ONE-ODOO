@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Direcciones del SIAT: parametrizadas, nunca en el código. Deben
+             contrastarse con las que entregue el SIN al autorizar el sistema. -->
+        <record id="param_ws_url_piloto" model="ir.config_parameter">
+            <field name="key">mira_siat.ws_url.2</field>
+            <field name="value">https://pilotosiatservicios.impuestos.gob.bo/v2</field>
+        </record>
+        <record id="param_ws_url_produccion" model="ir.config_parameter">
+            <field name="key">mira_siat.ws_url.1</field>
+            <field name="value">https://siatrest.impuestos.gob.bo/v2</field>
+        </record>
+        <record id="param_qr_url_piloto" model="ir.config_parameter">
+            <field name="key">mira_siat.qr_url.2</field>
+            <field name="value">https://pilotosiat.impuestos.gob.bo/consulta/QR</field>
+        </record>
+        <record id="param_qr_url_produccion" model="ir.config_parameter">
+            <field name="key">mira_siat.qr_url.1</field>
+            <field name="value">https://siat.impuestos.gob.bo/consulta/QR</field>
+        </record>
+        <record id="param_connect_timeout" model="ir.config_parameter">
+            <field name="key">mira_siat.connect_timeout</field>
+            <field name="value">5</field>
+        </record>
+        <record id="param_read_timeout" model="ir.config_parameter">
+            <field name="key">mira_siat.read_timeout</field>
+            <field name="value">30</field>
+        </record>
+
+        <!-- XSD oficial de Factura Compra y Venta (Computarizada en Línea),
+             descargado de siatinfo.impuestos.gob.bo. Volver a descargar y
+             cargar una nueva versión antes de cada homologación. -->
+        <record id="xsd_compra_venta_computarizada" model="mira.siat.xsd">
+            <field name="name">Factura Compra y Venta - Computarizada</field>
+            <field name="sector_code">1</field>
+            <field name="modality">2</field>
+            <field name="filename">facturaComputarizadaCompraVenta.xsd</field>
+            <field name="version_note">XSD ver. 23/08/2021 (descargado el 19/11/2026)</field>
+            <field name="file" type="base64" file="mira_sale_siat/data/xsd/facturaComputarizadaCompraVenta.xsd"/>
+        </record>
+
+        <record id="ir_cron_mira_siat_renew_cufd" model="ir.cron">
+            <field name="name">Mira_Sale SIAT: renovar CUFD diario</field>
+            <field name="model_id" ref="base.model_res_company"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_mira_siat_renew_cufd()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <!-- 04:10 UTC = 00:10 hora Bolivia -->
+            <field name="nextcall" eval="(datetime.now() + timedelta(days=1)).replace(hour=4, minute=10, second=0).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+        <record id="ir_cron_mira_siat_retry_pending" model="ir.cron">
+            <field name="name">Mira_Sale SIAT: conciliar documentos sin respuesta</field>
+            <field name="model_id" ref="base.model_res_company"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_mira_siat_retry_pending()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+        </record>
+    </data>
+</odoo>

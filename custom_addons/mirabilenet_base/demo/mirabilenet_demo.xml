@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Datos ficticios, solo para probar. -->
+    <record id="demo_region_norte" model="mirabilenet.region">
+        <field name="code">DEMO-N</field>
+        <field name="name">Región Norte (demo)</field>
+        <field name="wg_region_id">60</field>
+    </record>
+    <record id="demo_region_sur" model="mirabilenet.region">
+        <field name="code">DEMO-S</field>
+        <field name="name">Región Sur (demo)</field>
+        <field name="wg_region_id">61</field>
+        <field name="dia_emision_prepago">5</field>
+    </record>
+
+    <record id="demo_branch_norte" model="mirabilenet.branch">
+        <field name="region_id" ref="demo_region_norte"/>
+        <field name="code">DEMO-N-01</field>
+        <field name="name">Sucursal Central Norte</field>
+    </record>
+    <record id="demo_branch_sur" model="mirabilenet.branch">
+        <field name="region_id" ref="demo_region_sur"/>
+        <field name="code">DEMO-S-01</field>
+        <field name="name">Sucursal Central Sur</field>
+    </record>
+
+    <record id="demo_zone_norte" model="mirabilenet.zone">
+        <field name="region_id" ref="demo_region_norte"/>
+        <field name="code">DEMO-N-Z1</field>
+        <field name="name">Zona 1 Norte</field>
+        <field name="sector">Comunidad de ejemplo</field>
+    </record>
+    <record id="demo_zone_sur" model="mirabilenet.zone">
+        <field name="region_id" ref="demo_region_sur"/>
+        <field name="code">DEMO-S-Z1</field>
+        <field name="name">Zona 1 Sur</field>
+    </record>
+
+    <record id="demo_node_norte" model="mirabilenet.node">
+        <field name="zone_id" ref="demo_zone_norte"/>
+        <field name="code">DEMO-N-N1</field>
+        <field name="name">Nodo Norte 1</field>
+        <field name="capacidad_instalada">120</field>
+    </record>
+    <record id="demo_node_sur" model="mirabilenet.node">
+        <field name="zone_id" ref="demo_zone_sur"/>
+        <field name="code">DEMO-S-N1</field>
+        <field name="name">Nodo Sur 1</field>
+        <field name="capacidad_instalada">80</field>
+    </record>
+</odoo>

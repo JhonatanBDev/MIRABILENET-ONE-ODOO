@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Órdenes de red -->
+    <record id="view_mirabilenet_transition_list" model="ir.ui.view">
+        <field name="name">mirabilenet.service.transition.list</field>
+        <field name="model">mirabilenet.service.transition</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0"
+                  decoration-danger="state == 'revision_manual'"
+                  decoration-success="state == 'confirmada'">
+                <field name="create_date" string="Solicitada"/>
+                <field name="service_id"/>
+                <field name="region_id"/>
+                <field name="action"/>
+                <field name="state"/>
+                <field name="attempts"/>
+                <field name="summary"/>
+                <field name="error_detail"/>
+                <field name="user_id"/>
+                <button name="action_retry" type="object" string="Reintentar"
+                        invisible="state != 'revision_manual'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_transition_search" model="ir.ui.view">
+        <field name="name">mirabilenet.service.transition.search</field>
+        <field name="model">mirabilenet.service.transition</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="service_id"/>
+                <filter name="revision" string="Revisión manual"
+                        domain="[('state', '=', 'revision_manual')]"/>
+                <filter name="abiertas" string="En curso"
+                        domain="[('state', 'in', ('pendiente', 'en_proceso', 'reintento'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_transition" model="ir.actions.act_window">
+        <field name="name">Órdenes de red</field>
+        <field name="res_model">mirabilenet.service.transition</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_revision': 1}</field>
+    </record>
+</odoo>

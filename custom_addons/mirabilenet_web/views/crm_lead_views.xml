@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Consultas: lo que escribió el visitante se lee, no se edita. -->
+    <record id="view_web_lead_list" model="ir.ui.view">
+        <field name="name">crm.lead.mirabilenet.list</field>
+        <field name="model">crm.lead</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0" decoration-bf="mirabilenet_status == 'nuevo'"
+                  decoration-muted="mirabilenet_status == 'descartado'">
+                <field name="create_date" string="Recibida"/>
+                <field name="contact_name" string="Nombre"/>
+                <field name="phone"/>
+                <field name="mirabilenet_kind"/>
+                <field name="mirabilenet_region_id"/>
+                <field name="mirabilenet_origin"/>
+                <field name="mirabilenet_status" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_web_lead_form" model="ir.ui.view">
+        <field name="name">crm.lead.mirabilenet.form</field>
+        <field name="model">crm.lead</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <header>
+                    <button name="action_mirabilenet_contacted" type="object" string="Marcar contactado"
+                            invisible="mirabilenet_status != 'nuevo'"/>
+                    <button name="action_mirabilenet_convert" type="object" class="btn-primary"
+                            string="Convertir en prospecto"
+                            invisible="mirabilenet_status in ('convertido', 'descartado')"/>
+                    <button name="action_mirabilenet_discard" type="object" string="Descartar"
+                            invisible="mirabilenet_status in ('convertido', 'descartado')"/>
+                    <field name="mirabilenet_status" widget="statusbar" readonly="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Lo que escribió el visitante">
+                            <field name="contact_name" string="Nombre" readonly="1"/>
+                            <field name="phone" readonly="1"/>
+                            <field name="email_from" string="Correo" readonly="1"/>
+                            <field name="city" string="Localidad" readonly="1"/>
+                            <field name="mirabilenet_kind"/>
+                            <field name="mirabilenet_web_service_id"/>
+                            <field name="mirabilenet_plan_interest" readonly="1"/>
+                        </group>
+                        <group string="Gestión">
+                            <field name="mirabilenet_region_id" options="{'no_create': True}"/>
+                            <field name="mirabilenet_internal_note"/>
+                            <field name="mirabilenet_customer_id"/>
+                            <field name="mirabilenet_origin"/>
+                            <field name="create_date" string="Recibida"/>
+                        </group>
+                    </group>
+                    <group string="Mensaje"><field name="description" nolabel="1" readonly="1" colspan="2"/></group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_web_lead_search" model="ir.ui.view">
+        <field name="name">crm.lead.mirabilenet.search</field>
+        <field name="model">crm.lead</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="contact_name"/><field name="phone"/>
+                <filter name="pendientes" string="Sin atender" domain="[('mirabilenet_status', '=', 'nuevo')]"/>
+                <filter name="web" string="Del sitio web" domain="[('mirabilenet_origin', '=like', 'web:%')]"/>
+                <filter name="por_estado" string="Estado" context="{'group_by': 'mirabilenet_status'}"/>
+                <filter name="por_region" string="Región" context="{'group_by': 'mirabilenet_region_id'}"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_web_lead" model="ir.actions.act_window">
+        <field name="name">Consultas</field>
+        <field name="res_model">crm.lead</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('mirabilenet_origin', '!=', False)]</field>
+        <field name="context">{'search_default_pendientes': 1}</field>
+        <field name="search_view_id" ref="view_web_lead_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_web_lead_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_web_lead_form')})]"/>
+    </record>
+</odoo>

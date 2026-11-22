@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Quién usa la caja de la sucursal: los grupos de Punto de venta de Odoo. -->
+        <record id="mirabilenet_base.group_role_superadmin" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('point_of_sale.group_pos_manager'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_gerencia" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('point_of_sale.group_pos_manager'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_admin_regional" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('point_of_sale.group_pos_manager'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_cajero" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('point_of_sale.group_pos_user'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_cobrador" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('point_of_sale.group_pos_user'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_vendedor" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('point_of_sale.group_pos_user'))]"/>
+        </record>
+    </data>
+    <data noupdate="1">
+        <!-- Reglas sin grupo: se suman a las de Odoo. Un punto de venta sin sucursal no se
+             filtra. -->
+        <record id="rule_pos_config_region" model="ir.rule">
+            <field name="name">MIRABILENET: puntos de venta de la región del usuario</field>
+            <field name="model_id" ref="point_of_sale.model_pos_config"/>
+            <field name="domain_force">['|', '|', ('mirabilenet_region_id', '=', False), ('mirabilenet_region_id', '=', user.mirabilenet_region_id.id), (1 if user.mirabilenet_is_global else 0, '=', 1)]</field>
+        </record>
+        <record id="rule_pos_session_region" model="ir.rule">
+            <field name="name">MIRABILENET: sesiones de caja de la región del usuario</field>
+            <field name="model_id" ref="point_of_sale.model_pos_session"/>
+            <field name="domain_force">['|', '|', ('mirabilenet_region_id', '=', False), ('mirabilenet_region_id', '=', user.mirabilenet_region_id.id), (1 if user.mirabilenet_is_global else 0, '=', 1)]</field>
+        </record>
+        <record id="rule_pos_order_region" model="ir.rule">
+            <field name="name">MIRABILENET: ventas en sucursal de la región del usuario</field>
+            <field name="model_id" ref="point_of_sale.model_pos_order"/>
+            <field name="domain_force">['|', '|', ('mirabilenet_region_id', '=', False), ('mirabilenet_region_id', '=', user.mirabilenet_region_id.id), (1 if user.mirabilenet_is_global else 0, '=', 1)]</field>
+        </record>
+    </data>
+</odoo>

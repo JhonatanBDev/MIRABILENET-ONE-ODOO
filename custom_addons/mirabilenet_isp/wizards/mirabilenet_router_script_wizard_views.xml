@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_router_script_wizard_form" model="ir.ui.view">
+        <field name="name">mirabilenet.router.script.wizard.form</field>
+        <field name="model">mirabilenet.router.script.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <div class="alert alert-warning" role="alert">
+                    Pegue el guion completo de una sola vez en el router, por LAN o consola.
+                    Contiene una contraseña: no lo comparta ni lo guarde.
+                </div>
+                <group>
+                    <field name="router_id"/>
+                    <field name="expires_at" invisible="not expires_at"/>
+                </group>
+                <field name="script" widget="text" class="font-monospace"/>
+                <footer>
+                    <button string="Cerrar" special="cancel" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

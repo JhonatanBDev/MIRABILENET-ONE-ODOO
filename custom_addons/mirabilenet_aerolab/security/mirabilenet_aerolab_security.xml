@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- Quién gestiona cursos e inscripciones: los grupos de Eventos de Odoo. -->
+        <record id="mirabilenet_base.group_role_superadmin" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('event.group_event_manager'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_gerencia" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('event.group_event_manager'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_admin_regional" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('event.group_event_manager'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_vendedor" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('event.group_event_user'))]"/>
+        </record>
+    </data>
+    <data noupdate="1">
+        <!-- Solo para usuarios internos: el público sigue viendo los cursos publicados con
+             la regla del sitio web. -->
+        <record id="rule_event_event_region" model="ir.rule">
+            <field name="name">MIRABILENET: cursos de la región del usuario</field>
+            <field name="model_id" ref="event.model_event_event"/>
+            <field name="domain_force">['|', '|', ('mirabilenet_region_id', '=', False), ('mirabilenet_region_id', '=', user.mirabilenet_region_id.id), (1 if user.mirabilenet_is_global else 0, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_event_registration_region" model="ir.rule">
+            <field name="name">MIRABILENET: inscripciones de la región del usuario</field>
+            <field name="model_id" ref="event.model_event_registration"/>
+            <field name="domain_force">['|', '|', ('mirabilenet_region_id', '=', False), ('mirabilenet_region_id', '=', user.mirabilenet_region_id.id), (1 if user.mirabilenet_is_global else 0, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

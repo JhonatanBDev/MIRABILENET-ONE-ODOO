@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_fiber_segment_list" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.segment.list</field>
+        <field name="model">mirabilenet.fiber.segment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="branch_line" optional="show"/>
+                <field name="segment_type"/>
+                <field name="length_m" sum="Total"/>
+                <field name="vertex_count" optional="show"/>
+                <field name="color" widget="color" optional="show"/>
+                <field name="has_geometry" optional="show"/>
+                <field name="needs_review" optional="show"/>
+                <field name="state" widget="badge" decoration-success="state == 'activa'"
+                       decoration-warning="state == 'por_verificar'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_fiber_segment_search" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.segment.search</field>
+        <field name="model">mirabilenet.fiber.segment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code" filter_domain="['|', ('code', 'ilike', self), ('name', 'ilike', self)]"
+                       string="Código o nombre"/>
+                <field name="branch_line"/>
+                <field name="nap_ids" string="NAP"/>
+                <filter name="troncal" string="Troncal" domain="[('segment_type', '=', 'troncal')]"/>
+                <filter name="alimentador" string="Alimentador"
+                        domain="[('segment_type', '=', 'alimentador')]"/>
+                <filter name="distribucion" string="Distribución"
+                        domain="[('segment_type', '=', 'distribucion')]"/>
+                <separator/>
+                <filter name="sin_recorrido" string="Sin recorrido real"
+                        domain="[('has_geometry', '=', False)]"/>
+                <filter name="revisar" string="Revisar en campo"
+                        domain="[('needs_review', '=', True)]"/>
+                <group>
+                    <filter name="por_tipo" string="Tipo" context="{'group_by': 'segment_type'}"/>
+                    <filter name="por_ramal" string="Ramal" context="{'group_by': 'branch_line'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_fiber_segment_form" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.segment.form</field>
+        <field name="model">mirabilenet.fiber.segment</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_open_map" type="object" string="Ver en el mapa"
+                            class="btn-primary" invisible="not id"/>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-warning" role="alert" invisible="not needs_review">
+                        <strong>Revisar en campo.</strong>
+                        <field name="review_note" readonly="1" class="d-block"/>
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="has_geometry">
+                        Sin recorrido real: el mapa muestra una línea recta discontinua. Importe
+                        el KML/KMZ de Google Earth para cargarlo.
+                    </div>
+                    <field name="needs_review" invisible="1"/>
+                    <field name="has_geometry" invisible="1"/>
+                    <field name="active" invisible="1"/>
+                    <widget name="web_ribbon" title="Archivado" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <label for="code"/>
+                        <h1><field name="code" placeholder="TR-01"/></h1>
+                        <field name="name" placeholder="Ruta I: Central - 1I a 14I"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="region_id" options="{'no_create': True}"/>
+                            <field name="segment_type"/>
+                            <field name="branch_line"/>
+                            <field name="color" widget="color"/>
+                            <field name="effective_color" widget="color" readonly="1"
+                                   invisible="color"/>
+                            <field name="length_m"/>
+                            <field name="vertex_count"/>
+                        </group>
+                        <group>
+                            <field name="fiber_count"/>
+                            <field name="cable_type"/>
+                            <label for="start_latitude" string="Inicio"/>
+                            <div class="d-flex gap-2">
+                                <field name="start_latitude"/>
+                                <field name="start_longitude"/>
+                            </div>
+                            <label for="end_latitude" string="Fin"/>
+                            <div class="d-flex gap-2">
+                                <field name="end_latitude"/>
+                                <field name="end_longitude"/>
+                            </div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="NAP en ruta" name="route">
+                            <field name="stop_ids" context="{'default_segment_id': id}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="nap_id" options="{'no_create': True}"/>
+                                    <field name="nap_name"/>
+                                    <field name="region_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Geometría" name="geometry">
+                            <field name="geometry_json" placeholder="[[-17.40, -63.88], ...]"/>
+                        </page>
+                        <page string="Revisión" name="review">
+                            <group>
+                                <field name="needs_review" widget="boolean_toggle"/>
+                                <field name="review_note"/>
+                            </group>
+                        </page>
+                        <page string="Notas" name="notes">
+                            <field name="notes"/>
+                            <group>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_fiber_segment" model="ir.actions.act_window">
+        <field name="name">Tramos</field>
+        <field name="res_model">mirabilenet.fiber.segment</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_mirabilenet_fiber_segment_search"/>
+    </record>
+</odoo>

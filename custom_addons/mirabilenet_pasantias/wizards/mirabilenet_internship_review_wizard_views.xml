@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_review_wizard" model="ir.ui.view">
+        <field name="name">mirabilenet.internship.review.wizard.form</field>
+        <field name="model">mirabilenet.internship.review.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="task_id"/><field name="verdict" widget="radio"/>
+                    <field name="comment" required="verdict == 'cambios'"/>
+                    <field name="confirm_reopen" invisible="verdict != 'cambios'"/>
+                </group>
+                <footer>
+                    <button name="action_apply" type="object" string="Guardar la revisión" class="btn-primary"/>
+                    <button special="cancel" string="Cancelar"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

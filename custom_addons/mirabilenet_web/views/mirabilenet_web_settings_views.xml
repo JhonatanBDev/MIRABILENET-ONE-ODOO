@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_web_settings_form" model="ir.ui.view">
+        <field name="name">mirabilenet.web.settings.form</field>
+        <field name="model">mirabilenet.web.settings</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <header>
+                    <button name="action_load_initial_content" type="object"
+                            string="Cargar contenido inicial"
+                            confirm="Se cargan los textos de partida que falten. No se pisa nada de lo ya escrito."/>
+                </header>
+                <sheet>
+                <div class="alert alert-warning" role="alert" invisible="not missing_data">
+                    Faltan datos de contacto: <field name="missing_data" class="d-inline"/>.
+                </div>
+                <group string="Identidad">
+                    <group><field name="trade_name"/><field name="slogan"/>
+                        <field name="description"/></group>
+                    <group><field name="hero_title"/><field name="hero_phrase"/>
+                        <field name="hero_image" widget="image" options="{'size': [240, 150]}"/></group>
+                </group>
+                <group string="Contacto">
+                    <group><field name="phone"/><field name="whatsapp"/>
+                        <field name="sales_email"/><field name="support_email"/></group>
+                    <group><field name="address"/><field name="city"/><field name="schedule"/></group>
+                </group>
+                <group string="Redes y portada">
+                    <group><field name="facebook"/><field name="instagram"/><field name="tiktok"/></group>
+                    <group><field name="show_plans_home"/><field name="show_prices"/>
+                        <field name="band_title"/><field name="band_text"/></group>
+                </group>
+            </sheet></form>
+        </field>
+    </record>
+
+    <record id="action_web_settings" model="ir.actions.act_window">
+        <field name="name">Configuración del sitio</field>
+        <field name="res_model">mirabilenet.web.settings</field>
+        <field name="view_mode">form</field>
+        <field name="res_id" ref="site_settings"/>
+    </record>
+</odoo>

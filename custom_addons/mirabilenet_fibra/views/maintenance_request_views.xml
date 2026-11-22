@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_maintenance_request_form_fiber" model="ir.ui.view">
+        <field name="name">maintenance.request.form.fibra</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_mirabilenet_fiber_locate" type="object"
+                        string="Ubicar cliente" invisible="not mirabilenet_service_id"
+                        groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+                <button name="action_mirabilenet_fiber_map" type="object" string="Ver en el mapa"
+                        invisible="not mirabilenet_fiber_nap_id"
+                        groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+            </xpath>
+            <xpath expr="//field[@name='equipment_id']" position="before">
+                <field name="mirabilenet_service_id" options="{'no_create': True}"
+                       groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+                <field name="mirabilenet_partner_id" invisible="not mirabilenet_service_id"
+                       groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+                <field name="mirabilenet_fiber_nap_id" options="{'no_create': True}"
+                       groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+                <field name="mirabilenet_fiber_port_id" options="{'no_create': True}"
+                       invisible="not mirabilenet_fiber_nap_id"
+                       groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_maintenance_request_search_fiber" model="ir.ui.view">
+        <field name="name">maintenance.request.search.fibra</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='equipment_id']" position="after">
+                <field name="mirabilenet_service_id"
+                       groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+                <field name="mirabilenet_fiber_nap_id"
+                       groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_fiber_maintenance" model="ir.actions.act_window">
+        <field name="name">Averías de fibra</field>
+        <field name="res_model">maintenance.request</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">['|', ('mirabilenet_service_id', '!=', False), ('mirabilenet_fiber_nap_id', '!=', False)]</field>
+        <field name="context">{'default_maintenance_type': 'corrective'}</field>
+    </record>
+</odoo>

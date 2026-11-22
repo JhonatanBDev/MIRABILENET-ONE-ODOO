@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================= Menús ================= -->
+    <menuitem id="menu_mira_siat_root" name="SIAT (Mira_Sale)" parent="account.menu_finance"
+              sequence="30" groups="mira_sale_siat.group_mira_siat_user"/>
+    <menuitem id="menu_mira_siat_invoices" name="Documentos fiscales"
+              parent="menu_mira_siat_root" action="mira_siat_invoice_action" sequence="10"/>
+    <menuitem id="menu_mira_siat_events" name="Contingencias" parent="menu_mira_siat_root"
+              action="mira_siat_event_action" sequence="20"/>
+    <menuitem id="menu_mira_siat_config" name="Configuración SIAT"
+              parent="menu_mira_siat_root" sequence="90"
+              groups="mira_sale_siat.group_mira_siat_manager"/>
+    <menuitem id="menu_mira_siat_branches" name="Sucursales" parent="menu_mira_siat_config"
+              action="mira_siat_branch_action" sequence="10"/>
+    <menuitem id="menu_mira_siat_pos" name="Puntos de venta" parent="menu_mira_siat_config"
+              action="mira_siat_pos_action" sequence="20"/>
+    <menuitem id="menu_mira_siat_catalogs" name="Catálogos" parent="menu_mira_siat_config"
+              action="mira_siat_catalog_action" sequence="30"/>
+    <menuitem id="menu_mira_siat_xsd" name="Esquemas XSD" parent="menu_mira_siat_config"
+              action="mira_siat_xsd_action" sequence="40"/>
+    <menuitem id="menu_mira_siat_logs" name="Evidencia técnica" parent="menu_mira_siat_config"
+              action="mira_siat_log_action" sequence="80"/>
+    <menuitem id="menu_mira_siat_audit" name="Auditoría" parent="menu_mira_siat_config"
+              action="mira_siat_audit_log_action" sequence="90"/>
+
+    <!-- ================= Menús ================= -->
+    <menuitem id="menu_mira_siat_wizard" name="Asistente de configuración"
+              parent="menu_mira_siat_config" action="mira_siat_config_wizard_action"
+              sequence="1"/>
+    <menuitem id="menu_mira_siat_payment_methods" name="Métodos de pago SIN"
+              parent="menu_mira_siat_config" action="mira_siat_payment_method_action"
+              sequence="32"/>
+    <menuitem id="menu_mira_siat_currencies" name="Monedas SIN"
+              parent="menu_mira_siat_config" action="mira_siat_currency_action"
+              sequence="34"/>
+    <menuitem id="menu_mira_siat_cafc" name="Talonarios CAFC"
+              parent="menu_mira_siat_config" action="mira_siat_cafc_action" sequence="50"/>
+    <menuitem id="menu_mira_siat_retro" name="Emisión con fecha anterior"
+              parent="menu_mira_siat_root" action="mira_siat_retro_action" sequence="30"
+              groups="mira_sale_siat.group_mira_siat_backdate"/>
+</odoo>

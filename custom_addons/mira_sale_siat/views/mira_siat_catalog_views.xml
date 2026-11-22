@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================= Catálogos ================= -->
+    <record id="mira_siat_catalog_view_list" model="ir.ui.view">
+        <field name="name">mira.siat.catalog.list</field>
+        <field name="model">mira.siat.catalog</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0">
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="catalog_type"/>
+                <field name="item_count"/>
+                <field name="synced_at"/>
+                <field name="version_hash" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="mira_siat_catalog_view_form" model="ir.ui.view">
+        <field name="name">mira.siat.catalog.form</field>
+        <field name="model">mira.siat.catalog</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0" edit="0">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="catalog_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="synced_at"/>
+                            <field name="version_hash"/>
+                        </group>
+                    </group>
+                    <field name="item_ids">
+                        <list>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="activity_code" optional="show"/>
+                            <field name="extra" optional="hide"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mira_siat_catalog_action" model="ir.actions.act_window">
+        <field name="name">Catálogos sincronizados</field>
+        <field name="res_model">mira.siat.catalog</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Todavía no hay catálogos</p>
+            <p>Abra un punto de venta y use «Sincronizar catálogos».</p>
+        </field>
+    </record>
+</odoo>

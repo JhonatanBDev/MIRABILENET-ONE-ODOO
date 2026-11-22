@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================= Autorizaciones de fecha anterior ================= -->
+    <record id="mira_siat_retro_view_list" model="ir.ui.view">
+        <field name="name">mira.siat.retro.authorization.list</field>
+        <field name="model">mira.siat.retro.authorization</field>
+        <field name="arch" type="xml">
+            <list decoration-success="is_current" delete="0">
+                <field name="reason"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="user_id"/>
+                <field name="start_at"/>
+                <field name="end_at"/>
+                <field name="invoice_count"/>
+                <field name="is_current"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="mira_siat_retro_view_form" model="ir.ui.view">
+        <field name="name">mira.siat.retro.authorization.form</field>
+        <field name="model">mira.siat.retro.authorization</field>
+        <field name="arch" type="xml">
+            <form delete="0">
+                <header>
+                    <button name="action_close" type="object" string="Cerrar ahora"
+                            invisible="not is_current or not id"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="reason" readonly="id"/>
+                            <field name="company_id" groups="base.group_multi_company"
+                                   readonly="id"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="start_at" readonly="id"/>
+                            <field name="end_at" readonly="id"/>
+                            <field name="is_current"/>
+                        </group>
+                    </group>
+                    <field name="invoice_ids" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="emission_date"/>
+                            <field name="user_id"/>
+                            <field name="state" widget="badge"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mira_siat_retro_action" model="ir.actions.act_window">
+        <field name="name">Emisión con fecha anterior</field>
+        <field name="res_model">mira.siat.retro.authorization</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Sin autorizaciones</p>
+            <p>Una autorización abre, por un tiempo limitado y con motivo, la
+               posibilidad de emitir con fecha pasada (máximo 48 horas hacia atrás).
+               Queda registrado quién la abrió y qué documentos se emitieron.</p>
+        </field>
+    </record>
+</odoo>

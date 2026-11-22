@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_web_service_list" model="ir.ui.view">
+        <field name="name">mirabilenet.web.service.list</field>
+        <field name="model">mirabilenet.web.service</field>
+        <field name="arch" type="xml">
+            <list><field name="sequence" widget="handle"/><field name="name"/><field name="summary"/><field name="icon"/><field name="featured"/><field name="slug"/><field name="active" widget="boolean_toggle"/></list>
+        </field>
+    </record>
+
+    <record id="view_web_service_form" model="ir.ui.view">
+        <field name="name">mirabilenet.web.service.form</field>
+        <field name="model">mirabilenet.web.service</field>
+        <field name="arch" type="xml">
+            <form><sheet>
+                <group><group><field name="name"/><field name="slug"/><field name="icon"/></group>
+                <group><field name="featured"/><field name="sequence"/><field name="active"/></group></group>
+                <group><field name="summary"/><field name="description"/><field name="benefits"/></group>
+            </sheet></form>
+        </field>
+    </record>
+
+    <record id="action_web_service" model="ir.actions.act_window">
+        <field name="name">Servicios</field>
+        <field name="res_model">mirabilenet.web.service</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+</odoo>

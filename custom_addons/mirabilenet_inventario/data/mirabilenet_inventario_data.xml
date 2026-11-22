@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Ubicaciones virtuales: de aquí sale o aquí termina lo que no está en un almacén. -->
+    <record id="location_baja" model="stock.location">
+        <field name="name">MIRABILENET: Baja de equipos</field>
+        <field name="usage">inventory</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="location_consumo" model="stock.location">
+        <field name="name">MIRABILENET: Consumo de material</field>
+        <field name="usage">inventory</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="location_ajuste" model="stock.location">
+        <field name="name">MIRABILENET: Ajuste por conteo</field>
+        <field name="usage">inventory</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="category_root" model="product.category">
+        <field name="name">Inventario MIRABILENET</field>
+    </record>
+    <record id="category_router" model="product.category">
+        <field name="name">Router MikroTik</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_onu" model="product.category">
+        <field name="name">ONU / ONT</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_olt" model="product.category">
+        <field name="name">OLT y módulos</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_switch" model="product.category">
+        <field name="name">Switch</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_sfp" model="product.category">
+        <field name="name">SFP y transceptores</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_fibra" model="product.category">
+        <field name="name">Fibra óptica</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_conector" model="product.category">
+        <field name="name">Conectores y patch cords</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_nap" model="product.category">
+        <field name="name">Caja NAP</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_radio" model="product.category">
+        <field name="name">Radios y antenas</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_starlink" model="product.category">
+        <field name="name">Starlink</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_camara" model="product.category">
+        <field name="name">Cámara</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_nvr" model="product.category">
+        <field name="name">NVR / DVR</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_disco" model="product.category">
+        <field name="name">Disco duro</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_energia" model="product.category">
+        <field name="name">Fuentes y UPS</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_material" model="product.category">
+        <field name="name">Material de instalación</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_herramienta" model="product.category">
+        <field name="name">Herramienta</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+    <record id="category_servicio" model="product.category">
+        <field name="name">Servicio y mano de obra</field>
+        <field name="parent_id" ref="category_root"/>
+    </record>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_service_form_pos" model="ir.ui.view">
+        <field name="name">mirabilenet.service.form.pos</field>
+        <field name="model">mirabilenet.service</field>
+        <field name="inherit_id" ref="mirabilenet_isp.view_mirabilenet_service_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='monthly_price']" position="after">
+                <field name="mirabilenet_pos_order_id" invisible="not mirabilenet_pos_order_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

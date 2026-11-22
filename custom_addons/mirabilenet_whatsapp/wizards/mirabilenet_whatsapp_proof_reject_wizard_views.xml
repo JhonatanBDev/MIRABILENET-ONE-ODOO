@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_whatsapp_proof_reject_wizard" model="ir.ui.view">
+        <field name="name">mirabilenet.whatsapp.proof.reject.wizard.form</field>
+        <field name="model">mirabilenet.whatsapp.proof.reject.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group><field name="proof_id" invisible="1"/><field name="reason"/></group>
+                <footer>
+                    <button name="action_confirm" type="object" string="Rechazar" class="btn-primary"/>
+                    <button special="cancel" string="Cancelar"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_whatsapp_proof_reject_wizard" model="ir.actions.act_window">
+        <field name="name">Motivo del rechazo</field>
+        <field name="res_model">mirabilenet.whatsapp.proof.reject.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_load_initial_courses" name="Cargar cursos de partida de AeroLab"
+              parent="event.menu_event_configuration" action="action_load_initial_courses"
+              sequence="90" groups="event.group_event_manager"/>
+</odoo>

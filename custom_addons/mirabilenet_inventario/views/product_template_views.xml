@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Artículos -->
+    <record id="view_mirabilenet_item_list" model="ir.ui.view">
+        <field name="name">product.template.mirabilenet.item.list</field>
+        <field name="model">product.template</field>
+        <field name="priority">98</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="mirabilenet_below_min">
+                <field name="default_code" string="SKU"/>
+                <field name="name"/>
+                <field name="categ_id"/>
+                <field name="mirabilenet_brand"/>
+                <field name="mirabilenet_model"/>
+                <field name="tracking" string="Seguimiento"/>
+                <field name="qty_available" string="Existencia"/>
+                <field name="mirabilenet_stock_min"/>
+                <field name="mirabilenet_below_min"/>
+                <field name="standard_price" string="Costo" optional="show"/>
+                <field name="list_price" string="Precio de venta" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_item_form" model="ir.ui.view">
+        <field name="name">product.template.mirabilenet.item.form</field>
+        <field name="model">product.template</field>
+        <field name="priority">98</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="is_storable" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" string="Descripción"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="default_code" string="SKU" required="1"/>
+                            <field name="categ_id"/>
+                            <field name="mirabilenet_brand"/>
+                            <field name="mirabilenet_model"/>
+                            <field name="tracking" string="Seguimiento"/>
+                            <field name="uom_id" string="Unidad"/>
+                        </group>
+                        <group>
+                            <field name="standard_price" string="Costo"/>
+                            <field name="list_price" string="Precio de venta"/>
+                            <field name="mirabilenet_stock_min"/>
+                            <field name="qty_available" string="Existencia"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_item" model="ir.actions.act_window">
+        <field name="name">Artículos</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_storable', '=', True)]</field>
+        <field name="context">{'default_is_storable': True, 'default_type': 'consu', 'default_tracking': 'serial'}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_mirabilenet_item_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_mirabilenet_item_form')})]"/>
+    </record>
+</odoo>

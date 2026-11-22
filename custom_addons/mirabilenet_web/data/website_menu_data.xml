@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="website_menu_servicios" model="website.menu">
+            <field name="name">Servicios</field>
+            <field name="url">/servicios</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">20</field>
+        </record>
+        <record id="website_menu_planes" model="website.menu">
+            <field name="name">Planes</field>
+            <field name="url">/planes</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">21</field>
+        </record>
+        <record id="website_menu_cobertura" model="website.menu">
+            <field name="name">Cobertura</field>
+            <field name="url">/cobertura</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">22</field>
+        </record>
+        <record id="website_menu_proyectos" model="website.menu">
+            <field name="name">Proyectos</field>
+            <field name="url">/proyectos</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">23</field>
+        </record>
+        <record id="website_menu_preguntas_frecuentes" model="website.menu">
+            <field name="name">Preguntas</field>
+            <field name="url">/preguntas-frecuentes</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">24</field>
+        </record>
+        <record id="website_menu_contacto" model="website.menu">
+            <field name="name">Contacto</field>
+            <field name="url">/contacto</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence">25</field>
+        </record>
+    </data>
+</odoo>

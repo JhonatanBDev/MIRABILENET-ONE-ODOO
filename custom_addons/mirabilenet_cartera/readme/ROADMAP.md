@@ -1,0 +1,2 @@
+- Crear los contratos de cobro desde el asistente cuando se decida la fecha de inicio.
+- La contraseña PPPoE no viene en la planilla: se carga al cambiarla.

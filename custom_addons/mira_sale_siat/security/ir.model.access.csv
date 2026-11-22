@@ -1,0 +1,27 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mira_siat_branch_user,mira.siat.branch user,model_mira_siat_branch,group_mira_siat_user,1,0,0,0
+access_mira_siat_branch_manager,mira.siat.branch manager,model_mira_siat_branch,group_mira_siat_manager,1,1,1,1
+access_mira_siat_pos_user,mira.siat.pos user,model_mira_siat_pos,group_mira_siat_user,1,0,0,0
+access_mira_siat_pos_manager,mira.siat.pos manager,model_mira_siat_pos,group_mira_siat_manager,1,1,1,1
+access_mira_siat_cuis_manager,mira.siat.cuis manager,model_mira_siat_cuis,group_mira_siat_manager,1,0,0,0
+access_mira_siat_cufd_manager,mira.siat.cufd manager,model_mira_siat_cufd,group_mira_siat_manager,1,0,0,0
+access_mira_siat_sequence_manager,mira.siat.sequence manager,model_mira_siat_sequence,group_mira_siat_manager,1,0,0,0
+access_mira_siat_catalog_user,mira.siat.catalog user,model_mira_siat_catalog,base.group_user,1,0,0,0
+access_mira_siat_catalog_item_user,mira.siat.catalog.item user,model_mira_siat_catalog_item,base.group_user,1,0,0,0
+access_mira_siat_xsd_user,mira.siat.xsd user,model_mira_siat_xsd,group_mira_siat_user,1,0,0,0
+access_mira_siat_xsd_manager,mira.siat.xsd manager,model_mira_siat_xsd,group_mira_siat_manager,1,1,1,0
+access_mira_siat_invoice_user,mira.siat.invoice user,model_mira_siat_invoice,group_mira_siat_user,1,0,0,0
+access_mira_siat_event_user,mira.siat.event user,model_mira_siat_event,group_mira_siat_user,1,0,0,0
+access_mira_siat_event_supervisor,mira.siat.event supervisor,model_mira_siat_event,group_mira_siat_supervisor,1,1,1,1
+access_mira_siat_package_user,mira.siat.package user,model_mira_siat_package,group_mira_siat_user,1,0,0,0
+access_mira_siat_log_manager,mira.siat.log manager,model_mira_siat_log,group_mira_siat_manager,1,0,0,0
+access_mira_siat_audit_log_manager,mira.siat.audit.log manager,model_mira_siat_audit_log,group_mira_siat_manager,1,0,0,0
+access_mira_siat_token_wizard,mira.siat.token.wizard,model_mira_siat_token_wizard,group_mira_siat_manager,1,1,1,1
+access_mira_siat_cancel_wizard,mira.siat.cancel.wizard,model_mira_siat_cancel_wizard,group_mira_siat_supervisor,1,1,1,1
+access_mira_siat_catalog_item_manager,mira.siat.catalog.item manager,model_mira_siat_catalog_item,group_mira_siat_manager,1,1,0,0
+access_mira_siat_cafc_user,mira.siat.cafc user,model_mira_siat_cafc,group_mira_siat_user,1,0,0,0
+access_mira_siat_cafc_manager,mira.siat.cafc manager,model_mira_siat_cafc,group_mira_siat_manager,1,1,1,0
+access_mira_siat_retro_user,mira.siat.retro.authorization user,model_mira_siat_retro_authorization,group_mira_siat_user,1,0,0,0
+access_mira_siat_retro_backdate,mira.siat.retro.authorization backdate,model_mira_siat_retro_authorization,group_mira_siat_backdate,1,1,1,0
+access_mira_siat_config_wizard,mira.siat.config.wizard,model_mira_siat_config_wizard,group_mira_siat_manager,1,1,1,1
+access_mira_siat_config_wizard_branch,mira.siat.config.wizard.branch,model_mira_siat_config_wizard_branch,group_mira_siat_manager,1,1,1,1

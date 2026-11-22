@@ -1,0 +1,25 @@
+{
+    "name": "MIRABILENET: Pasantías sobre Proyecto",
+    "version": "19.0.2.0.0",
+    "summary": "Las pasantías con Proyecto y Empleados de Odoo",
+    "description": "Adapta Proyecto: el pasante ve lo suyo, entrega cuando cumple los puntos "
+                   "obligatorios y el tutor revisa. Detalle en readme/.",
+    "category": "MIRABILENET",
+    "author": "MIRABILENET",
+    "license": "AGPL-3",
+    "depends": ["mirabilenet_base", "project", "hr"],
+    "data": [
+        "security/mirabilenet_pasantias_security.xml",
+        "security/ir.model.access.csv",
+        "data/mirabilenet_pasantias_data.xml",
+        "views/project_project_views.xml",
+        "views/project_task_views.xml",
+        "views/hr_employee_views.xml",
+        "views/mirabilenet_internship_report_views.xml",
+        "views/mirabilenet_pasantias_menus.xml",
+        "report/mirabilenet_pasantias_report.xml",
+        "wizards/mirabilenet_internship_review_wizard_views.xml",
+    ],
+    "application": False,
+    "installable": True,
+}

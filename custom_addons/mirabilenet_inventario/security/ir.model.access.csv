@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_lot_mirabilenet_user,stock.lot lectura MIRABILENET,stock.model_stock_lot,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_stock_move_mirabilenet_user,stock.move lectura MIRABILENET,stock.model_stock_move,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_stock_location_mirabilenet_user,stock.location lectura MIRABILENET,stock.model_stock_location,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_stock_picking_type_mirabilenet_user,stock.picking.type lectura MIRABILENET,stock.model_stock_picking_type,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_stock_lot_mirabilenet_stock_user,stock.lot datos de la serie,stock.model_stock_lot,group_mirabilenet_stock_user,1,1,0,0
+access_mirabilenet_inventory_move_wizard,movimiento de inventario,model_mirabilenet_inventory_move_wizard,group_mirabilenet_stock_user,1,1,1,1

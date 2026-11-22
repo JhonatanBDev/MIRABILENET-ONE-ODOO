@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_whatsapp_optout_list" model="ir.ui.view">
+        <field name="name">mirabilenet.whatsapp.optout.list</field>
+        <field name="model">mirabilenet.whatsapp.optout</field>
+        <field name="arch" type="xml">
+            <list editable="top">
+                <field name="partner_id" options="{'no_create': True}"/>
+                <field name="region_id"/>
+                <field name="origin"/>
+                <field name="reason"/>
+                <field name="create_date" string="Desde"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_whatsapp_optout" model="ir.actions.act_window">
+        <field name="name">Bajas de mensajes</field>
+        <field name="res_model">mirabilenet.whatsapp.optout</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

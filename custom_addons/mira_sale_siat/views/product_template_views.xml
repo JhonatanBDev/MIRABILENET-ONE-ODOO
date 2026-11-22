@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Producto: homologación -->
+    <record id="product_template_form_mira_siat" model="ir.ui.view">
+        <field name="name">product.template.form.mira.siat</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="SIAT" name="mira_siat">
+                    <field name="mira_siat_homologated" invisible="1"/>
+                    <field name="mira_siat_activity_code" invisible="1"/>
+                    <field name="mira_siat_company_id" invisible="1"/>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="mira_siat_homologated">
+                        Todavía falta homologar este producto: sin actividad, producto SIN
+                        y unidad no se puede facturar.
+                    </div>
+                    <group string="Homologación (catálogos del SIN de la empresa actual)">
+                        <field name="mira_siat_is_discount"/>
+                        <field name="mira_siat_activity_id" options="{'no_create': True}"
+                               invisible="mira_siat_is_discount"/>
+                        <field name="mira_siat_product_id" options="{'no_create': True}"
+                               invisible="mira_siat_is_discount"
+                               readonly="not mira_siat_activity_id"
+                               domain="[('catalog_type', '=', 'productos_servicios'), ('company_id', '=', mira_siat_company_id), ('activity_code', '=', mira_siat_activity_code)]"/>
+                        <field name="mira_siat_unit_id" options="{'no_create': True}"
+                               invisible="mira_siat_is_discount"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_search_mira_siat" model="ir.ui.view">
+        <field name="name">product.template.search.mira.siat</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_search_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter name="mira_siat_not_homologated" string="Sin homologar con el SIAT"
+                        domain="[('mira_siat_homologated', '=', False)]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

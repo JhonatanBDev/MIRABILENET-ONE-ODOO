@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Datos ficticios, solo para probar. -->
+    <record id="demo_plan_hogar" model="product.template">
+        <field name="name">Hogar 20 (demo)</field>
+        <field name="type">service</field>
+        <field name="mirabilenet_is_plan" eval="True"/>
+        <field name="mirabilenet_plan_code">DEMO-HOGAR-20</field>
+        <field name="mirabilenet_down_mbps">20</field>
+        <field name="mirabilenet_up_mbps">10</field>
+        <field name="list_price">150</field>
+        <field name="mirabilenet_publish_web" eval="True"/>
+    </record>
+    <record id="demo_plan_norte" model="product.template">
+        <field name="name">Norte 50 (demo)</field>
+        <field name="type">service</field>
+        <field name="mirabilenet_is_plan" eval="True"/>
+        <field name="mirabilenet_plan_code">DEMO-NORTE-50</field>
+        <field name="mirabilenet_region_id" ref="mirabilenet_base.demo_region_norte"/>
+        <field name="mirabilenet_down_mbps">50</field>
+        <field name="mirabilenet_up_mbps">25</field>
+        <field name="list_price">250</field>
+    </record>
+
+    <record id="demo_customer_norte" model="res.partner">
+        <field name="name">Cliente de ejemplo Norte</field>
+        <field name="mirabilenet_is_customer" eval="True"/>
+        <field name="mirabilenet_region_id" ref="mirabilenet_base.demo_region_norte"/>
+        <field name="mirabilenet_zone_id" ref="mirabilenet_base.demo_zone_norte"/>
+        <field name="phone">70000001</field>
+    </record>
+    <record id="demo_customer_sur" model="res.partner">
+        <field name="name">Empresa de ejemplo Sur</field>
+        <field name="is_company" eval="True"/>
+        <field name="mirabilenet_is_customer" eval="True"/>
+        <field name="mirabilenet_customer_type">empresarial</field>
+        <field name="mirabilenet_region_id" ref="mirabilenet_base.demo_region_sur"/>
+        <field name="phone">70000002</field>
+    </record>
+</odoo>

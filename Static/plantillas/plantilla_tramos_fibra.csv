@@ -1,0 +1,3 @@
+﻿codigo;nombre;tipo;longitud_m;vertices;naps_en_ruta;lat_inicio;lon_inicio;lat_fin;lon_fin;hilos;tipo_cable;estado
+EJ-TR-01;Troncal Central - Ruta A;troncal;850.5;12;1A (EJ-A-01), 2A (EJ-A-02);-17.404864;-63.884567;-17.403895;-63.884512;48;ADSS;activa
+EJ-TR-02;Ruta B: Central - 1B;distribucion;420;6;1B (EJ-B-01);-17.404864;-63.884567;-17.406100;-63.881900;12;Drop;por_verificar

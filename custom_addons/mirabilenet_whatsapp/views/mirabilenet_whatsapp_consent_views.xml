@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Consentimientos y bajas -->
+    <record id="view_mirabilenet_whatsapp_consent_list" model="ir.ui.view">
+        <field name="name">mirabilenet.whatsapp.consent.list</field>
+        <field name="model">mirabilenet.whatsapp.consent</field>
+        <field name="arch" type="xml">
+            <list editable="top">
+                <field name="partner_id" options="{'no_create': True}"/>
+                <field name="region_id"/>
+                <field name="origin"/>
+                <field name="detail"/>
+                <field name="granted_at"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_whatsapp_consent" model="ir.actions.act_window">
+        <field name="name">Consentimientos</field>
+        <field name="res_model">mirabilenet.whatsapp.consent</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

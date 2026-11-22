@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cliente: datos de nominatividad -->
+    <record id="view_partner_form_mira_siat" model="ir.ui.view">
+        <field name="name">res.partner.form.mira.siat</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="SIAT" name="mira_siat">
+                    <field name="mira_siat_is_reserved_nit" invisible="1"/>
+                    <div class="alert alert-info" role="alert"
+                         invisible="not mira_siat_is_reserved_nit">
+                        NIT reservado para un caso especial: se emite siempre como NIT,
+                        sin complemento.
+                    </div>
+                    <group>
+                        <field name="mira_siat_legal_name" placeholder="Si se deja vacío, el nombre del contacto"/>
+                        <field name="mira_siat_doc_type_id" options="{'no_create': True}"
+                               invisible="mira_siat_is_reserved_nit"/>
+                        <field name="mira_siat_complement"
+                               invisible="mira_siat_is_reserved_nit"/>
+                    </group>
+                    <button name="action_mira_siat_verify_nit" type="object"
+                            string="Validar NIT en el SIAT" class="btn-secondary"
+                            groups="mira_sale_siat.group_mira_siat_user"/>
+                    <div class="text-muted mt-2">
+                        El número de documento se toma del campo de identificación
+                        fiscal (NIT/CI) del contacto.
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

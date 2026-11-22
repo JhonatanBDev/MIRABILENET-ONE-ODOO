@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_root" name="Pasantías" sequence="6"
+              web_icon="mirabilenet_pasantias,static/description/icon.png"
+              groups="group_internship_intern,group_internship_tutor"/>
+
+    <menuitem id="menu_intern_tasks" name="Mis tareas" parent="menu_root" action="action_intern_tasks"
+              sequence="5" groups="group_internship_intern"/>
+
+    <menuitem id="menu_team_work" name="Trabajo del equipo" parent="menu_root" action="action_team_work"
+              sequence="6" groups="group_internship_intern"/>
+
+    <menuitem id="menu_internship_tasks" name="Tareas" parent="menu_root" action="action_internship_tasks"
+              sequence="10" groups="group_internship_tutor"/>
+
+    <menuitem id="menu_internship_projects" name="Proyectos" parent="menu_root"
+              action="action_internship_projects" sequence="20" groups="group_internship_tutor"/>
+
+    <menuitem id="menu_interns" name="Pasantes" parent="menu_root" action="action_interns"
+              sequence="30" groups="group_internship_tutor"/>
+</odoo>

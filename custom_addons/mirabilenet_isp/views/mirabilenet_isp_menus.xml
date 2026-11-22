@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mirabilenet_customers" name="Clientes"
+              parent="mirabilenet_base.menu_mirabilenet_root"
+              action="action_mirabilenet_customer" sequence="10"/>
+    <menuitem id="menu_mirabilenet_services" name="Servicios"
+              parent="mirabilenet_base.menu_mirabilenet_root"
+              action="action_mirabilenet_service" sequence="15"/>
+    <menuitem id="menu_mirabilenet_plans" name="Planes"
+              parent="mirabilenet_base.menu_mirabilenet_root"
+              action="action_mirabilenet_plan" sequence="20"/>
+
+    <menuitem id="menu_mirabilenet_network" name="Red"
+              parent="mirabilenet_base.menu_mirabilenet_root" sequence="30"/>
+    <menuitem id="menu_mirabilenet_routers" name="Routers" parent="menu_mirabilenet_network"
+              action="action_mirabilenet_router" sequence="10"/>
+    <menuitem id="menu_mirabilenet_pppoe" name="Cuentas PPPoE" parent="menu_mirabilenet_network"
+              action="action_mirabilenet_pppoe" sequence="20"/>
+    <menuitem id="menu_mirabilenet_subnets" name="Subredes" parent="menu_mirabilenet_network"
+              action="action_mirabilenet_subnet" sequence="30"/>
+    <menuitem id="menu_mirabilenet_transitions" name="Órdenes de red"
+              parent="menu_mirabilenet_network" action="action_mirabilenet_transition"
+              sequence="40"/>
+</odoo>

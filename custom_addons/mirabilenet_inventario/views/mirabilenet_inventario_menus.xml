@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menús -->
+    <menuitem id="menu_mirabilenet_inventario" name="Inventario"
+              parent="mirabilenet_base.menu_mirabilenet_root" sequence="35"/>
+    <menuitem id="menu_mirabilenet_inventory_move" name="Registrar movimiento"
+              parent="menu_mirabilenet_inventario"
+              action="action_mirabilenet_inventory_move_wizard" sequence="5"
+              groups="group_mirabilenet_stock_user"/>
+    <menuitem id="menu_mirabilenet_lots" name="Series" parent="menu_mirabilenet_inventario"
+              action="action_mirabilenet_lot" sequence="10"/>
+    <menuitem id="menu_mirabilenet_quants" name="Existencias"
+              parent="menu_mirabilenet_inventario" action="action_mirabilenet_quant"
+              sequence="20"/>
+    <menuitem id="menu_mirabilenet_moves" name="Movimientos"
+              parent="menu_mirabilenet_inventario" action="action_mirabilenet_move"
+              sequence="30"/>
+    <menuitem id="menu_mirabilenet_items" name="Artículos"
+              parent="menu_mirabilenet_inventario" action="action_mirabilenet_item"
+              sequence="40"/>
+    <menuitem id="menu_mirabilenet_warehouses" name="Almacenes"
+              parent="menu_mirabilenet_inventario" action="action_mirabilenet_warehouse"
+              sequence="50"/>
+</odoo>

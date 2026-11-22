@@ -1,0 +1,31 @@
+{
+    "name": "MIRABILENET: Clientes, planes y red",
+    "version": "19.0.2.1.0",
+    "summary": "Clientes, planes, servicios, routers y subredes, aislados por región",
+    "description": "Clientes (sobre los contactos de Odoo) y planes de internet (sobre los "
+                   "productos), servicios, cuentas PPPoE, routers MikroTik con enrolamiento, subredes "
+                   "y órdenes de red. Todo aislado por región. Detalle en readme/.",
+    "external_dependencies": {"python": ["cryptography"]},
+    "category": "MIRABILENET",
+    "author": "MIRABILENET",
+    "license": "AGPL-3",
+    "depends": ["mirabilenet_base", "contacts", "product"],
+    "data": [
+        "security/mirabilenet_isp_security.xml",
+        "security/ir.model.access.csv",
+        "data/mirabilenet_isp_data.xml",
+        "data/mirabilenet_network_data.xml",
+        "views/res_partner_views.xml",
+        "views/product_template_views.xml",
+        "views/mirabilenet_service_views.xml",
+        "views/mirabilenet_router_views.xml",
+        "views/mirabilenet_subnet_views.xml",
+        "views/mirabilenet_pppoe_account_views.xml",
+        "views/mirabilenet_service_transition_views.xml",
+        "views/mirabilenet_isp_menus.xml",
+        "wizards/mirabilenet_router_script_wizard_views.xml",
+    ],
+    "demo": ["demo/mirabilenet_isp_demo.xml"],
+    "application": False,
+    "installable": True,
+}

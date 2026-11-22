@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Responder y simular -->
+    <record id="view_mirabilenet_chat_reply_form" model="ir.ui.view">
+        <field name="name">mirabilenet.chat.wizard.reply.form</field>
+        <field name="model">mirabilenet.chat.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <div class="alert alert-info" role="alert">
+                    Al responder, el asistente queda en pausa en este chat. Fuera de las 24
+                    horas desde el último mensaje del contacto solo vale una plantilla.
+                </div>
+                <group>
+                    <field name="conversation_id"/>
+                    <field name="text" placeholder="Escriba la respuesta"/>
+                </group>
+                <footer>
+                    <button name="action_reply" type="object" string="Enviar"
+                            class="btn-primary"/>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_chat_reply" model="ir.actions.act_window">
+        <field name="name">Responder</field>
+        <field name="res_model">mirabilenet.chat.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_mirabilenet_chat_reply_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_mirabilenet_chat_simulate_form" model="ir.ui.view">
+        <field name="name">mirabilenet.chat.wizard.simulate.form</field>
+        <field name="model">mirabilenet.chat.wizard</field>
+        <field name="priority">20</field>
+        <field name="arch" type="xml">
+            <form>
+                <div class="alert alert-warning" role="alert">
+                    Simulador: recorre el circuito completo con n8n, pero nada sale hacia
+                    WhatsApp. No aplica las palabras de baja.
+                </div>
+                <group>
+                    <field name="contact" required="1"
+                           placeholder="Número de un cliente, o uno libre para probar ventas"/>
+                    <field name="text" placeholder="Mensaje del contacto"/>
+                </group>
+                <footer>
+                    <button name="action_simulate" type="object" string="Enviar al asistente"
+                            class="btn-primary"/>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_chat_simulate" model="ir.actions.act_window">
+        <field name="name">Simulador</field>
+        <field name="res_model">mirabilenet.chat.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_mirabilenet_chat_simulate_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Lo que agrega el tutor en las pantallas de Proyecto y Empleados -->
+    <record id="view_project_form_mirabilenet" model="ir.ui.view">
+        <field name="name">project.project.form.mirabilenet</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='privacy_visibility']" position="after">
+                <field name="mirabilenet_internship"/>
+                <field name="mirabilenet_region_id" options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_internship_projects" model="ir.actions.act_window">
+        <field name="name">Proyectos de pasantías</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('mirabilenet_internship', '=', True)]</field>
+        <field name="context">{'default_mirabilenet_internship': True}</field>
+    </record>
+</odoo>

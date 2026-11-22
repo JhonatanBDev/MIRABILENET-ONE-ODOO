@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mirabilenet_root" name="MIRABILENET" sequence="5"
+              web_icon="mirabilenet_base,static/description/icon.png"
+              groups="group_mirabilenet_user"/>
+
+    <menuitem id="menu_mirabilenet_org" name="Organización" parent="menu_mirabilenet_root"
+              sequence="80"/>
+    <menuitem id="menu_mirabilenet_region" name="Regiones" parent="menu_mirabilenet_org"
+              action="action_mirabilenet_region" sequence="10"/>
+    <menuitem id="menu_mirabilenet_branch" name="Sucursales" parent="menu_mirabilenet_org"
+              action="action_mirabilenet_branch" sequence="20"/>
+    <menuitem id="menu_mirabilenet_zone" name="Zonas" parent="menu_mirabilenet_org"
+              action="action_mirabilenet_zone" sequence="30"/>
+    <menuitem id="menu_mirabilenet_node" name="Nodos" parent="menu_mirabilenet_org"
+              action="action_mirabilenet_node" sequence="40"/>
+
+    <menuitem id="menu_mirabilenet_users_root" name="Usuarios" parent="menu_mirabilenet_root"
+              sequence="90" groups="group_mirabilenet_user_admin"/>
+    <menuitem id="menu_mirabilenet_users" name="Usuarios" parent="menu_mirabilenet_users_root"
+              action="action_mirabilenet_users" sequence="10"/>
+    <menuitem id="menu_mirabilenet_user_new" name="Nuevo usuario"
+              parent="menu_mirabilenet_users_root" action="action_mirabilenet_user_wizard"
+              sequence="20"/>
+    <menuitem id="menu_mirabilenet_audit" name="Auditoría" parent="menu_mirabilenet_users_root"
+              action="action_mirabilenet_audit_log" sequence="30"/>
+</odoo>

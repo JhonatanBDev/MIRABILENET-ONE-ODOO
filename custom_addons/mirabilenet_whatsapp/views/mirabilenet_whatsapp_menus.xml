@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menús -->
+    <menuitem id="menu_mirabilenet_whatsapp" name="Mensajería"
+              parent="mirabilenet_base.menu_mirabilenet_root" sequence="28"/>
+    <menuitem id="menu_mirabilenet_whatsapp_send" name="Enviar aviso"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_whatsapp_send_wizard"
+              sequence="5" groups="group_mirabilenet_whatsapp_operator"/>
+    <menuitem id="menu_mirabilenet_whatsapp_messages" name="Bandeja"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_whatsapp_message"
+              sequence="10"/>
+    <menuitem id="menu_mirabilenet_whatsapp_tracking" name="Seguimiento"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_whatsapp_tracking"
+              sequence="15"/>
+    <menuitem id="menu_mirabilenet_whatsapp_consent" name="Consentimientos"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_whatsapp_consent"
+              sequence="20"/>
+    <menuitem id="menu_mirabilenet_whatsapp_optout" name="Bajas de mensajes"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_whatsapp_optout"
+              sequence="30"/>
+    <menuitem id="menu_mirabilenet_whatsapp_templates" name="Plantillas"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_whatsapp_template"
+              sequence="40"/>
+    <menuitem id="menu_mirabilenet_whatsapp_numbers" name="Números"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_whatsapp_number"
+              sequence="50"/>
+    <menuitem id="menu_mirabilenet_payment_qr" name="QR de pago"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_payment_qr"
+              sequence="60"/>
+    <menuitem id="menu_mirabilenet_whatsapp_settings" name="Ajustes"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_whatsapp_settings"
+              sequence="90" groups="group_mirabilenet_whatsapp_config"/>
+
+    <!-- Menús -->
+    <menuitem id="menu_mirabilenet_chats" name="Chats"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_conversation"
+              sequence="1"/>
+    <menuitem id="menu_mirabilenet_cases" name="Solicitudes"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_case" sequence="2"/>
+    <menuitem id="menu_mirabilenet_proofs" name="Comprobantes"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_proof" sequence="3"/>
+    <menuitem id="menu_mirabilenet_simulator" name="Simulador"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_chat_simulate"
+              sequence="4" groups="group_mirabilenet_whatsapp_operator"/>
+    <menuitem id="menu_mirabilenet_promos" name="Promociones"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_promo"
+              sequence="35"/>
+    <menuitem id="menu_mirabilenet_alerts" name="Alertas de n8n"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_alert"
+              sequence="70"/>
+    <menuitem id="menu_mirabilenet_bot_settings" name="Asistente con IA"
+              parent="menu_mirabilenet_whatsapp" action="action_mirabilenet_bot_settings"
+              sequence="80"/>
+</odoo>

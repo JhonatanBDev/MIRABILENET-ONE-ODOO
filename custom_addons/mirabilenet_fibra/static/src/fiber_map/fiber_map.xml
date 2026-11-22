@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mirabilenet_fibra.FiberMap">
+        <div class="o_fiber_map_action d-flex flex-column h-100">
+            <div class="o_fiber_map_toolbar d-flex flex-wrap align-items-center gap-2 p-2 border-bottom">
+                <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.setFilter('branch', ev.target.value)" title="Ramal">
+                    <option value="" t-att-selected="!state.branch">Todos los ramales</option>
+                    <t t-foreach="branches" t-as="branch" t-key="branch">
+                        <option t-att-value="branch" t-att-selected="state.branch == branch" t-esc="branch"/>
+                    </t>
+                </select>
+                <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.setFilter('napState', ev.target.value)" title="Estado de la NAP">
+                    <option value="" t-att-selected="!state.napState">Todos los estados</option>
+                    <option value="activa" t-att-selected="state.napState == 'activa'">Activa</option>
+                    <option value="por_verificar" t-att-selected="state.napState == 'por_verificar'">Por verificar</option>
+                    <option value="inactiva" t-att-selected="state.napState == 'inactiva'">Inactiva</option>
+                    <option value="danada" t-att-selected="state.napState == 'danada'">Dañada</option>
+                </select>
+                <select class="form-select form-select-sm w-auto" t-on-change="(ev) => this.setFilter('segmentType', ev.target.value)" title="Tipo de tramo">
+                    <option value="" t-att-selected="!state.segmentType">Todos los tramos</option>
+                    <option value="troncal" t-att-selected="state.segmentType == 'troncal'">Troncal</option>
+                    <option value="alimentador" t-att-selected="state.segmentType == 'alimentador'">Alimentador</option>
+                    <option value="distribucion" t-att-selected="state.segmentType == 'distribucion'">Distribución</option>
+                </select>
+                <label class="d-flex align-items-center gap-1 mb-0">
+                    <input type="checkbox" class="form-check-input mt-0" t-att-checked="state.onlyFree"
+                           t-on-change="(ev) => this.setFilter('onlyFree', ev.target.checked)"/>
+                    Solo NAP con puertos libres
+                </label>
+                <label class="d-flex align-items-center gap-1 mb-0">
+                    <input type="checkbox" class="form-check-input mt-0"
+                           t-att-checked="state.showCustomers" t-on-change="onToggleCustomers"/>
+                    Clientes
+                </label>
+                <div class="input-group input-group-sm w-auto">
+                    <input type="search" class="form-control" placeholder="Código de NAP o cliente"
+                           t-model="state.search" t-on-keydown="onSearchKeydown"/>
+                    <button class="btn btn-secondary" t-on-click="search" title="Buscar">
+                        <i class="fa fa-search"/>
+                    </button>
+                </div>
+                <button class="btn btn-sm btn-light" t-on-click="fitAll" title="Ver toda la red">
+                    <i class="fa fa-arrows-alt"/> Ver todo
+                </button>
+            </div>
+            <div t-if="warnings.length and !state.warningsDismissed"
+                 class="o_fiber_map_warnings alert alert-warning rounded-0 mb-0 py-1 px-2">
+                <div class="d-flex align-items-center">
+                    <i class="fa fa-exclamation-triangle me-2"/>
+                    <a href="#" class="alert-link" t-on-click.prevent="toggleWarnings">
+                        <t t-esc="warnings.length"/> avisos de datos —
+                        <t t-if="state.warningsOpen">ocultar</t><t t-else="">ver</t>
+                    </a>
+                    <button type="button" class="btn-close ms-auto" title="Cerrar"
+                            t-on-click="dismissWarnings"/>
+                </div>
+                <ul t-if="state.warningsOpen" class="o_fiber_map_warning_list list-unstyled mb-1 mt-1">
+                    <t t-foreach="warnings" t-as="warning" t-key="warning_index">
+                        <li>
+                            <a href="#" t-on-click.prevent="() => this.onWarningClick(warning)">
+                                <strong t-esc="warning.code"/>
+                            </a>: <t t-esc="warning.text"/>
+                        </li>
+                    </t>
+                </ul>
+            </div>
+            <div class="o_fiber_map_wrapper position-relative flex-grow-1">
+                <div class="o_fiber_map h-100 w-100" t-ref="map"/>
+                <div class="o_fiber_map_legend">
+                    <div class="fw-bold mb-1">NAP</div>
+                    <t t-foreach="napStatus" t-as="status" t-key="status.key">
+                        <div class="d-flex align-items-center gap-2">
+                            <span t-attf-class="o_fiber_nap_square o_fiber_legend_square o_fiber_status_{{status.key}}"/>
+                            <span t-esc="status.label"/>
+                        </div>
+                    </t>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="o_fiber_customer_dot"/>
+                        <span>Cliente</span>
+                    </div>
+                    <div class="fw-bold mt-2 mb-1">Tramos</div>
+                    <t t-foreach="legendLines" t-as="line" t-key="line.label">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="o_fiber_legend_line"
+                                  t-attf-style="background: {{line.color}}; height: {{line.type == 'troncal' ? 6 : 4}}px;"/>
+                            <span t-esc="line.label"/>
+                        </div>
+                    </t>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="o_fiber_legend_line o_fiber_legend_dashed"/>
+                        <span>Sin recorrido real</span>
+                    </div>
+                    <div t-if="state.data.missing_position" class="text-muted mt-1">
+                        <t t-esc="state.data.missing_position"/> NAP sin coordenadas
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

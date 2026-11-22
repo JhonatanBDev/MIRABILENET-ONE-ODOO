@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="module_category_mirabilenet" model="ir.module.category">
+            <field name="name">MIRABILENET</field>
+            <field name="sequence">5</field>
+        </record>
+
+        <record id="group_mirabilenet_user" model="res.groups">
+            <field name="name">MIRABILENET / Personal (ve su región)</field>
+            <field name="comment">Base de todo el personal interno. El pasante no lo tiene.</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="group_mirabilenet_global" model="res.groups">
+            <field name="name">MIRABILENET / Alcance global</field>
+            <field name="comment">Ve todas las regiones.</field>
+        </record>
+        <record id="group_mirabilenet_org_manager" model="res.groups">
+            <field name="name">MIRABILENET / Administra sucursales, zonas y nodos</field>
+        </record>
+        <record id="group_mirabilenet_region_manager" model="res.groups">
+            <field name="name">MIRABILENET / Administra regiones y su calendario de cobro</field>
+        </record>
+        <record id="group_mirabilenet_user_admin" model="res.groups">
+            <field name="name">MIRABILENET / Administra usuarios</field>
+        </record>
+
+        <!-- Un grupo por rol. Los asigna el campo «Rol en MIRABILENET» del usuario. -->
+        <record id="group_role_superadmin" model="res.groups">
+            <field name="name">MIRABILENET rol / Superadministrador</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user')), (4, ref('group_mirabilenet_global')), (4, ref('group_mirabilenet_org_manager')), (4, ref('group_mirabilenet_user_admin')), (4, ref('group_mirabilenet_region_manager'))]"/>
+        </record>
+        <record id="group_role_gerencia" model="res.groups">
+            <field name="name">MIRABILENET rol / Gerencia general</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user')), (4, ref('group_mirabilenet_global')), (4, ref('group_mirabilenet_org_manager')), (4, ref('group_mirabilenet_user_admin')), (4, ref('group_mirabilenet_region_manager'))]"/>
+        </record>
+        <record id="group_role_admin_regional" model="res.groups">
+            <field name="name">MIRABILENET rol / Administrador regional</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user')), (4, ref('group_mirabilenet_org_manager')), (4, ref('group_mirabilenet_user_admin'))]"/>
+        </record>
+        <record id="group_role_noc" model="res.groups">
+            <field name="name">MIRABILENET rol / NOC</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user'))]"/>
+        </record>
+        <record id="group_role_tecnico" model="res.groups">
+            <field name="name">MIRABILENET rol / Técnico</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user'))]"/>
+        </record>
+        <record id="group_role_finanzas" model="res.groups">
+            <field name="name">MIRABILENET rol / Finanzas</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user'))]"/>
+        </record>
+        <record id="group_role_cajero" model="res.groups">
+            <field name="name">MIRABILENET rol / Cajero</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user'))]"/>
+        </record>
+        <record id="group_role_cobrador" model="res.groups">
+            <field name="name">MIRABILENET rol / Cobrador</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user'))]"/>
+        </record>
+        <record id="group_role_almacenista" model="res.groups">
+            <field name="name">MIRABILENET rol / Almacenista</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user'))]"/>
+        </record>
+        <record id="group_role_vendedor" model="res.groups">
+            <field name="name">MIRABILENET rol / Vendedor</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user'))]"/>
+        </record>
+        <record id="group_role_operador_camaras" model="res.groups">
+            <field name="name">MIRABILENET rol / Operador de cámaras</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user'))]"/>
+        </record>
+        <record id="group_role_auditor" model="res.groups">
+            <field name="name">MIRABILENET rol / Auditor</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user')), (4, ref('group_mirabilenet_user')), (4, ref('group_mirabilenet_global'))]"/>
+        </record>
+        <record id="group_role_pasante" model="res.groups">
+            <field name="name">MIRABILENET rol / Pasante</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+
+    <!-- Aislamiento por región: vale también si alguien pide un registro por su id. -->
+    <data noupdate="1">
+        <record id="rule_mirabilenet_region_region" model="ir.rule">
+            <field name="name">MIRABILENET: región de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_region"/>
+            <field name="domain_force">[('id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_region_global" model="ir.rule">
+            <field name="name">MIRABILENET: región, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_region"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_branch_region" model="ir.rule">
+            <field name="name">MIRABILENET: sucursal de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_branch"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_branch_global" model="ir.rule">
+            <field name="name">MIRABILENET: sucursal, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_branch"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_zone_region" model="ir.rule">
+            <field name="name">MIRABILENET: zona de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_zone"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_zone_global" model="ir.rule">
+            <field name="name">MIRABILENET: zona, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_zone"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_node_region" model="ir.rule">
+            <field name="name">MIRABILENET: nodo de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_node"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_node_global" model="ir.rule">
+            <field name="name">MIRABILENET: nodo, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_node"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_audit_log_region" model="ir.rule">
+            <field name="name">MIRABILENET: auditoría de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_audit_log"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_audit_log_global" model="ir.rule">
+            <field name="name">MIRABILENET: auditoría, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_audit_log"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_mirabilenet_global'))]"/>
+        </record>
+
+        <!-- El administrador de Odoo arranca como superadministrador de MIRABILENET. -->
+        <record id="base.user_admin" model="res.users">
+            <field name="mirabilenet_role">superadmin</field>
+        </record>
+    </data>
+</odoo>

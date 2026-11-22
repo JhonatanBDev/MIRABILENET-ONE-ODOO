@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================= Empresa: perfil tributario ================= -->
+    <record id="view_company_form_mira_siat" model="ir.ui.view">
+        <field name="name">res.company.form.mira.siat</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="SIAT (Mira_Sale)" name="mira_siat"
+                      groups="mira_sale_siat.group_mira_siat_manager">
+                    <group>
+                        <group string="Perfil tributario">
+                            <field name="mira_siat_enabled"/>
+                            <field name="mira_siat_association_status"/>
+                            <field name="mira_siat_environment"/>
+                            <field name="mira_siat_modality"/>
+                            <field name="mira_siat_system_code"/>
+                            <field name="mira_siat_gateway_mode"/>
+                        </group>
+                        <group string="Token delegado">
+                            <field name="mira_siat_token_state"/>
+                            <field name="mira_siat_token_fingerprint"/>
+                            <field name="mira_siat_token_expires_at"/>
+                            <button name="action_mira_siat_token_wizard" type="object"
+                                    string="Configurar token" class="btn-secondary"
+                                    colspan="2"/>
+                        </group>
+                        <group string="Parámetros de emisión">
+                            <field name="mira_siat_currency_item_id" options="{'no_create': True}"/>
+                            <field name="mira_siat_default_payment_method_id"
+                                   options="{'no_create': True}"/>
+                            <field name="mira_siat_credit_payment_method_id"
+                                   options="{'no_create': True}"/>
+                            <field name="mira_siat_default_unit_id"
+                                   options="{'no_create': True}"/>
+                            <field name="mira_siat_default_sector"/>
+                            <field name="mira_siat_activity_ids" widget="many2many_tags"
+                                   options="{'no_create': True}"/>
+                        </group>
+                        <group string="Operación">
+                            <field name="mira_siat_package_size"/>
+                            <field name="mira_siat_backdate_max_hours"/>
+                            <field name="mira_siat_auto_email"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="mira_siat_gateway_mode != 'fake'">
+                        Conexión en modo <b>simulador</b>: los documentos no llegan al SIN
+                        y no tienen validez fiscal.
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

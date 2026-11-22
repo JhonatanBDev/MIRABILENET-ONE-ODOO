@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_service_form_fiber" model="ir.ui.view">
+        <field name="name">mirabilenet.service.form.fibra</field>
+        <field name="model">mirabilenet.service</field>
+        <field name="inherit_id" ref="mirabilenet_isp.view_mirabilenet_service_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_title')]" position="before">
+                <div class="oe_button_box" name="button_box"
+                     groups="mirabilenet_fibra.group_mirabilenet_fiber_user">
+                    <button name="action_view_fiber_maintenance" type="object"
+                            class="oe_stat_button" icon="fa-wrench">
+                        <field name="fiber_maintenance_count" widget="statinfo" string="Averías"/>
+                    </button>
+                    <button name="action_open_fiber_map" type="object" class="oe_stat_button"
+                            icon="fa-map-marker" string="Mapa" invisible="not fiber_nap_id"/>
+                    <button name="action_mirabilenet_fiber_locate" type="object"
+                            class="oe_stat_button" icon="fa-crosshairs" string="Ubicar"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='install_address']" position="before">
+                <field name="fiber_nap_id" options="{'no_create': True}"
+                       groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+                <field name="fiber_port_id" options="{'no_create': True}"
+                       invisible="not fiber_nap_id"
+                       groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_service_list_fiber" model="ir.ui.view">
+        <field name="name">mirabilenet.service.list.fibra</field>
+        <field name="model">mirabilenet.service</field>
+        <field name="inherit_id" ref="mirabilenet_isp.view_mirabilenet_service_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="fiber_nap_id" optional="hide"
+                       groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+                <field name="fiber_port_id" optional="hide"
+                       groups="mirabilenet_fibra.group_mirabilenet_fiber_user"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

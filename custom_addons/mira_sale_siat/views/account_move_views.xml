@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Factura y nota de crédito de cliente: emisión fiscal -->
+    <record id="view_move_form_mira_siat" model="ir.ui.view">
+        <field name="name">account.move.form.mira.siat</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/header/button[@name='action_post']" position="before">
+                <field name="mira_siat_enabled" invisible="1"/>
+                <button name="action_mira_siat_issue" type="object" class="oe_highlight"
+                        string="Emitir al SIAT"
+                        invisible="not mira_siat_enabled or move_type not in ('out_invoice', 'out_refund') or state != 'posted' or mira_siat_state not in (False, 'rejected')"
+                        groups="mira_sale_siat.group_mira_siat_user"/>
+                <button name="action_mira_siat_open" type="object"
+                        string="Documento fiscal"
+                        invisible="not mira_siat_state"
+                        groups="mira_sale_siat.group_mira_siat_user"/>
+            </xpath>
+            <xpath expr="//page[@id='other_tab']" position="after">
+                <page string="SIAT" name="mira_siat"
+                      invisible="not mira_siat_enabled or move_type not in ('out_invoice', 'out_refund')">
+                    <group>
+                        <group string="Emisión">
+                            <field name="mira_siat_pos_id" options="{'no_create': True}"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                            <field name="mira_siat_sector" invisible="move_type != 'out_invoice'"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                            <field name="mira_siat_joint_nit"
+                                   invisible="move_type != 'out_invoice' or mira_siat_sector != '22'"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                            <field name="mira_siat_force_invalid_nit"
+                                   invisible="move_type != 'out_invoice'"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                        </group>
+                        <group string="Pago" invisible="move_type != 'out_invoice'">
+                            <field name="mira_siat_payment_method_id"
+                                   options="{'no_create': True}"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                            <field name="mira_siat_payment_method_manual" invisible="1"/>
+                            <field name="mira_siat_suggested_method_id" invisible="1"/>
+                            <div class="text-muted" colspan="2"
+                                 invisible="not mira_siat_suggested_method_id or mira_siat_suggested_method_id == mira_siat_payment_method_id or mira_siat_state not in (False, 'rejected')">
+                                Según los cobros y el plazo corresponde
+                                <field name="mira_siat_suggested_method_id" readonly="1"
+                                       class="oe_inline" nolabel="1"/>.
+                                Se aplicará al emitir si no elige otro a mano.
+                            </div>
+                            <field name="mira_siat_method_includes_card" invisible="1"/>
+                            <field name="mira_siat_method_includes_gift" invisible="1"/>
+                            <field name="mira_siat_card_number"
+                                   invisible="not mira_siat_method_includes_card"
+                                   required="mira_siat_method_includes_card"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                            <field name="mira_siat_gift_card_amount"
+                                   invisible="not mira_siat_method_includes_gift"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                        </group>
+                        <group string="Descuento global" invisible="move_type != 'out_invoice'">
+                            <field name="mira_siat_global_discount" readonly="state != 'draft'"/>
+                            <button name="action_mira_siat_apply_global_discount" type="object"
+                                    string="Aplicar descuento" class="btn-secondary" colspan="2"
+                                    invisible="state != 'draft'"/>
+                        </group>
+                        <group string="Contingencia" invisible="move_type != 'out_invoice'">
+                            <field name="mira_siat_manual"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                            <field name="mira_siat_manual_number" invisible="not mira_siat_manual"
+                                   required="mira_siat_manual"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                            <field name="mira_siat_manual_date" invisible="not mira_siat_manual"
+                                   required="mira_siat_manual"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                            <field name="mira_siat_can_backdate" invisible="1"/>
+                            <field name="mira_siat_backdate"
+                                   invisible="mira_siat_manual or not mira_siat_can_backdate"
+                                   readonly="mira_siat_state not in (False, 'rejected')"/>
+                        </group>
+                        <group string="Documento fiscal">
+                            <field name="mira_siat_invoice_id"/>
+                            <field name="mira_siat_state" widget="badge"
+                                   decoration-success="mira_siat_state in ('valid', 'package_validated')"
+                                   decoration-danger="mira_siat_state == 'rejected'"
+                                   decoration-warning="mira_siat_state in ('pending_retry', 'offline_issued', 'packaged', 'package_sent')"/>
+                            <field name="mira_siat_cuf"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

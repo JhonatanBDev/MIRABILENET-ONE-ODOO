@@ -1,0 +1,5 @@
+/.env.odoo
+/odoo.conf
+/respaldos/
+/custom_addons
+/oca

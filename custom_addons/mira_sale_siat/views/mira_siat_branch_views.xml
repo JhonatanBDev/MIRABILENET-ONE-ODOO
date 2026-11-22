@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================= Sucursales ================= -->
+    <record id="mira_siat_branch_view_list" model="ir.ui.view">
+        <field name="name">mira.siat.branch.list</field>
+        <field name="model">mira.siat.branch</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="municipality"/>
+                <field name="address"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="mira_siat_branch_view_form" model="ir.ui.view">
+        <field name="name">mira.siat.branch.form</field>
+        <field name="model">mira.siat.branch</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="CASA MATRIZ"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="code"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group>
+                            <field name="municipality"/>
+                            <field name="address"/>
+                            <field name="phone"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Puntos de venta" name="pos">
+                            <field name="pos_ids">
+                                <list editable="bottom">
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="connectivity_state" widget="badge"
+                                           decoration-success="connectivity_state == 'online'"
+                                           decoration-warning="connectivity_state == 'degraded'"
+                                           decoration-danger="connectivity_state == 'contingency'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mira_siat_branch_action" model="ir.actions.act_window">
+        <field name="name">Sucursales</field>
+        <field name="res_model">mira.siat.branch</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

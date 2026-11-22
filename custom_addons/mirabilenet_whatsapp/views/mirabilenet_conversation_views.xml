@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Chats -->
+    <record id="view_mirabilenet_conversation_list" model="ir.ui.view">
+        <field name="name">mirabilenet.conversation.list</field>
+        <field name="model">mirabilenet.conversation</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" decoration-bf="pending_review">
+                <field name="pending_review" column_invisible="1"/>
+                <field name="last_incoming_at"/>
+                <field name="contact"/>
+                <field name="partner_id"/>
+                <field name="region_id"/>
+                <field name="channel"/>
+                <field name="attended_by" optional="show"/>
+                <field name="window_open"/>
+                <field name="state" widget="badge" decoration-info="state == 'bot'"
+                       decoration-warning="state == 'humano'" decoration-muted="state == 'cerrada'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_conversation_search" model="ir.ui.view">
+        <field name="name">mirabilenet.conversation.search</field>
+        <field name="model">mirabilenet.conversation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="contact"/>
+                <field name="partner_id"/>
+                <filter name="sin_revisar" string="Sin revisar"
+                        domain="[('pending_review', '=', True)]"/>
+                <filter name="humano" string="Atiende una persona"
+                        domain="[('state', '=', 'humano')]"/>
+                <filter name="prospectos" string="No son clientes"
+                        domain="[('partner_id', '=', False)]"/>
+                <filter name="whatsapp" string="Solo WhatsApp"
+                        domain="[('channel', '=', 'whatsapp')]"/>
+                <group>
+                    <filter name="por_region" string="Región" context="{'group_by': 'region_id'}"/>
+                    <filter name="por_estado" string="Estado" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_conversation_form" model="ir.ui.view">
+        <field name="name">mirabilenet.conversation.form</field>
+        <field name="model">mirabilenet.conversation</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <header>
+                    <button name="%(action_mirabilenet_chat_reply)d" type="action"
+                            string="Responder" class="btn-primary"
+                            context="{'default_conversation_id': id}"
+                            groups="mirabilenet_whatsapp.group_mirabilenet_whatsapp_operator"/>
+                    <button name="action_mark_reviewed" type="object" string="Marcar revisada"
+                            invisible="not pending_review"
+                            groups="mirabilenet_whatsapp.group_mirabilenet_whatsapp_operator"/>
+                    <button name="action_return_to_bot" type="object"
+                            string="Devolver al asistente" invisible="state == 'bot'"
+                            groups="mirabilenet_whatsapp.group_mirabilenet_whatsapp_operator"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <field name="pending_review" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="contact"/>
+                            <field name="partner_id"/>
+                            <field name="region_id"/>
+                            <field name="channel"/>
+                        </group>
+                        <group>
+                            <field name="attended_by"/>
+                            <field name="last_incoming_at"/>
+                            <field name="window_until"/>
+                            <field name="window_open"/>
+                        </group>
+                    </group>
+                    <field name="message_ids">
+                        <list decoration-info="direction == 'saliente'"
+                              decoration-danger="state == 'fallido'">
+                            <field name="create_date" string="Cuándo"/>
+                            <field name="direction" column_invisible="1"/>
+                            <field name="origin"/>
+                            <field name="kind"/>
+                            <field name="text"/>
+                            <field name="state"/>
+                            <field name="error_detail" optional="show"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_conversation" model="ir.actions.act_window">
+        <field name="name">Chats</field>
+        <field name="res_model">mirabilenet.conversation</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_whatsapp': 1}</field>
+    </record>
+</odoo>

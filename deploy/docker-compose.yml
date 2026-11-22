@@ -1,0 +1,52 @@
+# Odoo de MIRABILENET en el VPS. Primer uso de Docker del proyecto (el desarrollo fue sin él).
+# Se levanta junto al sistema anterior, en su propia carpeta, sin tocarlo:
+#   cd /opt/mirabilenet-odoo && docker compose up -d
+# Los secretos van en .env.odoo (fuera de Git, permisos 600). Nunca en la imagen.
+name: mirabilenet-odoo
+
+services:
+  odoo_db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file: .env.odoo
+    environment:
+      POSTGRES_DB: postgres
+    volumes:
+      - odoo_pg:/var/lib/postgresql/data
+      - ./respaldos:/respaldos
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  odoo:
+    image: odoo:19.0
+    restart: unless-stopped
+    env_file: .env.odoo
+    environment:
+      HOST: odoo_db
+    depends_on:
+      odoo_db:
+        condition: service_healthy
+    volumes:
+      - ./odoo.conf:/etc/odoo/odoo.conf:ro
+      - ./custom_addons:/mnt/custom_addons:ro
+      - ./oca:/mnt/oca:ro
+      - odoo_data:/var/lib/odoo
+      # La misma carpeta de WireGuard que usa hoy la API del sistema anterior.
+      - ${WIREGUARD_DIR:-/opt/mirabilenet-one/wireguard}:/wireguard
+    networks:
+      - default
+      - mirabilenet
+
+networks:
+  # La red del sistema anterior, donde está n8n. Odoo entra con su propio nombre («odoo»);
+  # el nombre «api» se le da solo el día del cambio (docker-compose.cambio.yml).
+  mirabilenet:
+    external: true
+    name: ${RED_SISTEMA_ANTERIOR:-mirabilenet-one_default}
+
+volumes:
+  odoo_pg:
+  odoo_data:

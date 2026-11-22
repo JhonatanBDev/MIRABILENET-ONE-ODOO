@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================= Asistente de configuración ================= -->
+    <record id="mira_siat_config_wizard_view_form" model="ir.ui.view">
+        <field name="name">mira.siat.config.wizard.form</field>
+        <field name="model">mira.siat.config.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Asistente de configuración SIAT">
+                <field name="step" invisible="1"/>
+                <field name="is_production" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <h3><field name="progress" readonly="1" nolabel="1"/></h3>
+                <div class="alert alert-warning" role="alert"
+                     invisible="not notice or is_production">
+                    <field name="notice" readonly="1" nolabel="1"/>
+                </div>
+                <div class="alert alert-danger" role="alert"
+                     invisible="not notice or not is_production">
+                    <field name="notice" readonly="1" nolabel="1"/>
+                </div>
+
+                <group invisible="step != 'company'">
+                    <field name="nit_ok" invisible="1"/>
+                    <field name="nit" placeholder="Solo dígitos"/>
+                    <div class="text-success" colspan="2" invisible="not nit_ok">
+                        Va a facturar con este NIT.
+                    </div>
+                    <div class="text-warning" colspan="2" invisible="nit_ok or not nit">
+                        El NIT debe contener solo dígitos.
+                    </div>
+                </group>
+
+                <group invisible="step != 'connection'">
+                    <field name="gateway_mode" widget="radio"/>
+                    <field name="environment" widget="radio"/>
+                    <field name="modality"/>
+                    <field name="system_code" invisible="gateway_mode != 'real'"
+                           placeholder="Código asignado por el SIN al sistema Mira_Sale"/>
+                    <field name="associated" invisible="gateway_mode != 'real'"/>
+                </group>
+
+                <div invisible="step != 'branches'">
+                    <p class="text-muted">
+                        Las sucursales se crean en la Oficina Virtual del SIN; aquí se
+                        registran con el mismo número. La sucursal 0 es la casa matriz.
+                        Cada sucursal tiene su punto de venta 0; los adicionales se
+                        registran ante el SIN en el siguiente paso de sincronización.
+                    </p>
+                    <field name="branch_ids">
+                        <list editable="bottom">
+                            <field name="branch_id" column_invisible="1"/>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="address"/>
+                            <field name="municipality"/>
+                            <field name="phone"/>
+                            <field name="existing_count"/>
+                            <field name="pos_count"/>
+                        </list>
+                    </field>
+                </div>
+
+                <group invisible="step != 'token'">
+                    <field name="token_state"/>
+                    <field name="token" password="True"
+                           placeholder="Pegue aquí el token delegado"/>
+                    <field name="token_expires_at"/>
+                    <div class="text-muted" colspan="2">
+                        El token se cifra al guardar y no vuelve a mostrarse. Si ya hay
+                        uno vigente, puede dejar el campo vacío.
+                    </div>
+                </group>
+
+                <div invisible="step != 'sync'">
+                    <p>Se solicitarán CUIS y CUFD para cada punto de venta y se
+                       descargarán los catálogos oficiales del SIN.</p>
+                    <field name="result_message" readonly="1" nolabel="1"/>
+                </div>
+
+                <group invisible="step != 'defaults'">
+                    <field name="currency_item_id" options="{'no_create': True}"/>
+                    <field name="default_payment_method_id" options="{'no_create': True}"/>
+                    <field name="credit_payment_method_id" options="{'no_create': True}"/>
+                    <field name="default_unit_id" options="{'no_create': True}"/>
+                    <field name="default_sector"/>
+                    <field name="activity_ids" widget="many2many_tags"
+                           options="{'no_create': True}"/>
+                </group>
+
+                <div invisible="step != 'done'">
+                    <h4>Todo listo</h4>
+                    <p>Ya puede emitir. Falta homologar cada producto (pestaña SIAT:
+                       actividad, producto SIN y unidad) e indicar el tipo de documento
+                       de sus clientes.</p>
+                </div>
+
+                <footer>
+                    <button name="action_back" type="object" string="Anterior"
+                            class="btn-secondary" invisible="step == 'company'"/>
+                    <button name="action_next" type="object" string="Siguiente"
+                            class="btn-primary" invisible="step == 'done'"/>
+                    <button name="action_finish" type="object" string="Terminar"
+                            class="btn-primary" invisible="step != 'done'"/>
+                    <button string="Cerrar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="mira_siat_config_wizard_action" model="ir.actions.act_window">
+        <field name="name">Asistente de configuración SIAT</field>
+        <field name="res_model">mira.siat.config.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

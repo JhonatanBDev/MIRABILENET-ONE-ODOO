@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_web_root" name="Sitio web" parent="mirabilenet_base.menu_mirabilenet_root"
+              sequence="70"/>
+
+    <menuitem id="menu_web_lead" name="Consultas" parent="menu_web_root" action="action_web_lead"
+              sequence="5"/>
+
+    <menuitem id="menu_web_settings" name="Configuración del sitio" parent="menu_web_root"
+              action="action_web_settings" sequence="10"
+              groups="group_mirabilenet_web_publisher"/>
+
+    <menuitem id="menu_web_service" name="Servicios" parent="menu_web_root" action="action_web_service" sequence="20"/>
+
+    <menuitem id="menu_web_coverage" name="Cobertura" parent="menu_web_root" action="action_web_coverage" sequence="21"/>
+
+    <menuitem id="menu_web_project" name="Proyectos" parent="menu_web_root" action="action_web_project" sequence="22"/>
+
+    <menuitem id="menu_web_faq" name="Preguntas frecuentes" parent="menu_web_root" action="action_web_faq" sequence="23"/>
+
+    <menuitem id="menu_web_advantage" name="Ventajas" parent="menu_web_root" action="action_web_advantage" sequence="24"/>
+
+    <menuitem id="menu_web_figure" name="Cifras" parent="menu_web_root" action="action_web_figure" sequence="25"/>
+
+    <menuitem id="menu_web_ally" name="Tecnologías y aliados" parent="menu_web_root" action="action_web_ally" sequence="26"/>
+
+    <menuitem id="menu_web_legal" name="Textos legales" parent="menu_web_root" action="action_web_legal" sequence="27"/>
+</odoo>

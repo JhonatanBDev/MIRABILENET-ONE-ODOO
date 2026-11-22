@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Series -->
+    <record id="view_mirabilenet_lot_list" model="ir.ui.view">
+        <field name="name">stock.lot.mirabilenet.list</field>
+        <field name="model">stock.lot</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0">
+                <field name="name" string="Número de serie"/>
+                <field name="product_id"/>
+                <field name="mirabilenet_mac" optional="show"/>
+                <field name="mirabilenet_region_id"/>
+                <field name="mirabilenet_warehouse_id"/>
+                <field name="mirabilenet_technician_id" optional="show"/>
+                <field name="mirabilenet_partner_id" optional="show"/>
+                <field name="mirabilenet_warranty_until" optional="hide"/>
+                <field name="mirabilenet_state" widget="badge"
+                       decoration-success="mirabilenet_state == 'en_almacen'"
+                       decoration-info="mirabilenet_state in ('con_tecnico', 'en_cliente')"
+                       decoration-warning="mirabilenet_state == 'en_reparacion'"
+                       decoration-muted="mirabilenet_state == 'baja'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_lot_form" model="ir.ui.view">
+        <field name="name">stock.lot.mirabilenet.form</field>
+        <field name="model">stock.lot</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <header>
+                    <field name="mirabilenet_state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Número de serie"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Dónde está">
+                            <field name="product_id" readonly="1"/>
+                            <field name="mirabilenet_region_id"/>
+                            <field name="mirabilenet_warehouse_id"/>
+                            <field name="mirabilenet_technician_id"/>
+                            <field name="mirabilenet_partner_id"/>
+                        </group>
+                        <group string="Datos del equipo">
+                            <field name="mirabilenet_mac"/>
+                            <field name="mirabilenet_supplier"/>
+                            <field name="mirabilenet_purchase_date"/>
+                            <field name="mirabilenet_warranty_until"/>
+                            <field name="mirabilenet_cost"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Observaciones"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_lot_search" model="ir.ui.view">
+        <field name="name">stock.lot.mirabilenet.search</field>
+        <field name="model">stock.lot</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Serie o MAC"
+                       filter_domain="['|', ('name', 'ilike', self), ('mirabilenet_mac', 'ilike', self)]"/>
+                <field name="product_id"/>
+                <field name="mirabilenet_partner_id"/>
+                <field name="mirabilenet_technician_id"/>
+                <filter name="en_almacen" string="En almacén"
+                        domain="[('mirabilenet_state', '=', 'en_almacen')]"/>
+                <filter name="con_tecnico" string="Con técnico"
+                        domain="[('mirabilenet_state', '=', 'con_tecnico')]"/>
+                <filter name="en_cliente" string="En cliente"
+                        domain="[('mirabilenet_state', '=', 'en_cliente')]"/>
+                <filter name="en_reparacion" string="En reparación"
+                        domain="[('mirabilenet_state', '=', 'en_reparacion')]"/>
+                <group>
+                    <filter name="por_situacion" string="Situación"
+                            context="{'group_by': 'mirabilenet_state'}"/>
+                    <filter name="por_articulo" string="Artículo"
+                            context="{'group_by': 'product_id'}"/>
+                    <filter name="por_almacen" string="Almacén"
+                            context="{'group_by': 'mirabilenet_warehouse_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_lot" model="ir.actions.act_window">
+        <field name="name">Series</field>
+        <field name="res_model">stock.lot</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('mirabilenet_state', '!=', False)]</field>
+        <field name="search_view_id" ref="view_mirabilenet_lot_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_mirabilenet_lot_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_mirabilenet_lot_form')})]"/>
+    </record>
+</odoo>

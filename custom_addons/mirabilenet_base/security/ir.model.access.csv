@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mirabilenet_region_user,mirabilenet.region user,model_mirabilenet_region,group_mirabilenet_user,1,0,0,0
+access_mirabilenet_region_manager,mirabilenet.region manager,model_mirabilenet_region,group_mirabilenet_region_manager,1,1,1,0
+access_mirabilenet_branch_user,mirabilenet.branch user,model_mirabilenet_branch,group_mirabilenet_user,1,0,0,0
+access_mirabilenet_branch_manager,mirabilenet.branch manager,model_mirabilenet_branch,group_mirabilenet_org_manager,1,1,1,0
+access_mirabilenet_zone_user,mirabilenet.zone user,model_mirabilenet_zone,group_mirabilenet_user,1,0,0,0
+access_mirabilenet_zone_manager,mirabilenet.zone manager,model_mirabilenet_zone,group_mirabilenet_org_manager,1,1,1,0
+access_mirabilenet_node_user,mirabilenet.node user,model_mirabilenet_node,group_mirabilenet_user,1,0,0,0
+access_mirabilenet_node_manager,mirabilenet.node manager,model_mirabilenet_node,group_mirabilenet_org_manager,1,1,1,0
+access_mirabilenet_audit_log_admin,mirabilenet.audit.log admin,model_mirabilenet_audit_log,group_mirabilenet_user_admin,1,0,0,0
+access_mirabilenet_audit_log_global,mirabilenet.audit.log global,model_mirabilenet_audit_log,group_mirabilenet_global,1,0,0,0
+access_mirabilenet_user_wizard_admin,mirabilenet.user.wizard admin,model_mirabilenet_user_wizard,group_mirabilenet_user_admin,1,1,1,1

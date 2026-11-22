@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_fiber" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.mirabilenet_fibra</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="40"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Red de fibra" string="Red de fibra" name="mirabilenet_fibra"
+                     groups="mirabilenet_fibra.group_mirabilenet_fiber_manager">
+                    <block title="Cajas NAP">
+                        <setting string="Puertos por caja NAP"
+                                 help="Cada caja nueva nace con esta cantidad de puertos (de 8 a 16).">
+                            <field name="mirabilenet_fiber_default_port_count"/>
+                            <div class="mt8">
+                                <button name="action_mirabilenet_apply_standard_ports"
+                                        type="object" string="Aplicar a las cajas sin puertos"
+                                        class="btn-link" icon="fa-arrow-right"/>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Cobertura">
+                        <setting string="Umbral de baja ocupación"
+                                 help="Las zonas con menos ocupación que este porcentaje aparecen en «Zonas con pocos clientes».">
+                            <field name="mirabilenet_fiber_low_occupancy_threshold"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_fiber_settings" model="ir.actions.act_window">
+        <field name="name">Ajustes</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'module': 'mirabilenet_fibra', 'bin_size': False}</field>
+    </record>
+</odoo>

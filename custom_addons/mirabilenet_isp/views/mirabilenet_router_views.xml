@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Routers -->
+    <record id="view_mirabilenet_router_list" model="ir.ui.view">
+        <field name="name">mirabilenet.router.list</field>
+        <field name="model">mirabilenet.router</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="region_id"/>
+                <field name="zone_id" optional="show"/>
+                <field name="wg_ip"/>
+                <field name="function"/>
+                <field name="routeros_version" optional="show"/>
+                <field name="last_diagnosis" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'conectado'"
+                       decoration-warning="state == 'degradado'"
+                       decoration-danger="state == 'desconectado'"
+                       decoration-muted="state == 'retirado'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_router_form" model="ir.ui.view">
+        <field name="name">mirabilenet.router.form</field>
+        <field name="model">mirabilenet.router</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_generate_enrollment" type="object"
+                            string="Generar guion de enrolamiento" class="btn-primary"
+                            invisible="state == 'retirado'"
+                            groups="mirabilenet_isp.group_mirabilenet_network_manager"/>
+                    <button name="action_probe" type="object" string="Diagnosticar ahora"
+                            invisible="state == 'retirado'"/>
+                    <button name="action_declare_peer" type="object" string="Declarar peer"
+                            invisible="not wg_public_key or state == 'retirado'"
+                            groups="mirabilenet_isp.group_mirabilenet_network_manager"/>
+                    <button name="action_offboard" type="object" string="Retirar router"
+                            invisible="state == 'retirado'"
+                            confirm="Se revocará su acceso por WireGuard y quedará retirado. ¿Continuar?"
+                            groups="mirabilenet_isp.group_mirabilenet_network_manager"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pendiente,desconectado,degradado,conectado"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Ubicación">
+                            <field name="region_id" options="{'no_create': True}"/>
+                            <field name="zone_id" options="{'no_create': True}"/>
+                            <field name="node_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="Equipo">
+                            <field name="model"/>
+                            <field name="equipment_type"/>
+                            <field name="routeros_version"/>
+                            <field name="function"/>
+                            <field name="control_mode"/>
+                        </group>
+                        <group string="Gestión">
+                            <field name="wg_ip"/>
+                            <field name="wg_public_key"/>
+                            <field name="wg_last_handshake"/>
+                            <field name="api_user"/>
+                            <field name="api_port"/>
+                            <field name="has_credentials"/>
+                        </group>
+                        <group string="Diagnóstico: el handshake solo no basta">
+                            <field name="chk_handshake"/>
+                            <field name="chk_ping"/>
+                            <field name="chk_api"/>
+                            <field name="chk_identity"/>
+                            <field name="chk_version"/>
+                            <field name="last_diagnosis"/>
+                        </group>
+                        <group string="Informado por el equipo">
+                            <field name="identity"/>
+                            <field name="serial"/>
+                            <field name="board_name"/>
+                            <field name="api_address_before"/>
+                        </group>
+                    </group>
+                    <group string="Redes LAN publicadas">
+                        <field name="lan_networks" nolabel="1" colspan="2"
+                               placeholder="Una por línea, por ejemplo 192.168.10.0/24"/>
+                    </group>
+                    <notebook>
+                        <page string="Cambios de configuración">
+                            <field name="config_change_ids">
+                                <list create="0" edit="0" delete="0">
+                                    <field name="create_date" string="Cuándo"/>
+                                    <field name="kind"/>
+                                    <field name="summary"/>
+                                    <field name="backup_name"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_router" model="ir.actions.act_window">
+        <field name="name">Routers</field>
+        <field name="res_model">mirabilenet.router</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

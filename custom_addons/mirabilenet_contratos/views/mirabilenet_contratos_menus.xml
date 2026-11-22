@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mirabilenet_billing" name="Cobros"
+              parent="mirabilenet_base.menu_mirabilenet_root" sequence="30"
+              groups="account.group_account_invoice"/>
+    <menuitem id="menu_mirabilenet_invoices" name="Facturas a clientes" parent="menu_mirabilenet_billing"
+              action="account.action_move_out_invoice_type" sequence="10"/>
+    <menuitem id="menu_mirabilenet_payments" name="Pagos" parent="menu_mirabilenet_billing"
+              action="account.action_account_payments" sequence="20"/>
+    <menuitem id="menu_mirabilenet_contracts" name="Contratos de cobro" parent="menu_mirabilenet_billing"
+              action="contract.action_customer_contract" sequence="30"/>
+</odoo>

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_project_intern,project_project intern,project.model_project_project,group_internship_intern,1,0,0,0
+access_project_task_intern,project_task intern,project.model_project_task,group_internship_intern,1,1,0,0
+access_project_task_type_intern,project_task_type intern,project.model_project_task_type,group_internship_intern,1,0,0,0
+access_project_tags_intern,project_tags intern,project.model_project_tags,group_internship_intern,1,0,0,0
+access_report_intern,report intern,model_mirabilenet_internship_report,group_internship_intern,1,1,0,0
+access_report_tutor,report tutor,model_mirabilenet_internship_report,group_internship_tutor,1,1,1,0
+access_review_wizard_tutor,review wizard tutor,model_mirabilenet_internship_review_wizard,group_internship_tutor,1,1,1,1

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Movimientos -->
+    <record id="view_mirabilenet_move_list" model="ir.ui.view">
+        <field name="name">stock.move.mirabilenet.list</field>
+        <field name="model">stock.move</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="date"/>
+                <field name="mirabilenet_kind"/>
+                <field name="product_id"/>
+                <field name="mirabilenet_lot_id" optional="show"/>
+                <field name="quantity"/>
+                <field name="mirabilenet_source_id" optional="show"/>
+                <field name="mirabilenet_dest_id" optional="show"/>
+                <field name="mirabilenet_technician_id" optional="show"/>
+                <field name="mirabilenet_partner_id" optional="show"/>
+                <field name="mirabilenet_region_id"/>
+                <field name="mirabilenet_document" optional="hide"/>
+                <field name="mirabilenet_reason" optional="show"/>
+                <field name="mirabilenet_user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_move" model="ir.actions.act_window">
+        <field name="name">Movimientos</field>
+        <field name="res_model">stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="domain">[('mirabilenet_kind', '!=', False)]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_mirabilenet_move_list')})]"/>
+    </record>
+</odoo>

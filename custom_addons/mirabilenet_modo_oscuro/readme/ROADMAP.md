@@ -1,0 +1,2 @@
+- El sitio web público y el punto de venta siguen siempre en claro.
+- En Firefox la primera carga puede verse clara un momento antes de pasar a oscuro.

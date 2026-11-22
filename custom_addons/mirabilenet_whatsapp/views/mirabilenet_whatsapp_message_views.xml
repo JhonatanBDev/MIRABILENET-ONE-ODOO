@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Bandeja -->
+    <record id="view_mirabilenet_whatsapp_message_list" model="ir.ui.view">
+        <field name="name">mirabilenet.whatsapp.message.list</field>
+        <field name="model">mirabilenet.whatsapp.message</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="create_date" string="Encolado"/>
+                <field name="partner_id"/>
+                <field name="event"/>
+                <field name="charge_id"/>
+                <field name="destination"/>
+                <field name="region_id"/>
+                <field name="number_id" optional="hide"/>
+                <field name="attempts" optional="show"/>
+                <field name="sent_at" optional="show"/>
+                <field name="error_code" optional="show"/>
+                <field name="error_detail" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('enviado', 'entregado', 'leido')"
+                       decoration-warning="state == 'pendiente'"
+                       decoration-danger="state == 'fallido'"
+                       decoration-muted="state == 'descartado'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_whatsapp_message_search" model="ir.ui.view">
+        <field name="name">mirabilenet.whatsapp.message.search</field>
+        <field name="model">mirabilenet.whatsapp.message</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="charge_id"/>
+                <field name="destination"/>
+                <filter name="enviados" string="Enviados"
+                        domain="[('state', 'in', ('enviado', 'entregado', 'leido'))]"/>
+                <filter name="pendientes" string="Pendientes" domain="[('state', '=', 'pendiente')]"/>
+                <filter name="fallidos" string="Fallidos" domain="[('state', '=', 'fallido')]"/>
+                <group>
+                    <filter name="por_cliente" string="Cliente" context="{'group_by': 'partner_id'}"/>
+                    <filter name="por_evento" string="Evento" context="{'group_by': 'event'}"/>
+                    <filter name="por_estado" string="Estado" context="{'group_by': 'state'}"/>
+                    <filter name="por_region" string="Región" context="{'group_by': 'region_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_whatsapp_message" model="ir.actions.act_window">
+        <field name="name">Bandeja de WhatsApp</field>
+        <field name="res_model">mirabilenet.whatsapp.message</field>
+        <field name="view_mode">list,pivot</field>
+    </record>
+
+    <!-- Seguimiento: solo cuenta lo enviado, entregado o leído -->
+    <record id="action_mirabilenet_whatsapp_tracking" model="ir.actions.act_window">
+        <field name="name">Seguimiento de cobranza</field>
+        <field name="res_model">mirabilenet.whatsapp.message</field>
+        <field name="view_mode">list,pivot</field>
+        <field name="domain">[('event', 'in', ('aviso_emitido', 'recordatorio_pago', 'aviso_vencido', 'recordatorio_mora'))]</field>
+        <field name="context">{'search_default_enviados': 1, 'search_default_por_cliente': 1}</field>
+    </record>
+</odoo>

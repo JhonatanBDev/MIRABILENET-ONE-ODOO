@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_event_form_mirabilenet" model="ir.ui.view">
+        <field name="name">event.event.form.mirabilenet</field>
+        <field name="model">event.event</field>
+        <field name="inherit_id" ref="event.view_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_begin']" position="after">
+                <field name="mirabilenet_date_confirmed"/>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="mirabilenet_region_id" options="{'no_create': True}"/>
+                <field name="mirabilenet_missing" invisible="not mirabilenet_missing"
+                       decoration-warning="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

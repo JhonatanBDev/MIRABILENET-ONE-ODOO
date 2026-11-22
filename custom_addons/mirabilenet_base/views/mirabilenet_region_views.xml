@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Regiones -->
+    <record id="view_mirabilenet_region_list" model="ir.ui.view">
+        <field name="name">mirabilenet.region.list</field>
+        <field name="model">mirabilenet.region</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="dia_emision_prepago"/>
+                <field name="dia_vencimiento"/>
+                <field name="dias_gracia"/>
+                <field name="currency_id" optional="hide"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_region_form" model="ir.ui.view">
+        <field name="name">mirabilenet.region.form</field>
+        <field name="model">mirabilenet.region</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Inactiva" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Identificación">
+                            <field name="code"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Red">
+                            <field name="wg_region_id"/>
+                            <field name="bloque_gestion"/>
+                            <field name="bloque_camaras"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Cobro prepago">
+                            <field name="dia_emision_prepago"/>
+                            <field name="dia_vencimiento"/>
+                            <field name="prorrateo_prepago_activacion"/>
+                            <field name="prorrateo_prepago_desde"
+                                   invisible="not prorrateo_prepago_activacion"/>
+                        </group>
+                        <group string="Cobro pospago">
+                            <div class="text-muted" colspan="2">
+                                Cada servicio pospago se cobra todos los meses el día de su
+                                alta y vence ese mismo día. Las altas del 29 al 31 pasan al 28
+                                cuando llega un mes que no tiene ese día.
+                            </div>
+                        </group>
+                        <group string="Corte y reactivación">
+                            <field name="dias_gracia"/>
+                            <field name="hora_corte" widget="float_time"/>
+                            <field name="suspension_automatica"/>
+                            <field name="reactivacion_automatica"/>
+                        </group>
+                        <group string="Metas comerciales">
+                            <field name="objetivo_mrr"/>
+                            <field name="precio_referencia"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Sucursales">
+                            <field name="branch_ids">
+                                <list editable="bottom">
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="address"/>
+                                    <field name="phone"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Zonas">
+                            <field name="zone_ids">
+                                <list editable="bottom">
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="sector"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_region" model="ir.actions.act_window">
+        <field name="name">Regiones</field>
+        <field name="res_model">mirabilenet.region</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

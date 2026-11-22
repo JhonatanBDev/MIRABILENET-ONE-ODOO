@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Asistente con IA -->
+    <record id="view_mirabilenet_bot_settings_form" model="ir.ui.view">
+        <field name="name">mirabilenet.bot.settings.form</field>
+        <field name="model">mirabilenet.bot.settings</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <header>
+                    <button name="action_retry_model" type="object"
+                            string="Volver a probar los modelos"
+                            groups="mirabilenet_base.group_mirabilenet_global"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Interruptores">
+                            <field name="support_on"/>
+                            <field name="sales_on"/>
+                        </group>
+                        <group string="Modelo">
+                            <field name="model"/>
+                            <field name="backup_model"/>
+                            <field name="daily_limit"/>
+                            <field name="in_use"/>
+                        </group>
+                    </group>
+                    <group string="Uso del día (medido, no estimado)">
+                        <field name="usage_summary" nolabel="1" colspan="2"/>
+                    </group>
+                    <notebook>
+                        <page string="Estilo de ventas">
+                            <field name="sales_style"/>
+                        </page>
+                        <page string="Estilo de soporte">
+                            <field name="support_style"/>
+                        </page>
+                        <page string="Quiénes somos">
+                            <field name="about_us"
+                                   placeholder="Vacío: el asistente dice solo que somos MIRABILENET, proveedor de internet, y nombra las regiones."/>
+                        </page>
+                    </notebook>
+                    <p class="text-muted">
+                        El estilo cambia el tono, nunca los datos ni las reglas. Precios, planes,
+                        cobertura y promociones salen solo de lo cargado en el sistema.
+                    </p>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_bot_settings" model="ir.actions.server">
+        <field name="name">Asistente con IA</field>
+        <field name="model_id" ref="model_mirabilenet_bot_settings"/>
+        <field name="state">code</field>
+        <field name="code">action = {
+    "type": "ir.actions.act_window", "name": "Asistente con IA",
+    "res_model": "mirabilenet.bot.settings", "view_mode": "form",
+    "res_id": model._load().id,
+}</field>
+    </record>
+</odoo>

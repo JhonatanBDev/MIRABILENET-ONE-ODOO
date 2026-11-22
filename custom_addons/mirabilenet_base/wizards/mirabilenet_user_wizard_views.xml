@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_user_wizard_form" model="ir.ui.view">
+        <field name="name">mirabilenet.user.wizard.form</field>
+        <field name="model">mirabilenet.user.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="user_id" invisible="1"/>
+                        <field name="name"/>
+                        <field name="login"/>
+                        <field name="email"/>
+                        <field name="phone"/>
+                        <field name="active" invisible="not user_id"/>
+                    </group>
+                    <group>
+                        <field name="role"/>
+                        <field name="region_id" options="{'no_create': True}"/>
+                        <field name="branch_id" options="{'no_create': True}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_save" type="object" string="Guardar"
+                            class="btn-primary"/>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_user_wizard" model="ir.actions.act_window">
+        <field name="name">Nuevo usuario</field>
+        <field name="res_model">mirabilenet.user.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

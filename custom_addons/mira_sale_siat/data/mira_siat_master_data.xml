@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- XSD oficiales adicionales (descargados de siatinfo.impuestos.gob.bo). -->
+        <record id="xsd_telecom_computarizada" model="mira.siat.xsd">
+            <field name="name">Factura de Telecomunicaciones - Computarizada</field>
+            <field name="sector_code">22</field>
+            <field name="modality">2</field>
+            <field name="filename">facturaComputarizadaTelecomunicacion.xsd</field>
+            <field name="version_note">XSD ver. 23/08/2021 (descargado el 19/11/2026)</field>
+            <field name="file" type="base64" file="mira_sale_siat/data/xsd/facturaComputarizadaTelecomunicacion.xsd"/>
+        </record>
+        <record id="xsd_nota_credito_debito_computarizada" model="mira.siat.xsd">
+            <field name="name">Nota de Crédito-Débito - Computarizada</field>
+            <field name="sector_code">24</field>
+            <field name="modality">2</field>
+            <field name="filename">notaComputarizadaCreditoDebito.xsd</field>
+            <field name="version_note">XSD ver. 23/08/2021 (descargado el 19/11/2026)</field>
+            <field name="file" type="base64" file="mira_sale_siat/data/xsd/notaComputarizadaCreditoDebito.xsd"/>
+        </record>
+
+        <!-- Casos especiales de nominatividad: NIT reservados. -->
+        <record id="partner_nit_99001" model="res.partner">
+            <field name="name">CLIENTE EXTRANJERO (plantilla: duplicar por cliente)</field>
+            <field name="vat">99001</field>
+            <field name="comment">Plantilla para clientes extranjeros no inscritos. Duplique este contacto y escriba la razón social del cliente; el NIT 99001 puede repetirse.</field>
+        </record>
+        <record id="partner_nit_99002" model="res.partner">
+            <field name="name">CONTROL TRIBUTARIO</field>
+            <field name="vat">99002</field>
+            <field name="comment">Uso exclusivo en operativos de control tributario del SIN.</field>
+        </record>
+        <record id="partner_nit_99003" model="res.partner">
+            <field name="name">VENTAS MENORES DEL DIA</field>
+            <field name="vat">99003</field>
+            <field name="comment">Ventas menores sin datos del comprador.</field>
+        </record>
+
+        <!-- Producto para la línea de descuento global. -->
+        <record id="product_global_discount" model="product.product">
+            <field name="name">Descuento</field>
+            <field name="default_code">DESCUENTO</field>
+            <field name="type">service</field>
+            <field name="sale_ok" eval="True"/>
+            <field name="purchase_ok" eval="False"/>
+            <field name="list_price">0</field>
+            <field name="mira_siat_is_discount" eval="True"/>
+        </record>
+    </data>
+
+    <data noupdate="0">
+        <record id="mail_template_mira_siat_invoice" model="mail.template">
+            <field name="name">Mira_Sale SIAT: documento fiscal</field>
+            <field name="model_id" ref="model_mira_siat_invoice"/>
+            <field name="subject">{{ object.company_id.name }}: {{ object.document_kind == 'note' and 'Nota de crédito-débito' or 'Factura' }} N.º {{ object.number }}</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.move_id.partner_id.id }}</field>
+            <field name="report_template_ids" eval="[(4, ref('mira_sale_siat.action_report_mira_siat_invoice'))]"/>
+            <field name="body_html" type="html">
+<div>
+    <p>Estimado(a) <t t-out="object.move_id.partner_id.name"/>:</p>
+    <p>Adjuntamos su documento fiscal N.º <strong t-out="object.number"/> por
+       <strong t-out="format_amount(object.amount_total, object.currency_id)"/>,
+       en formato PDF y XML.</p>
+    <p>Código de autorización (CUF): <t t-out="object.cuf"/></p>
+    <p t-if="object.qr_url">Puede verificarlo en el portal del SIN:
+       <a t-att-href="object.qr_url">consulta de la factura</a>.</p>
+    <p>Gracias por su preferencia.<br/><t t-out="object.company_id.name"/></p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+
+        <record id="mail_template_mira_siat_cancelled" model="mail.template">
+            <field name="name">Mira_Sale SIAT: aviso de anulación</field>
+            <field name="model_id" ref="model_mira_siat_invoice"/>
+            <field name="subject">{{ object.company_id.name }}: anulación del documento N.º {{ object.number }}</field>
+            <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.move_id.partner_id.id }}</field>
+            <field name="body_html" type="html">
+<div>
+    <p>Estimado(a) <t t-out="object.move_id.partner_id.name"/>:</p>
+    <p>Le informamos que el documento fiscal N.º <strong t-out="object.number"/>
+       (CUF <t t-out="object.cuf"/>) fue <strong>ANULADO</strong> ante el Servicio de
+       Impuestos Nacionales.</p>
+    <p t-if="object.cancellation_reason_id">Motivo: <t t-out="object.cancellation_reason_id.name"/></p>
+    <p><t t-out="object.company_id.name"/></p>
+</div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>

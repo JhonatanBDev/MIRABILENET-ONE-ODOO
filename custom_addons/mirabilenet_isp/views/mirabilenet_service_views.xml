@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Servicios -->
+    <record id="view_mirabilenet_service_list" model="ir.ui.view">
+        <field name="name">mirabilenet.service.list</field>
+        <field name="model">mirabilenet.service</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <field name="region_id"/>
+                <field name="payment_mode"/>
+                <field name="monthly_price"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="router_id" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'activo'"
+                       decoration-warning="state == 'moroso'"
+                       decoration-danger="state == 'suspendido'"
+                       decoration-muted="state == 'baja'"/>
+                <field name="pending_transition" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_service_search" model="ir.ui.view">
+        <field name="name">mirabilenet.service.search</field>
+        <field name="model">mirabilenet.service</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="plan_id"/>
+                <field name="router_id"/>
+                <filter name="activos" string="Activos" domain="[('state', '=', 'activo')]"/>
+                <filter name="morosos" string="Morosos" domain="[('state', '=', 'moroso')]"/>
+                <filter name="suspendidos" string="Suspendidos"
+                        domain="[('state', '=', 'suspendido')]"/>
+                <filter name="prepago" string="Prepago"
+                        domain="[('payment_mode', '=', 'prepago')]"/>
+                <filter name="pospago" string="Pospago"
+                        domain="[('payment_mode', '=', 'pospago')]"/>
+                <group>
+                    <filter name="por_region" string="Región" context="{'group_by': 'region_id'}"/>
+                    <filter name="por_estado" string="Estado" context="{'group_by': 'state'}"/>
+                    <filter name="por_plan" string="Plan" context="{'group_by': 'plan_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_service_form" model="ir.ui.view">
+        <field name="name">mirabilenet.service.form</field>
+        <field name="model">mirabilenet.service</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" type="object" string="Activar"
+                            class="btn-primary"
+                            invisible="state not in ('pendiente_instalacion', 'moroso', 'suspendido')"
+                            groups="mirabilenet_isp.group_mirabilenet_service_manager"/>
+                    <button name="action_partial_cut" type="object" string="Corte parcial"
+                            invisible="state != 'activo'"
+                            confirm="Se bajará la velocidad del cliente al perfil reducido."
+                            groups="mirabilenet_isp.group_mirabilenet_service_manager"/>
+                    <button name="action_suspend" type="object" string="Suspender"
+                            invisible="state not in ('activo', 'moroso')"
+                            confirm="Se cortará el servicio del cliente."
+                            groups="mirabilenet_isp.group_mirabilenet_service_manager"/>
+                    <button name="action_disconnect" type="object" string="Desconectar sesión"
+                            invisible="state not in ('activo', 'moroso')"
+                            groups="mirabilenet_isp.group_mirabilenet_service_manager"/>
+                    <button name="action_terminate" type="object" string="Dar de baja"
+                            invisible="state == 'baja'"
+                            confirm="¿Dar de baja este servicio? No se puede deshacer."
+                            groups="mirabilenet_isp.group_mirabilenet_service_manager"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="pendiente_instalacion,activo"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-info" role="alert" invisible="not pending_transition">
+                        Hay una orden de red en curso. El estado cambiará cuando el equipo la
+                        confirme.
+                    </div>
+                    <field name="pending_transition" invisible="1"/>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Contrato">
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="region_id" options="{'no_create': True}"/>
+                            <field name="plan_id" options="{'no_create': True}"/>
+                            <field name="payment_mode"/>
+                            <field name="monthly_price"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="billing_day"/>
+                        </group>
+                        <group string="Instalación">
+                            <field name="node_id" options="{'no_create': True}"/>
+                            <field name="router_id" options="{'no_create': True}"/>
+                            <field name="install_address"/>
+                            <field name="date_start"/>
+                            <field name="date_end" invisible="not date_end"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Cuenta PPPoE">
+                            <field name="pppoe_ids">
+                                <list editable="bottom">
+                                    <field name="username"/>
+                                    <field name="password" password="True"/>
+                                    <field name="has_password"/>
+                                    <field name="fixed_ip"/>
+                                    <field name="caller_id"/>
+                                    <field name="profile"/>
+                                    <field name="enabled"/>
+                                    <field name="synced"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Órdenes de red">
+                            <field name="transition_ids">
+                                <list create="0" edit="0" delete="0"
+                                      decoration-danger="state == 'revision_manual'"
+                                      decoration-success="state == 'confirmada'">
+                                    <field name="create_date" string="Solicitada"/>
+                                    <field name="action"/>
+                                    <field name="state"/>
+                                    <field name="attempts"/>
+                                    <field name="summary"/>
+                                    <field name="error_detail"/>
+                                    <field name="user_id"/>
+                                    <button name="action_retry" type="object" string="Reintentar"
+                                            invisible="state != 'revision_manual'"/>
+                                    <button name="action_cancel" type="object" string="Cancelar"
+                                            invisible="state not in ('pendiente', 'reintento', 'revision_manual')"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Observaciones">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_service" model="ir.actions.act_window">
+        <field name="name">Servicios</field>
+        <field name="res_model">mirabilenet.service</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_form_mirabilenet" model="ir.ui.view">
+        <field name="name">hr.employee.form.mirabilenet</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_type']" position="after">
+                <field name="mirabilenet_institution" invisible="employee_type != 'trainee'"/>
+                <field name="mirabilenet_career" invisible="employee_type != 'trainee'"/>
+                <field name="mirabilenet_hours_committed" invisible="employee_type != 'trainee'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_interns" model="ir.actions.act_window">
+        <field name="name">Pasantes</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('employee_type', '=', 'trainee')]</field>
+        <field name="context">{'default_employee_type': 'trainee'}</field>
+    </record>
+</odoo>

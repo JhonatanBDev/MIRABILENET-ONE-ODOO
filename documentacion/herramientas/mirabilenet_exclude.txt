@@ -1,0 +1,21 @@
+# Repositorio MIRABILENET: solo el proyecto propio, no Odoo.
+/*
+!/custom_addons/
+!/deploy/
+!/documentacion/
+!/Static/
+/Static/*
+!/Static/plantillas/
+!/ESTADO.md
+!/AGENTS.md
+!/CLAUDE.md
+!/.claude/
+/.claude/*
+!/.claude/settings.json
+!/.gitignore-mirabilenet
+custom_addons/graphify-out/
+__pycache__/
+*.py[co]
+.env.odoo
+/odoo.conf
+/deploy/odoo.conf

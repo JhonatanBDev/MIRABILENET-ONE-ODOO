@@ -1,0 +1,142 @@
+PLANTILLAS PARA IMPORTAR DATOS A ODOO (MIRABILENET)
+====================================================
+
+En esta carpeta hay tres plantillas con datos de EJEMPLO. Los nombres, carnets, teléfonos,
+IP y series son inventados: borre esas filas y ponga las suyas antes de importar.
+
+  plantilla_cartera_clientes.csv   clientes, servicios, cuentas PPPoE y ONU
+  plantilla_cajas_nap.csv          cajas NAP de la red de fibra
+  plantilla_tramos_fibra.csv       tramos (recorridos) de la red de fibra
+
+Cómo guardar el archivo
+-----------------------
+- Formato CSV. En Excel: Archivo > Guardar como > «CSV UTF-8 (delimitado por comas)».
+  Si Excel lo guarda con «;» también sirve: el importador acepta «;» y «,».
+- La primera fila son los encabezados. No importan mayúsculas, tildes ni espacios
+  («Teléfono» = «TELEFONO» = «telefono»).
+- Las filas vacías se saltan. Una columna que el importador no conoce se avisa y se ignora.
+
+
+1. CARTERA DE CLIENTES  (plantilla_cartera_clientes.csv)
+--------------------------------------------------------
+Dónde:  MIRABILENET > Importar cartera
+Quién:  gerencia y administración regional (solo de su región).
+
+Pasos:
+  1. Elija la región.
+  2. Suba el CSV. El botón «Descargar plantilla» baja esta misma plantilla.
+  3. Pulse «Revisar». Ve un resumen: cuántos servicios y clientes se crearán, cuáles ya
+     existen, qué planes nuevos hacen falta y cuántos avisos hay. TODAVÍA NO SE GUARDA NADA.
+     Puede descargar «revisar_en_campo_<región>.csv» con lo que hay que verificar.
+  4. Si está bien, pulse «Importar». Si no, «Atrás», corrija el archivo y vuelva a subirlo.
+
+Columnas OBLIGATORIAS:
+  NOMBRE               nombre del titular. Lo que va después de «+» o «EN WS» se pasa a
+                       las notas (ejemplo: «CARLOS GUTIERREZ + CATV»).
+  PRECIO DEL PAQUETE   mensualidad en Bs (140, 140.50 o 140,50).
+  USUARIO PPPoE        usuario del cliente en el router. Es la clave: si ya existe en la
+                       región, esa fila se salta (importar dos veces no duplica).
+  PLAN win box         nombre exacto del perfil en Winbox (ejemplo: 35MBPS-2026140).
+
+Columnas opcionales:
+  MODALIDAD DE PAGO    prepago o pospago (vacío = prepago).
+                         prepago: se avisa a todos el «día de emisión (prepago)» de la región.
+                         pospago: se cobra cada mes el día del alta.
+  IP REMOTA            IP fija del cliente.
+  C.I.                 carnet, con o sin expedido (1234567 SC, 2345678 CBBA, 8086560-1K).
+  TELEFONO             celular de 8 dígitos (se usa también como WhatsApp).
+  BARRIO               «B/ VILLA BELEN», «B. Villa Belen» o «Villa Belen» quedan igual.
+  DIRECCION            referencia de la casa.
+  MARCA, MODELO        de la ONU (V-SOL, C-DATA, HUAWEI, ZTE, LANLY...).
+  No. De SERIE         serie de la ONU. Sin serie, la ONU no se registra en inventario.
+  No. MAC              MAC de la ONU, con o sin «:» o «-».
+  FECHA SOLICITUD      dd/mm/aaaa.
+  FECHA ACTIVACION     dd/mm/aaaa. Es la fecha de alta del servicio (si falta, se usa la de
+                       solicitud).
+  LATITUD, LONGITUD    con punto o coma decimal (-17,404000 o -17.404000).
+  CAJA NAP             código de la caja (YAP-D-08) o su nombre corto (8D), de la misma
+                       región. Las cajas se cargan antes (sección 2).
+  PUERTO               número del puerto de esa caja, de 1 a 8 (también «P3» o «Puerto 3»).
+
+Qué crea:
+  - PLANES que no existan: uno por cada «PLAN win box» distinto, con la velocidad que dice el
+    nombre (35MBPS = 35 Mbps de bajada y de subida), el precio de la planilla y TV incluida si
+    el nombre dice CATV. Si el plan ya existe en la región, se usa el que hay.
+  - CLIENTES: uno por persona (mismo C.I. y mismo nombre). Si una persona tiene dos servicios,
+    ponga dos filas con el mismo nombre y C.I. (vea «JUAN PEREZ ROJAS» en la plantilla).
+  - SERVICIOS activos, con su cuenta PPPoE. NO se mandan órdenes a los routers: se asume que
+    ya funcionan.
+  - ONU en inventario, instaladas en el cliente, con su serie y MAC.
+  - CAJA NAP Y PUERTO de cada servicio, si vienen las dos columnas. Así cada puerto queda con
+    la IP de su cliente y «Red de fibra > Ubicar cliente (por IP)» muestra a qué caja ir.
+    Sirve también para servicios ya importados: suba de nuevo la planilla con estas dos
+    columnas y solo se asignan los puertos (no se duplica nada). Si la planilla dice otro
+    puerto para un servicio que ya tenía uno, se cambia y queda anotado en la lista.
+  - NO crea contratos de cobro: se crean aparte, cuando se decide desde qué fecha cobra Odoo.
+
+Subir otra planilla otro día (para completar o corregir):
+  - El cliente se reconoce, sin duplicarlo, por su USUARIO PPPoE; si es un servicio nuevo,
+    por su nombre y C.I. Si el C.I. coincide pero el nombre no, se toma como otra persona
+    (familias que comparten carnet) y queda anotado.
+  - Lo que estaba VACÍO se completa (C.I., teléfono, dirección, coordenadas, fecha de alta,
+    IP, ONU, caja y puerto).
+  - Lo que ya estaba cargado y viene DISTINTO no se cambia: aparece en la lista
+    «revisar en campo» como «distinto: en Odoo ..., en la planilla ...». Si la planilla nueva
+    es la corregida, marque «Reemplazar con los datos de esta planilla» y esos datos se
+    reemplazan (queda anotado qué cambió).
+  - El PLAN y la MODALIDAD DE PAGO nunca se cambian solos (afectan al router y al cobro):
+    si vienen distintos se avisa para cambiarlos desde el servicio.
+  - Un cliente con dos servicios en lugares distintos no da diferencias: la dirección y las
+    coordenadas de cada fila son las de ese servicio.
+  - Dentro de la misma planilla: un USUARIO PPPoE repetido solo vale la primera vez; una IP
+    repetida solo se carga al primero; una IP que en Odoo ya es de otro cliente no se carga.
+
+Qué corrige solo y qué deja para revisar:
+  - Corrige: notas dentro del nombre, barrios escritos distinto, C.I. y expedido, MAC con la
+    letra O en lugar de cero, modelos mal escritos, coordenadas con coma.
+  - NO inventa: lo que falta o no se entiende (MAC ilegible, sin serie, sin C.I., teléfono
+    raro, sin fecha, coordenadas fuera de Bolivia, la misma ONU en dos clientes, un carnet
+    usado por dos personas) va a la lista «revisar en campo» y a las notas del cliente.
+  - NO asigna caja (pero sí importa el servicio) cuando: la caja no existe en la región, el
+    puerto no existe, el puerto ya es de otro cliente, el mismo puerto figura dos veces en la
+    planilla, el puerto está marcado como dañado, o falta la caja o el puerto.
+  - NO importa: filas sin nombre, sin usuario PPPoE, sin precio o sin plan; filas cuyo
+    nombre dice PRUEBA; un usuario PPPoE que ya existe en OTRA región. Aparecen en la lista
+    como «NO SE IMPORTA».
+
+
+2. CAJAS NAP  (plantilla_cajas_nap.csv)
+---------------------------------------
+Dónde:  MIRABILENET > Red de fibra > Configuración > Importar CSV de NAP y tramos
+        (conviene subir NAP y tramos juntos).
+
+Columnas: codigo (obligatorio), nombre_nap, localidad, zona_barrio, ramal, latitud, longitud,
+direccion_referencia, puertos_totales, puertos_ocupados, puertos_danados, olt, puerto_pon,
+color_de_hilo_alimentador, estado (activa, inactiva, danada o por_verificar).
+
+- Se actualiza por «codigo»: importar dos veces no duplica.
+- Al subir otro archivo otro día, cada dato que se reemplaza queda en el registro. Marque
+  «Conservar los datos ya cargados» para que el archivo solo complete lo vacío y no pise lo
+  que se corrigió en Odoo (lo distinto se anota).
+- Coordenadas con punto decimal (-17.404864). También acepta las que vienen con puntos de
+  miles (-17.404.864).
+- Un dato vacío no borra lo ya cargado.
+
+
+3. TRAMOS DE FIBRA  (plantilla_tramos_fibra.csv)
+------------------------------------------------
+Dónde:  el mismo asistente que las cajas NAP.
+
+Columnas: codigo (obligatorio), nombre, tipo (troncal, alimentador o distribucion),
+longitud_m, vertices, naps_en_ruta, lat_inicio, lon_inicio, lat_fin, lon_fin, hilos,
+tipo_cable, estado (activa o por_verificar). Opcionales: color y geometria_json.
+
+- naps_en_ruta: las cajas por las que pasa, en orden, con su código entre paréntesis:
+  «1A (EJ-A-01), 2A (EJ-A-02)».
+- El ramal de un tramo es lo que va antes de «:» en su nombre («Ruta B: Central - 1B»).
+- El recorrido exacto se carga después con «Importar KML/KMZ» (archivo de Google Earth).
+
+
+Antes de importar datos reales
+------------------------------
+Haga un respaldo de la base. Guía: documentacion\puesta_en_marcha\03_respaldos.md

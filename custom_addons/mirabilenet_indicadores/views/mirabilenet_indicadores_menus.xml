@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_indicadores" name="Indicadores" parent="mirabilenet_base.menu_mirabilenet_root"
+              sequence="90"/>
+
+    <menuitem id="menu_cobranza" name="Cobranza y servicios por mes" parent="menu_indicadores"
+              action="action_cobranza" sequence="10" groups="account.group_account_invoice"/>
+
+    <menuitem id="menu_service" name="Servicios y mensualidad" parent="menu_indicadores"
+              action="action_service" sequence="20"/>
+
+    <menuitem id="menu_overdue" name="Mora de más de 30 días" parent="menu_indicadores"
+              action="action_overdue" sequence="30" groups="account.group_account_invoice"/>
+
+    <menuitem id="menu_router" name="Routers" parent="menu_indicadores" action="action_router"
+              sequence="40"/>
+
+    <menuitem id="menu_message" name="Avisos de WhatsApp" parent="menu_indicadores"
+              action="action_message" sequence="50"/>
+
+    <menuitem id="menu_dashboards" name="Tableros de Odoo" parent="menu_indicadores"
+              action="spreadsheet_dashboard.ir_actions_dashboard_action" sequence="60"/>
+    <menuitem id="menu_region_goal" name="Objetivo de MRR por región" parent="menu_indicadores"
+              action="action_region_goal" sequence="15"/>
+</odoo>

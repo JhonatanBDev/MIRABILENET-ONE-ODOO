@@ -1,0 +1,9 @@
+# Versión de Odoo y de cada repositorio OCA (lo escribe sincronizar_github.ps1 al subir).
+odoo dc1f2561cda785530d55b85de70a4b44243f5200 https://github.com/odoo/odoo.git
+oca/contract ad50ff2448eff2ef831134c2e252a156cf7f0fc2 https://github.com/OCA/contract.git
+oca/event 84eaf0fe3b6d831464ba3a6d05543c5908f7dbe5 https://github.com/OCA/event.git
+oca/geospatial 431e59138fb63f771a809e106ead4108549509b1 https://github.com/OCA/geospatial.git
+oca/mis-builder e8e7e927c2c5553cf10a60129293cc6b9a7c5fc8 https://github.com/OCA/mis-builder.git
+oca/reporting-engine ba46b0da7be00f2b86e60df4b8f521a6fcb9235f https://github.com/OCA/reporting-engine.git
+oca/server-ux f1a4319461e40f7ab8ad347e02deaaee708857ea https://github.com/OCA/server-ux.git
+oca/web b25d75b921d007006468de68040a622121c0e396 https://github.com/OCA/web.git

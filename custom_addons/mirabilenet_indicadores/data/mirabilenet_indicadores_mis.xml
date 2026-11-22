@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+    <record id="mis_report_cobranza" model="mis.report">
+        <field name="name">MIRABILENET: cobranza y servicios por mes</field>
+    </record>
+    <record id="query_inv" model="mis.report.query">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">inv</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="field_ids" eval="[(6, 0, [ref('account.field_account_move__amount_total'), ref('account.field_account_move__amount_residual')])]"/>
+        <field name="aggregate">sum</field>
+        <field name="date_field" ref="account.field_account_move__invoice_date"/>
+        <field name="domain">[('move_type', '=', 'out_invoice'), ('state', '=', 'posted'), ('mirabilenet_service_id', '!=', False)]</field>
+    </record>
+    <record id="query_pay" model="mis.report.query">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">pay</field>
+        <field name="model_id" ref="account.model_account_payment"/>
+        <field name="field_ids" eval="[(6, 0, [ref('account.field_account_payment__amount')])]"/>
+        <field name="aggregate">sum</field>
+        <field name="date_field" ref="account.field_account_payment__date"/>
+        <field name="domain">[('payment_type', '=', 'inbound'), ('state', 'in', ('in_process', 'paid')), ('mirabilenet_region_id', '!=', False)]</field>
+    </record>
+    <record id="query_alta" model="mis.report.query">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">alta</field>
+        <field name="model_id" ref="mirabilenet_isp.model_mirabilenet_service"/>
+        <field name="field_ids" eval="[(6, 0, [ref('mirabilenet_isp.field_mirabilenet_service__monthly_price')])]"/>
+        <field name="aggregate">sum</field>
+        <field name="date_field" ref="mirabilenet_isp.field_mirabilenet_service__date_start"/>
+        <field name="domain">[]</field>
+    </record>
+    <record id="query_baja" model="mis.report.query">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">baja</field>
+        <field name="model_id" ref="mirabilenet_isp.model_mirabilenet_service"/>
+        <field name="field_ids" eval="[(6, 0, [ref('mirabilenet_isp.field_mirabilenet_service__monthly_price')])]"/>
+        <field name="aggregate">sum</field>
+        <field name="date_field" ref="mirabilenet_isp.field_mirabilenet_service__date_end"/>
+        <field name="domain">[('state', '=', 'baja')]</field>
+    </record>
+    <record id="query_msg" model="mis.report.query">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">msg</field>
+        <field name="model_id" ref="mirabilenet_whatsapp.model_mirabilenet_whatsapp_message"/>
+        <field name="field_ids" eval="[(6, 0, [ref('mirabilenet_whatsapp.field_mirabilenet_whatsapp_message__attempts')])]"/>
+        <field name="aggregate">sum</field>
+        <field name="date_field" ref="mirabilenet_whatsapp.field_mirabilenet_whatsapp_message__sent_at"/>
+        <field name="domain">[('state', 'in', ('enviado', 'entregado', 'leido'))]</field>
+    </record>
+    <record id="kpi_facturado" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">facturado</field>
+        <field name="description">Facturado en el mes (Bs)</field>
+        <field name="expression">inv.amount_total if inv.count else AccountingNone</field>
+        <field name="type">num</field>
+        <field name="accumulation_method">sum</field>
+        <field name="compare_method">none</field>
+        <field name="sequence">1</field>
+    </record>
+    <record id="kpi_cobrado" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">cobrado</field>
+        <field name="description">Cobrado en el mes (Bs)</field>
+        <field name="expression">pay.amount if pay.count else AccountingNone</field>
+        <field name="type">num</field>
+        <field name="accumulation_method">sum</field>
+        <field name="compare_method">none</field>
+        <field name="sequence">2</field>
+    </record>
+    <record id="kpi_tasa" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">tasa</field>
+        <field name="description">Tasa de recaudación</field>
+        <field name="expression">cobrado / facturado if facturado else AccountingNone</field>
+        <field name="type">pct</field>
+        <field name="accumulation_method">none</field>
+        <field name="compare_method">none</field>
+        <field name="sequence">3</field>
+    </record>
+    <record id="kpi_pendiente" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">pendiente</field>
+        <field name="description">Pendiente de lo facturado (Bs)</field>
+        <field name="expression">inv.amount_residual if inv.count else AccountingNone</field>
+        <field name="type">num</field>
+        <field name="accumulation_method">sum</field>
+        <field name="compare_method">none</field>
+        <field name="sequence">4</field>
+    </record>
+    <record id="kpi_facturas" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">facturas</field>
+        <field name="description">Servicios facturados</field>
+        <field name="expression">inv.count or AccountingNone</field>
+        <field name="type">num</field>
+        <field name="accumulation_method">sum</field>
+        <field name="compare_method">none</field>
+        <field name="sequence">5</field>
+    </record>
+    <record id="kpi_arpu" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">arpu</field>
+        <field name="description">Ingreso medio por servicio, ARPU (Bs)</field>
+        <field name="expression">facturado / facturas if facturas else AccountingNone</field>
+        <field name="type">num</field>
+        <field name="accumulation_method">none</field>
+        <field name="compare_method">none</field>
+        <field name="sequence">6</field>
+    </record>
+    <record id="kpi_altas" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">altas</field>
+        <field name="description">Altas de servicio</field>
+        <field name="expression">alta.count</field>
+        <field name="type">num</field>
+        <field name="accumulation_method">sum</field>
+        <field name="compare_method">none</field>
+        <field name="sequence">7</field>
+    </record>
+    <record id="kpi_bajas" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">bajas</field>
+        <field name="description">Bajas de servicio</field>
+        <field name="expression">baja.count</field>
+        <field name="type">num</field>
+        <field name="accumulation_method">sum</field>
+        <field name="compare_method">none</field>
+        <field name="sequence">8</field>
+    </record>
+    <record id="kpi_avisos" model="mis.report.kpi">
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="name">avisos</field>
+        <field name="description">Avisos de WhatsApp enviados (cantidad, no Bs)</field>
+        <field name="expression">msg.count</field>
+        <field name="type">num</field>
+        <field name="accumulation_method">sum</field>
+        <field name="compare_method">none</field>
+        <field name="sequence">9</field>
+    </record>
+    <record id="mis_instance_cobranza" model="mis.report.instance">
+        <field name="name">MIRABILENET: últimos 6 meses</field>
+        <field name="report_id" ref="mis_report_cobranza"/>
+        <field name="comparison_mode" eval="True"/>
+    </record>
+    <record id="mis_instance_cobranza_m5" model="mis.report.instance.period">
+        <field name="name">Hace 5 meses</field>
+        <field name="report_instance_id" ref="mis_instance_cobranza"/>
+        <field name="mode">relative</field>
+        <field name="type">m</field>
+        <field name="offset">-5</field>
+        <field name="duration">1</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="mis_instance_cobranza_m4" model="mis.report.instance.period">
+        <field name="name">Hace 4 meses</field>
+        <field name="report_instance_id" ref="mis_instance_cobranza"/>
+        <field name="mode">relative</field>
+        <field name="type">m</field>
+        <field name="offset">-4</field>
+        <field name="duration">1</field>
+        <field name="sequence">11</field>
+    </record>
+    <record id="mis_instance_cobranza_m3" model="mis.report.instance.period">
+        <field name="name">Hace 3 meses</field>
+        <field name="report_instance_id" ref="mis_instance_cobranza"/>
+        <field name="mode">relative</field>
+        <field name="type">m</field>
+        <field name="offset">-3</field>
+        <field name="duration">1</field>
+        <field name="sequence">12</field>
+    </record>
+    <record id="mis_instance_cobranza_m2" model="mis.report.instance.period">
+        <field name="name">Hace 2 meses</field>
+        <field name="report_instance_id" ref="mis_instance_cobranza"/>
+        <field name="mode">relative</field>
+        <field name="type">m</field>
+        <field name="offset">-2</field>
+        <field name="duration">1</field>
+        <field name="sequence">13</field>
+    </record>
+    <record id="mis_instance_cobranza_m1" model="mis.report.instance.period">
+        <field name="name">Hace 1 mes</field>
+        <field name="report_instance_id" ref="mis_instance_cobranza"/>
+        <field name="mode">relative</field>
+        <field name="type">m</field>
+        <field name="offset">-1</field>
+        <field name="duration">1</field>
+        <field name="sequence">14</field>
+    </record>
+    <record id="mis_instance_cobranza_m0" model="mis.report.instance.period">
+        <field name="name">Mes actual</field>
+        <field name="report_instance_id" ref="mis_instance_cobranza"/>
+        <field name="mode">relative</field>
+        <field name="type">m</field>
+        <field name="offset">0</field>
+        <field name="duration">1</field>
+        <field name="sequence">15</field>
+    </record>
+    </data>
+    <record id="action_cobranza" model="ir.actions.server">
+        <field name="name">Cobranza y servicios por mes</field>
+        <field name="model_id" ref="mis_builder.model_mis_report_instance"/>
+        <field name="state">code</field>
+        <field name="code">action = env.ref("mirabilenet_indicadores.mis_instance_cobranza").preview()</field>
+    </record>
+</odoo>

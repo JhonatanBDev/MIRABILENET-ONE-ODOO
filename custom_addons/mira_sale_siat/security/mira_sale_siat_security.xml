@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="res_groups_privilege_mira_siat" model="res.groups.privilege">
+            <field name="name">Mira_Sale SIAT</field>
+            <field name="category_id" ref="base.module_category_accounting_accounting"/>
+            <field name="sequence">75</field>
+        </record>
+
+        <record id="group_mira_siat_user" model="res.groups">
+            <field name="name">Emisor (cajero / vendedor)</field>
+            <field name="sequence">10</field>
+            <field name="privilege_id" ref="res_groups_privilege_mira_siat"/>
+            <field name="comment">Emite facturas y consulta documentos fiscales de su empresa.</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_mira_siat_supervisor" model="res.groups">
+            <field name="name">Supervisor (anula, revierte y gestiona contingencias)</field>
+            <field name="sequence">20</field>
+            <field name="privilege_id" ref="res_groups_privilege_mira_siat"/>
+            <field name="implied_ids" eval="[(4, ref('group_mira_siat_user'))]"/>
+        </record>
+
+        <record id="group_mira_siat_backdate" model="res.groups">
+            <field name="name">Emisión con fecha anterior</field>
+            <field name="comment">Puede abrir autorizaciones y emitir con fecha pasada mientras haya una vigente.</field>
+        </record>
+
+        <record id="group_mira_siat_manager" model="res.groups">
+            <field name="name">Administrador SIAT (configuración tributaria)</field>
+            <field name="sequence">30</field>
+            <field name="privilege_id" ref="res_groups_privilege_mira_siat"/>
+            <field name="comment">Token delegado, CUIS/CUFD, catálogos, sucursales, puntos de venta, auditoría.</field>
+            <field name="implied_ids" eval="[(4, ref('group_mira_siat_supervisor'))]"/>
+            <field name="user_ids" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+        </record>
+    </data>
+
+    <!-- Aislamiento por contribuyente: toda consulta queda dentro de las
+         empresas del usuario, también si manipula IDs. -->
+    <data noupdate="1">
+        <record id="rule_mira_siat_branch" model="ir.rule">
+            <field name="name">Mira SIAT: sucursal por empresa</field>
+            <field name="model_id" ref="model_mira_siat_branch"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_pos" model="ir.rule">
+            <field name="name">Mira SIAT: punto de venta por empresa</field>
+            <field name="model_id" ref="model_mira_siat_pos"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_cuis" model="ir.rule">
+            <field name="name">Mira SIAT: CUIS por empresa</field>
+            <field name="model_id" ref="model_mira_siat_cuis"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_cufd" model="ir.rule">
+            <field name="name">Mira SIAT: CUFD por empresa</field>
+            <field name="model_id" ref="model_mira_siat_cufd"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_sequence" model="ir.rule">
+            <field name="name">Mira SIAT: secuencia por empresa</field>
+            <field name="model_id" ref="model_mira_siat_sequence"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_catalog" model="ir.rule">
+            <field name="name">Mira SIAT: catálogo por empresa</field>
+            <field name="model_id" ref="model_mira_siat_catalog"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_catalog_item" model="ir.rule">
+            <field name="name">Mira SIAT: elemento de catálogo por empresa</field>
+            <field name="model_id" ref="model_mira_siat_catalog_item"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_invoice" model="ir.rule">
+            <field name="name">Mira SIAT: documento fiscal por empresa</field>
+            <field name="model_id" ref="model_mira_siat_invoice"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_event" model="ir.rule">
+            <field name="name">Mira SIAT: evento por empresa</field>
+            <field name="model_id" ref="model_mira_siat_event"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_package" model="ir.rule">
+            <field name="name">Mira SIAT: paquete por empresa</field>
+            <field name="model_id" ref="model_mira_siat_package"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_cafc" model="ir.rule">
+            <field name="name">Mira SIAT: talonario CAFC por empresa</field>
+            <field name="model_id" ref="model_mira_siat_cafc"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_retro_authorization" model="ir.rule">
+            <field name="name">Mira SIAT: autorización de fecha anterior por empresa</field>
+            <field name="model_id" ref="model_mira_siat_retro_authorization"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_log" model="ir.rule">
+            <field name="name">Mira SIAT: evidencia técnica por empresa</field>
+            <field name="model_id" ref="model_mira_siat_log"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+        <record id="rule_mira_siat_audit_log" model="ir.rule">
+            <field name="name">Mira SIAT: auditoría por empresa</field>
+            <field name="model_id" ref="model_mira_siat_audit_log"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Todo usuario nuevo sigue el modo claro u oscuro de su navegador. -->
+    <function model="ir.default" name="set"
+              eval="('res.users.settings', 'dark_mode_device_dependent', True)"/>
+</odoo>

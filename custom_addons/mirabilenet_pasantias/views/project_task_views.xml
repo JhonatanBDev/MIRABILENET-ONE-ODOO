@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_form_mirabilenet" model="ir.ui.view">
+        <field name="name">project.task.form.mirabilenet</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_mirabilenet_review" type="object" string="Revisar la entrega"
+                        class="btn-primary" invisible="not mirabilenet_internship or parent_id"
+                        groups="mirabilenet_pasantias.group_internship_tutor"/>
+                <button name="action_mirabilenet_open_report" type="object" string="Informe de avance"
+                        invisible="not mirabilenet_internship or parent_id"/>
+            </xpath>
+            <xpath expr="//field[@name='user_ids']" position="after">
+                <field name="mirabilenet_internship" invisible="1"/>
+                <field name="mirabilenet_published" invisible="not mirabilenet_internship or parent_id"/>
+                <field name="mirabilenet_required" invisible="not mirabilenet_internship or not parent_id"/>
+                <field name="mirabilenet_requires_files" invisible="not mirabilenet_internship or parent_id"/>
+                <field name="mirabilenet_requires_report" invisible="not mirabilenet_internship or parent_id"/>
+                <field name="mirabilenet_delivered_at" invisible="not mirabilenet_delivered_at"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Lo que ve el pasante: pocas columnas y nada que pueda mover el estado -->
+    <record id="view_task_intern_list" model="ir.ui.view">
+        <field name="name">project.task.intern.list</field>
+        <field name="model">project.task</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list create="0" delete="0" edit="0">
+                <field name="name"/><field name="project_id"/><field name="user_ids" widget="many2many_avatar_user"/>
+                <field name="date_deadline"/><field name="stage_id"/><field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_task_intern_form" model="ir.ui.view">
+        <field name="name">project.task.intern.form</field>
+        <field name="model">project.task</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <header>
+                    <button name="action_mirabilenet_deliver" type="object" string="Entregar" class="btn-primary"/>
+                    <button name="action_mirabilenet_open_report" type="object" string="Informe de avance"
+                            invisible="not mirabilenet_requires_report"/>
+                    <field name="stage_id" widget="statusbar" readonly="1"/>
+                </header>
+                <sheet>
+                    <h1><field name="name" readonly="1"/></h1>
+                    <group>
+                        <group>
+                            <field name="project_id" readonly="1"/>
+                            <field name="user_ids" widget="many2many_avatar_user" readonly="1"/>
+                            <field name="date_deadline" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="state" readonly="1"/>
+                            <field name="mirabilenet_requires_files" readonly="1"/>
+                            <field name="mirabilenet_requires_report" readonly="1"/>
+                            <field name="mirabilenet_delivered_at" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="description" readonly="1"/>
+                    <separator string="Lista de puntos"/>
+                    <field name="child_ids">
+                        <list editable="bottom" create="0" delete="0">
+                            <field name="name" readonly="1"/>
+                            <field name="mirabilenet_required" readonly="1"/>
+                            <field name="state" widget="project_task_state_selection"/>
+                        </list>
+                    </field>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_intern_tasks" model="ir.actions.act_window">
+        <field name="name">Mis tareas</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('user_ids', 'in', uid), ('parent_id', '=', False), ('mirabilenet_internship', '=', True)]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_task_intern_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_task_intern_form')})]"/>
+    </record>
+
+    <record id="action_team_work" model="ir.actions.act_window">
+        <field name="name">Trabajo del equipo</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('user_ids', 'not in', uid), ('parent_id', '=', False), ('mirabilenet_internship', '=', True), ('stage_id.mirabilenet_shared', '=', True)]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_task_intern_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('view_task_intern_form')})]"/>
+    </record>
+
+    <record id="action_internship_tasks" model="ir.actions.act_window">
+        <field name="name">Tareas de pasantías</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('mirabilenet_internship', '=', True), ('parent_id', '=', False)]</field>
+    </record>
+</odoo>

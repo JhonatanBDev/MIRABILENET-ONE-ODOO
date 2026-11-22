@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Parámetros de red. Los vacíos se completan en cada servidor. -->
+        <record id="param_wg_mgmt_network" model="ir.config_parameter">
+            <field name="key">mirabilenet.wg_mgmt_network</field>
+            <field name="value">10.250.0.0/16</field>
+        </record>
+        <record id="param_wg_listen_port" model="ir.config_parameter">
+            <field name="key">mirabilenet.wg_listen_port</field>
+            <field name="value">51820</field>
+        </record>
+        <record id="param_wg_worker_ip" model="ir.config_parameter">
+            <field name="key">mirabilenet.wg_worker_ip</field>
+            <field name="value">10.250.0.20</field>
+        </record>
+        <record id="param_enrollment_ttl" model="ir.config_parameter">
+            <field name="key">mirabilenet.enrollment_ttl_minutes</field>
+            <field name="value">15</field>
+        </record>
+        <record id="param_camera_supernet" model="ir.config_parameter">
+            <field name="key">mirabilenet.camera_supernet</field>
+            <field name="value">10.64.0.0/10</field>
+        </record>
+        <record id="param_router_gateway" model="ir.config_parameter">
+            <field name="key">mirabilenet.router_gateway</field>
+            <field name="value">real</field>
+        </record>
+
+        <record id="cron_process_transitions" model="ir.cron">
+            <field name="name">MIRABILENET: ejecutar órdenes de red</field>
+            <field name="model_id" ref="model_mirabilenet_service_transition"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_process()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+        </record>
+        <record id="cron_probe_routers" model="ir.cron">
+            <field name="name">MIRABILENET: diagnóstico de routers</field>
+            <field name="model_id" ref="model_mirabilenet_router"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_probe()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+        </record>
+        <record id="cron_expire_tokens" model="ir.cron">
+            <field name="name">MIRABILENET: vencer códigos de enrolamiento</field>
+            <field name="model_id" ref="model_mirabilenet_enrollment_token"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_expire()</field>
+            <field name="interval_number">5</field>
+            <field name="interval_type">minutes</field>
+        </record>
+        <record id="cron_purge_quarantine" model="ir.cron">
+            <field name="name">MIRABILENET: liberar subredes en cuarentena</field>
+            <field name="model_id" ref="model_mirabilenet_subnet"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_purge_quarantine()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+        </record>
+    </data>
+</odoo>

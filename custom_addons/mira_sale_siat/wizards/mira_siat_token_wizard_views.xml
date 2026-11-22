@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================= Asistentes ================= -->
+    <record id="mira_siat_token_wizard_view_form" model="ir.ui.view">
+        <field name="name">mira.siat.token.wizard.form</field>
+        <field name="model">mira.siat.token.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Token delegado">
+                <div class="alert alert-info" role="alert">
+                    El token se cifra al guardar y no vuelve a mostrarse. Solo se
+                    conserva una huella para identificarlo.
+                </div>
+                <group>
+                    <field name="company_id" readonly="1"/>
+                    <field name="token" password="True"/>
+                    <field name="expires_at"/>
+                </group>
+                <footer>
+                    <button name="action_save" type="object" string="Guardar cifrado"
+                            class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

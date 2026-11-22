@@ -1,0 +1,42 @@
+{
+    "name": "MIRABILENET: Sitio web",
+    "version": "19.0.2.0.0",
+    "summary": "El sitio público, sus contenidos y las consultas que llegan por él",
+    "description": "Páginas de MIRABILENET sobre el Sitio web de Odoo y consultas que entran "
+                   "como oportunidades. Detalle en readme/.",
+    "category": "MIRABILENET",
+    "author": "MIRABILENET",
+    "license": "AGPL-3",
+    "depends": ["mirabilenet_isp", "crm", "website"],
+    "data": [
+        "security/mirabilenet_web_security.xml",
+        "security/ir.model.access.csv",
+        "data/mirabilenet_web_data.xml",
+        "data/website_menu_data.xml",
+        "data/website_snippet_filter_data.xml",
+        "views/mirabilenet_web_service_views.xml",
+        "views/mirabilenet_web_coverage_views.xml",
+        "views/mirabilenet_web_project_views.xml",
+        "views/mirabilenet_web_faq_views.xml",
+        "views/mirabilenet_web_advantage_views.xml",
+        "views/mirabilenet_web_figure_views.xml",
+        "views/mirabilenet_web_ally_views.xml",
+        "views/mirabilenet_web_legal_views.xml",
+        "views/mirabilenet_web_settings_views.xml",
+        "views/crm_lead_views.xml",
+        "views/templates.xml",
+        "views/snippets/mirabilenet_snippets.xml",
+        "views/mirabilenet_web_menus.xml",
+    ],
+    "assets": {
+        "web.assets_frontend": [
+            "mirabilenet_web/static/src/snippets/**/*.js",
+            ("remove", "mirabilenet_web/static/src/snippets/**/*.edit.js"),
+        ],
+        "website.assets_inside_builder_iframe": [
+            "mirabilenet_web/static/src/snippets/**/*.edit.js",
+        ],
+    },
+    "application": False,
+    "installable": True,
+}

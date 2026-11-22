@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Informe de avance y revisión -->
+    <record id="view_report_form" model="ir.ui.view">
+        <field name="name">mirabilenet.internship.report.form</field>
+        <field name="model">mirabilenet.internship.report</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <sheet>
+                    <group>
+                        <field name="task_id"/><field name="intern_ids" widget="many2many_avatar_user"/>
+                        <field name="hours"/>
+                    </group>
+                    <group string="Secciones">
+                        <field name="goal"/>
+                        <field name="summary"/>
+                        <field name="procedure"/>
+                        <field name="tools"/>
+                        <field name="parameters"/>
+                        <field name="results"/>
+                        <field name="validation"/>
+                        <field name="rationale"/>
+                        <field name="difficulties"/>
+                        <field name="next_steps"/>
+                        <field name="references"/>
+                    </group>
+                    <group string="Devolución del tutor"><field name="tutor_comment" nolabel="1" colspan="2"/></group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+</odoo>

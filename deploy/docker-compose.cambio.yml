@@ -1,0 +1,11 @@
+# Día del cambio: Odoo pasa a responder como «api» en la red del sistema anterior, así los
+# flujos de n8n (http://api:8000/api/v1/messaging/n8n/...) llegan a Odoo SIN editarlos.
+#   docker compose -f docker-compose.yml -f docker-compose.cambio.yml up -d odoo
+# Volver atrás: quitar este archivo y devolverle el nombre «api» al sistema anterior
+# (procedimiento en documentacion/puesta_en_marcha/02_dia_del_cambio.md).
+services:
+  odoo:
+    networks:
+      mirabilenet:
+        aliases:
+          - api

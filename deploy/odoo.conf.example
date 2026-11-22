@@ -1,0 +1,20 @@
+; Copiar a odoo.conf en el VPS. admin_passwd va solo en esa copia, nunca en Git.
+[options]
+addons_path = /mnt/custom_addons,/mnt/oca/contract,/mnt/oca/event,/mnt/oca/mis-builder,/mnt/oca/reporting-engine,/mnt/oca/server-ux,/mnt/oca/geospatial,/mnt/oca/web,/usr/lib/python3/dist-packages/odoo/addons
+data_dir = /var/lib/odoo
+admin_passwd = cambiar
+db_name = mirabilenet
+dbfilter = ^mirabilenet$
+list_db = False
+proxy_mode = True
+; El puerto que esperan los flujos de n8n (api:8000).
+http_port = 8000
+gevent_port = 8072
+workers = 4
+max_cron_threads = 2
+limit_time_cpu = 120
+limit_time_real = 240
+limit_memory_soft = 1610612736
+limit_memory_hard = 2147483648
+without_demo = all
+log_level = info

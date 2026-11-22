@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Promociones de retención -->
+    <record id="view_mirabilenet_promo_list" model="ir.ui.view">
+        <field name="name">mirabilenet.retention.promo.list</field>
+        <field name="model">mirabilenet.retention.promo</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="offer"/>
+                <field name="conditions"/>
+                <field name="region_id" options="{'no_create': True}" placeholder="Todas"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_promo" model="ir.actions.act_window">
+        <field name="name">Promociones de retención</field>
+        <field name="res_model">mirabilenet.retention.promo</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+</odoo>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Registrar movimiento -->
+    <record id="view_mirabilenet_inventory_move_wizard_form" model="ir.ui.view">
+        <field name="name">mirabilenet.inventory.move.wizard.form</field>
+        <field name="model">mirabilenet.inventory.move.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="kind"/>
+                        <field name="product_id" options="{'no_create': True}"/>
+                        <field name="tracking" invisible="1"/>
+                        <field name="lot_name"
+                               invisible="tracking != 'serial' or kind != 'compra'"
+                               required="tracking == 'serial' and kind == 'compra'"/>
+                        <field name="lot_id" options="{'no_create': True}"
+                               invisible="tracking != 'serial' or kind == 'compra'"
+                               required="tracking == 'serial' and kind != 'compra'"/>
+                        <field name="quantity" invisible="tracking == 'serial'"/>
+                    </group>
+                    <group>
+                        <field name="source_id" options="{'no_create': True}"
+                               invisible="kind in ('compra', 'asignacion_cliente', 'devolucion', 'baja')"/>
+                        <field name="dest_id" options="{'no_create': True}"
+                               invisible="kind not in ('compra', 'transferencia', 'devolucion', 'ajuste')"/>
+                        <field name="technician_id" options="{'no_create': True}"
+                               invisible="kind != 'salida_tecnico'"
+                               required="kind == 'salida_tecnico'"/>
+                        <field name="partner_id" options="{'no_create': True}"
+                               invisible="kind not in ('asignacion_cliente', 'consumo')"
+                               required="kind == 'asignacion_cliente'"/>
+                        <field name="document"/>
+                        <field name="reason"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="Registrar movimiento"
+                            class="btn-primary"/>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_inventory_move_wizard" model="ir.actions.act_window">
+        <field name="name">Registrar movimiento</field>
+        <field name="res_model">mirabilenet.inventory.move.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

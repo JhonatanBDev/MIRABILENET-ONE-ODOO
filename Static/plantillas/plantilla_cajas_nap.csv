@@ -1,0 +1,4 @@
+﻿codigo;nombre_nap;localidad;zona_barrio;ramal;latitud;longitud;direccion_referencia;puertos_totales;puertos_ocupados;puertos_danados;olt;puerto_pon;color_de_hilo_alimentador;estado
+EJ-A-01;1A;Yapacani;Villa Belen;Ruta A;-17.404864;-63.884567;Esquina de la plaza;8;5;0;OLT-1;1;azul;activa
+EJ-A-02;2A;Yapacani;Villa Belen;Ruta A;-17.403895;-63.884512;Frente al colegio;8;2;1;OLT-1;1;azul;activa
+EJ-B-01;1B;Yapacani;24 de Junio;;-17.406100;-63.881900;;8;;;;;;por_verificar

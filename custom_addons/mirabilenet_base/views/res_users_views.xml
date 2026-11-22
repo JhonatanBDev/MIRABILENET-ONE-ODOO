@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_users_list" model="ir.ui.view">
+        <field name="name">res.users.mirabilenet.list</field>
+        <field name="model">res.users</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0" decoration-muted="not active">
+                <field name="name"/>
+                <field name="login"/>
+                <field name="mirabilenet_role"/>
+                <field name="mirabilenet_region_id"/>
+                <field name="mirabilenet_branch_id" optional="show"/>
+                <field name="active"/>
+                <button name="action_mirabilenet_edit" type="object" string="Editar"
+                        icon="fa-pencil"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_users_form" model="ir.ui.view">
+        <field name="name">res.users.mirabilenet.form</field>
+        <field name="model">res.users</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <header>
+                    <button name="action_mirabilenet_edit" type="object" string="Editar"
+                            class="btn-primary"/>
+                    <button name="action_mirabilenet_invite" type="object"
+                            string="Enviar invitación"
+                            confirm="Se enviará un correo para que la persona defina su contraseña."/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="login"/>
+                            <field name="email"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="mirabilenet_role"/>
+                            <field name="mirabilenet_region_id"/>
+                            <field name="mirabilenet_branch_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_users" model="ir.actions.server">
+        <field name="name">Usuarios</field>
+        <field name="model_id" ref="base.model_res_users"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_mirabilenet_users()</field>
+    </record>
+</odoo>

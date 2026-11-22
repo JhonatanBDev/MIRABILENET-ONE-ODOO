@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_config_form_mirabilenet" model="ir.ui.view">
+        <field name="name">pos.config.form.mirabilenet</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="mirabilenet_branch_id" options="{'no_create': True}"
+                       placeholder="Sucursal de MIRABILENET"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

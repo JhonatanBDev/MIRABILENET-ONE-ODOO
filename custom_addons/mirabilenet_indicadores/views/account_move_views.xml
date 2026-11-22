@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_overdue_pivot" model="ir.ui.view">
+        <field name="name">account.move.pivot.mirabilenet</field>
+        <field name="model">account.move</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <pivot string="Mora de más de 30 días" sample="1">
+                <field name="mirabilenet_region_id" type="row"/><field name="partner_id" type="col"/><field name="amount_residual" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_overdue_graph" model="ir.ui.view">
+        <field name="name">account.move.graph.mirabilenet</field>
+        <field name="model">account.move</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <graph string="Mora de más de 30 días" type="bar" stacked="1" sample="1">
+                <field name="mirabilenet_region_id"/><field name="partner_id"/><field name="amount_residual" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_overdue" model="ir.actions.act_window">
+        <field name="name">Mora de más de 30 días</field>
+        <field name="res_model">account.move</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="domain">[('move_type', '=', 'out_invoice'), ('state', '=', 'posted'), ('payment_state', 'in', ('not_paid', 'partial')), ('invoice_date_due', '&lt;', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))]</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'pivot', 'view_id': ref('view_overdue_pivot')}),
+            (0, 0, {'view_mode': 'graph', 'view_id': ref('view_overdue_graph')})]"/>
+        <field name="help" type="html"><p class="o_view_nocontent_smiling_face">—</p><p>Ninguna factura de su región vencida hace más de 30 días.</p></field>
+    </record>
+</odoo>

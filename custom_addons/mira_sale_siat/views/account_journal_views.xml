@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Diario: método de pago y documento sector -->
+    <record id="view_account_journal_form_mira_siat" model="ir.ui.view">
+        <field name="name">account.journal.form.mira.siat</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="SIAT" name="mira_siat"
+                      invisible="type not in ('sale', 'bank', 'cash', 'credit')">
+                    <group>
+                        <field name="mira_siat_payment_method_id" options="{'no_create': True}"
+                               invisible="type == 'sale'"/>
+                        <field name="mira_siat_sector" invisible="type != 'sale'"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

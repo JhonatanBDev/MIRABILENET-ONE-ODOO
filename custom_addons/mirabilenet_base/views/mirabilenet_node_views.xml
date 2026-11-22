@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Nodos -->
+    <record id="view_mirabilenet_node_list" model="ir.ui.view">
+        <field name="name">mirabilenet.node.list</field>
+        <field name="model">mirabilenet.node</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="zone_id"/>
+                <field name="region_id"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="capacidad_instalada"/>
+                <field name="latitude" optional="hide"/>
+                <field name="longitude" optional="hide"/>
+                <field name="active" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_node" model="ir.actions.act_window">
+        <field name="name">Nodos</field>
+        <field name="res_model">mirabilenet.node</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

@@ -1,0 +1,154 @@
+// Pantallas de ingreso, registro y cambio de contraseña en oscuro cuando el navegador
+// o el sistema están en oscuro. Solo esas pantallas: el resto del sitio público no cambia.
+// Colores tomados de OCA web_dark_mode para que el ingreso combine con el backend.
+
+$mn-dark-bg: #181818;
+$mn-dark-surface: #1f1f1f;
+$mn-dark-border: #303030;
+$mn-dark-muted: #8b8b8b;
+$mn-dark-text: #c8c8c8;
+$mn-dark-heading: #e6e6e6;
+$mn-dark-link: #c9a6c0;
+
+@media (prefers-color-scheme: dark) {
+    html:has(.oe_login_form, .oe_signup_form, .oe_reset_password_form) {
+        color-scheme: dark;
+        --body-bg: #{$mn-dark-bg};
+        --body-color: #{$mn-dark-text};
+        --o-cc1-bg: #{$mn-dark-bg};
+        --o-cc1-text: #{$mn-dark-text};
+        --o-cc1-headings: #{$mn-dark-heading};
+        --o-cc1-link: #{$mn-dark-link};
+        --o-cc-bg: #{$mn-dark-bg};
+        --o-cc-text: #{$mn-dark-text};
+        --o-cc-headings: #{$mn-dark-heading};
+        --o-cc-link: #{$mn-dark-link};
+        --link-color: #{$mn-dark-link};
+        --link-hover-color: #{$mn-dark-heading};
+        --border-color: #{$mn-dark-border};
+        --secondary-color: #{$mn-dark-muted};
+
+        body,
+        #wrapwrap,
+        #wrapwrap > main,
+        header#top,
+        header#top .navbar,
+        header#top nav {
+            background-color: $mn-dark-bg !important;
+            color: $mn-dark-text;
+        }
+
+        header#top {
+            border-bottom: 1px solid $mn-dark-border;
+            .nav-link,
+            .navbar-brand,
+            .o_navlink_background,
+            .o_navlink_background_hover,
+            .fa {
+                color: $mn-dark-text !important;
+            }
+            .btn-light,
+            .o_navlink_background {
+                background-color: $mn-dark-surface !important;
+                border-color: $mn-dark-border !important;
+            }
+            .btn-outline-secondary,
+            .o_header_sign_in,
+            a.btn:not(.btn-primary) {
+                color: $mn-dark-text !important;
+                border-color: $mn-dark-border !important;
+                background-color: transparent !important;
+            }
+            img {
+                filter: brightness(1.6);
+            }
+        }
+
+        .o_footer,
+        .o_footer_copyright,
+        #footer,
+        #bottom {
+            --background-color: #{$mn-dark-surface};
+            --color: #{$mn-dark-text};
+            --o-cc-bg: #{$mn-dark-surface};
+            background-color: $mn-dark-surface !important;
+            color: $mn-dark-text !important;
+            border-color: $mn-dark-border !important;
+            h1, h2, h3, h4, h5, h6, .h5 {
+                color: $mn-dark-heading !important;
+            }
+            a, .fa {
+                color: $mn-dark-link !important;
+            }
+            .o_footer_copyright_name,
+            .text-muted,
+            span, p, li {
+                color: $mn-dark-text !important;
+            }
+            .btn, .rounded-circle, .shadow-sm {
+                background-color: $mn-dark-border !important;
+                color: $mn-dark-text !important;
+            }
+        }
+
+        .oe_login_form,
+        .oe_signup_form,
+        .oe_reset_password_form {
+            label,
+            .form-label {
+                color: $mn-dark-heading;
+            }
+            .form-control,
+            .form-select,
+            .input-group-text,
+            .o_show_password {
+                background-color: $mn-dark-surface !important;
+                color: $mn-dark-heading !important;
+                border-color: $mn-dark-border !important;
+            }
+            .form-control::placeholder {
+                color: $mn-dark-muted;
+            }
+            .form-control:focus {
+                border-color: $mn-dark-link !important;
+                box-shadow: 0 0 0 0.2rem rgba(201, 166, 192, 0.25);
+            }
+            .btn-secondary,
+            .btn-light,
+            .btn-outline-secondary,
+            .list-group-item {
+                background-color: $mn-dark-surface !important;
+                color: $mn-dark-text !important;
+                border-color: $mn-dark-border !important;
+            }
+            .list-group-item:hover {
+                background-color: $mn-dark-border !important;
+            }
+            a,
+            .btn-link {
+                color: $mn-dark-link !important;
+                background-color: transparent !important;
+                border-color: transparent !important;
+            }
+            .text-muted,
+            .o_login_auth hr,
+            .small {
+                color: $mn-dark-muted !important;
+            }
+            img {
+                filter: invert(0.85);
+            }
+        }
+
+        .alert-danger {
+            background-color: #3a1d1d;
+            color: #f1b0b0;
+            border-color: #5c2b2b;
+        }
+        .alert-success {
+            background-color: #1d3a24;
+            color: #b0f1c0;
+            border-color: #2b5c37;
+        }
+    }
+}

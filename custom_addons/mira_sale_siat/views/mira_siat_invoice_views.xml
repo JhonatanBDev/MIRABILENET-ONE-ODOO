@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================= Documentos fiscales ================= -->
+    <record id="mira_siat_invoice_view_list" model="ir.ui.view">
+        <field name="name">mira.siat.invoice.list</field>
+        <field name="model">mira.siat.invoice</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0"
+                  decoration-success="state in ('valid', 'package_validated')"
+                  decoration-danger="state == 'rejected'"
+                  decoration-warning="state in ('pending_retry', 'offline_issued', 'packaged', 'package_sent', 'cancellation_pending', 'reversal_pending')"
+                  decoration-muted="state == 'cancelled'">
+                <field name="emission_date"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="branch_id" optional="show"/>
+                <field name="pos_id" optional="show"/>
+                <field name="document_kind" optional="show"/>
+                <field name="number"/>
+                <field name="partner_id"/>
+                <field name="amount_total" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="cuf" optional="hide"/>
+                <field name="emission_type" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('valid', 'package_validated')"
+                       decoration-danger="state == 'rejected'"
+                       decoration-warning="state in ('pending_retry', 'offline_issued', 'packaged', 'package_sent', 'cancellation_pending', 'reversal_pending')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="mira_siat_invoice_view_form" model="ir.ui.view">
+        <field name="name">mira.siat.invoice.form</field>
+        <field name="model">mira.siat.invoice</field>
+        <field name="arch" type="xml">
+            <form create="0" edit="0" delete="0">
+                <header>
+                    <button name="action_retry" type="object" class="oe_highlight"
+                            string="Consultar y reintentar"
+                            invisible="state not in ('pending_retry', 'issuing', 'sent', 'cancellation_pending', 'reversal_pending')"/>
+                    <button name="action_print" type="object" string="Imprimir factura"
+                            invisible="state not in ('valid', 'package_validated', 'offline_issued', 'packaged', 'package_sent', 'cancelled')"/>
+                    <button name="action_print_ticket" type="object" string="Ticket 80 mm"
+                            invisible="state not in ('valid', 'package_validated', 'offline_issued', 'packaged', 'package_sent', 'cancelled')"/>
+                    <button name="action_send_email" type="object" string="Enviar por correo"
+                            invisible="state not in ('valid', 'package_validated', 'cancelled')"/>
+                    <button name="action_cancel_wizard" type="object" string="Anular"
+                            invisible="state not in ('valid', 'package_validated')"
+                            groups="mira_sale_siat.group_mira_siat_supervisor"/>
+                    <button name="action_revert_cancellation" type="object"
+                            string="Revertir anulación" invisible="state != 'cancelled'"
+                            confirm="¿Revertir la anulación ante el SIN?"
+                            groups="mira_sale_siat.group_mira_siat_supervisor"/>
+                    <button name="action_view_logs" type="object" string="Evidencia técnica"
+                            groups="mira_sale_siat.group_mira_siat_manager"/>
+                    <field name="state" widget="statusbar" statusbar_visible="issuing,valid"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-success" role="alert"
+                         invisible="state not in ('valid', 'package_validated')">
+                        Documento <b>ACEPTADO</b> por el SIN.
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="state != 'pending_retry'">
+                        El SIN no respondió. <b>No emita de nuevo</b>: use «Consultar y
+                        reintentar». El sistema consulta primero si el documento llegó y
+                        solo reenvía el mismo archivo si el SIN confirma que no lo tiene.
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="state not in ('offline_issued', 'packaged', 'package_sent')">
+                        Emitido <b>fuera de línea</b>. Aún no fue validado por el SIN.
+                    </div>
+                    <div class="alert alert-danger" role="alert" invisible="state != 'rejected'">
+                        Documento <b>RECHAZADO</b> por el SIN. Corrija el dato observado y
+                        emita de nuevo desde la factura comercial.
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Documento">
+                            <field name="move_id"/>
+                            <field name="partner_id"/>
+                            <field name="number"/>
+                            <field name="amount_total"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="emission_iso"/>
+                            <field name="emission_type"/>
+                            <field name="user_id"/>
+                            <field name="email_sent_at" invisible="not email_sent_at"/>
+                        </group>
+                        <group string="Origen">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="branch_id"/>
+                            <field name="pos_id"/>
+                            <field name="document_kind"/>
+                            <field name="sector_code"/>
+                            <field name="original_invoice_id" invisible="not original_invoice_id"/>
+                            <field name="event_id" invisible="not event_id"/>
+                            <field name="package_id" invisible="not package_id"/>
+                            <field name="cafc_id" invisible="not cafc_id"/>
+                            <field name="retro_authorization_id"
+                                   invisible="not retro_authorization_id"/>
+                        </group>
+                    </group>
+                    <group string="SIAT">
+                        <field name="cuf"/>
+                        <field name="reception_code"/>
+                        <field name="siat_status_code"/>
+                        <field name="siat_status_description"/>
+                        <field name="error_code" invisible="not error_code"/>
+                        <field name="siat_messages" invisible="not siat_messages"/>
+                        <field name="cancellation_reason_id"
+                               invisible="not cancellation_reason_id"/>
+                        <field name="qr_url" widget="url" invisible="not qr_url"/>
+                    </group>
+                    <group string="Evidencia" groups="mira_sale_siat.group_mira_siat_manager">
+                        <field name="xml_attachment_id"/>
+                        <field name="xml_sha256"/>
+                        <field name="file_hash"/>
+                        <field name="xsd_id"/>
+                        <field name="xsd_sha256"/>
+                        <field name="idempotency_key"/>
+                        <field name="correlation_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="mira_siat_invoice_view_search" model="ir.ui.view">
+        <field name="name">mira.siat.invoice.search</field>
+        <field name="model">mira.siat.invoice</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="cuf"/>
+                <field name="number"/>
+                <field name="partner_id"/>
+                <field name="branch_id"/>
+                <field name="pos_id"/>
+                <filter name="accepted" string="Aceptadas"
+                        domain="[('state', 'in', ('valid', 'package_validated'))]"/>
+                <filter name="cancelled" string="Anuladas" domain="[('state', '=', 'cancelled')]"/>
+                <filter name="attention" string="Requieren atención"
+                        domain="[('state', 'in', ('pending_retry', 'issuing', 'sent', 'rejected', 'cancellation_pending', 'reversal_pending'))]"/>
+                <filter name="notes" string="Notas de crédito-débito"
+                        domain="[('document_kind', '=', 'note')]"/>
+                <filter name="offline" string="Fuera de línea"
+                        domain="[('emission_type', '=', '2')]"/>
+                <filter name="emission_date" string="Fecha de emisión" date="emission_date"/>
+                <group>
+                    <filter name="group_state" string="Estado" context="{'group_by': 'state'}"/>
+                    <filter name="group_branch" string="Sucursal" context="{'group_by': 'branch_id'}"/>
+                    <filter name="group_pos" string="Punto de venta" context="{'group_by': 'pos_id'}"/>
+                    <filter name="group_user" string="Usuario" context="{'group_by': 'user_id'}"/>
+                    <filter name="group_date" string="Fecha" context="{'group_by': 'emission_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="mira_siat_invoice_action" model="ir.actions.act_window">
+        <field name="name">Documentos fiscales</field>
+        <field name="res_model">mira.siat.invoice</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aún no hay documentos fiscales</p>
+            <p>Se crean al emitir desde una factura de cliente publicada.</p>
+        </field>
+    </record>
+</odoo>

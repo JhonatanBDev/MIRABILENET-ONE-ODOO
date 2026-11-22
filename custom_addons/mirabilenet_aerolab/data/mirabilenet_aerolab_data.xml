@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="tag_category_level" model="event.tag.category">
+            <field name="name">Nivel</field>
+            <field name="website_published" eval="True"/>
+        </record>
+        <record id="tag_category_application" model="event.tag.category">
+            <field name="name">Aplicación</field>
+            <field name="website_published" eval="True"/>
+        </record>
+        <record id="tag_level_basico" model="event.tag">
+            <field name="name">Básico</field>
+            <field name="category_id" ref="tag_category_level"/>
+            <field name="color">4</field>
+        </record>
+        <record id="tag_level_intermedio" model="event.tag">
+            <field name="name">Intermedio</field>
+            <field name="category_id" ref="tag_category_level"/>
+            <field name="color">4</field>
+        </record>
+        <record id="tag_level_avanzado" model="event.tag">
+            <field name="name">Avanzado</field>
+            <field name="category_id" ref="tag_category_level"/>
+            <field name="color">4</field>
+        </record>
+        <record id="tag_level_especializado" model="event.tag">
+            <field name="name">Especializado</field>
+            <field name="category_id" ref="tag_category_level"/>
+            <field name="color">4</field>
+        </record>
+        <record id="tag_application_pilotaje" model="event.tag">
+            <field name="name">Pilotaje y seguridad</field>
+            <field name="category_id" ref="tag_category_application"/>
+            <field name="color">10</field>
+        </record>
+        <record id="tag_application_fotogrametria" model="event.tag">
+            <field name="name">Fotogrametría y mapeo</field>
+            <field name="category_id" ref="tag_category_application"/>
+            <field name="color">10</field>
+        </record>
+        <record id="tag_application_agricola" model="event.tag">
+            <field name="name">Agricultura de precisión</field>
+            <field name="category_id" ref="tag_category_application"/>
+            <field name="color">10</field>
+        </record>
+        <record id="tag_application_inspeccion" model="event.tag">
+            <field name="name">Inspección industrial y minera</field>
+            <field name="category_id" ref="tag_category_application"/>
+            <field name="color">10</field>
+        </record>
+        <record id="tag_application_audiovisual" model="event.tag">
+            <field name="name">Producción audiovisual</field>
+            <field name="category_id" ref="tag_category_application"/>
+            <field name="color">10</field>
+        </record>
+        <record id="tag_application_topografia" model="event.tag">
+            <field name="name">Topografía</field>
+            <field name="category_id" ref="tag_category_application"/>
+            <field name="color">10</field>
+        </record>
+
+        <!-- Pregunta por defecto de toda inscripción: el carnet, único por curso. -->
+        <record id="question_ci" model="event.question">
+            <field name="title">Carnet de identidad</field>
+            <field name="question_type">text_box</field>
+            <field name="is_mandatory_answer" eval="True"/>
+            <field name="is_default" eval="True"/>
+            <field name="once_per_order" eval="False"/>
+        </record>
+    </data>
+
+    <record id="action_load_initial_courses" model="ir.actions.server">
+        <field name="name">Cargar cursos de partida de AeroLab</field>
+        <field name="model_id" ref="event.model_event_event"/>
+        <field name="state">code</field>
+        <field name="code">model._mirabilenet_load_initial_courses()</field>
+        <field name="group_ids" eval="[(4, ref('event.group_event_manager'))]"/>
+    </record>
+</odoo>

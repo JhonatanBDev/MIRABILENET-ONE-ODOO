@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_portfolio_import_form" model="ir.ui.view">
+        <field name="name">mirabilenet.portfolio.import.form</field>
+        <field name="model">mirabilenet.portfolio.import</field>
+        <field name="arch" type="xml">
+            <form string="Importar cartera">
+                <field name="state" invisible="1"/>
+                <div invisible="state != 'draft'">
+                    <p>
+                        Suba la planilla de clientes en CSV (separada por «;» o «,»), con las
+                        mismas columnas de la plantilla. Primero verá un resumen; nada se guarda
+                        hasta pulsar «Importar».
+                    </p>
+                    <p class="text-muted">
+                        Obligatorias: NOMBRE, PRECIO DEL PAQUETE, USUARIO PPPoE y PLAN win box.
+                        Los planes que no existan se crean con la velocidad y el precio de la
+                        planilla. Importar dos veces no duplica nada.
+                    </p>
+                </div>
+                <group invisible="state != 'draft'">
+                    <field name="region_id" options="{'no_create': True}"/>
+                    <field name="file" filename="filename"/>
+                    <field name="filename" invisible="1"/>
+                    <field name="replace_data"/>
+                </group>
+                <group invisible="state == 'draft'">
+                    <field name="region_id" readonly="1"/>
+                    <field name="replace_data" readonly="1"/>
+                    <field name="filename" readonly="1" string="Archivo"/>
+                </group>
+                <field name="summary" invisible="state == 'draft'" nolabel="1"/>
+                <group invisible="state == 'draft'">
+                    <field name="review_file" filename="review_filename"/>
+                    <field name="review_filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="action_preview" type="object" string="Revisar"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_download_template" type="object"
+                            string="Descargar plantilla" class="btn-secondary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_import" type="object" string="Importar"
+                            class="btn-primary" invisible="state != 'preview'"
+                            confirm="Se crearán los planes, clientes, servicios, cuentas PPPoE y ONU del resumen. ¿Continuar?"/>
+                    <button name="action_back" type="object" string="Atrás"
+                            invisible="state != 'preview'"/>
+                    <button special="cancel" string="Cerrar" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_portfolio_import" model="ir.actions.act_window">
+        <field name="name">Importar cartera</field>
+        <field name="res_model">mirabilenet.portfolio.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

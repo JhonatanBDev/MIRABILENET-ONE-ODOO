@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_fiber_port_list" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.port.list</field>
+        <field name="model">mirabilenet.fiber.port</field>
+        <field name="arch" type="xml">
+            <list create="0" decoration-success="state == 'libre'"
+                  decoration-danger="state == 'danado'" decoration-warning="state == 'reservado'">
+                <field name="nap_id"/>
+                <field name="number"/>
+                <field name="branch_line" optional="show"/>
+                <field name="neighborhood" optional="show"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'libre'"
+                       decoration-info="state == 'ocupado'"
+                       decoration-danger="state == 'danado'"
+                       decoration-warning="state == 'reservado'"/>
+                <field name="service_id" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="service_ip" optional="show"/>
+                <field name="pppoe_username" optional="hide"/>
+                <field name="assigned_date" optional="hide"/>
+                <field name="region_id" optional="hide"/>
+                <button name="action_assign_wizard" type="object" string="Asignar"
+                        icon="fa-user-plus" invisible="state not in ('libre', 'reservado')"/>
+                <button name="action_open_map" type="object" string="Mapa" icon="fa-map-marker"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_fiber_port_search" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.port.search</field>
+        <field name="model">mirabilenet.fiber.port</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="service_ip"/>
+                <field name="pppoe_username"/>
+                <field name="nap_id"/>
+                <field name="partner_id"/>
+                <field name="service_id"/>
+                <field name="branch_line"/>
+                <field name="neighborhood"/>
+                <filter name="libres" string="Libres" domain="[('state', '=', 'libre')]"/>
+                <filter name="ocupados" string="Ocupados" domain="[('state', '=', 'ocupado')]"/>
+                <filter name="danados" string="Dañados" domain="[('state', '=', 'danado')]"/>
+                <filter name="reservados" string="Reservados"
+                        domain="[('state', '=', 'reservado')]"/>
+                <group>
+                    <filter name="por_nap" string="NAP" context="{'group_by': 'nap_id'}"/>
+                    <filter name="por_estado" string="Estado" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_fiber_port_form" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.port.form</field>
+        <field name="model">mirabilenet.fiber.port</field>
+        <field name="arch" type="xml">
+            <form create="0">
+                <header>
+                    <button name="action_assign_wizard" type="object" string="Asignar cliente"
+                            class="btn-primary" invisible="state not in ('libre', 'reservado')"/>
+                    <button name="action_release" type="object" string="Liberar"
+                            invisible="not service_id" confirm="¿Liberar este puerto?"/>
+                    <button name="action_open_map" type="object" string="Ver en el mapa"/>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="nap_id" readonly="1"/>
+                            <field name="number" readonly="1"/>
+                            <field name="region_id"/>
+                        </group>
+                        <group>
+                            <field name="service_id" options="{'no_create': True}"/>
+                            <field name="partner_id"/>
+                            <field name="assigned_date"/>
+                        </group>
+                    </group>
+                    <field name="notes" placeholder="Notas del puerto"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_fiber_port" model="ir.actions.act_window">
+        <field name="name">Puertos</field>
+        <field name="res_model">mirabilenet.fiber.port</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_mirabilenet_fiber_port_search"/>
+    </record>
+
+    <record id="action_mirabilenet_fiber_port_free" model="ir.actions.act_window">
+        <field name="name">Puertos libres</field>
+        <field name="res_model">mirabilenet.fiber.port</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_mirabilenet_fiber_port_search"/>
+        <field name="context">{'search_default_libres': 1, 'search_default_por_nap': 1}</field>
+        <field name="help" type="html">
+            <p>No hay puertos libres. Revise que las NAP tengan definida su cantidad de puertos.</p>
+        </field>
+    </record>
+</odoo>

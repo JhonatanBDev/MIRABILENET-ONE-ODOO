@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_progress">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Informe de avance</h2>
+                        <table class="table table-sm">
+                            <tr><th>Tarea</th><td><span t-out="doc.task_id.sudo().name"/></td></tr>
+                            <tr><th>Proyecto</th><td><span t-out="doc.task_id.sudo().project_id.name"/></td></tr>
+                            <tr><th>Pasante</th><td><span t-out="', '.join(doc.sudo().intern_ids.mapped('name'))"/></td></tr>
+                            <tr><th>Horas dedicadas</th><td><span t-out="doc.hours"/></td></tr>
+                            <tr><th>Estado</th><td><span t-out="doc.task_id.sudo().stage_id.name"/></td></tr>
+                        </table>
+                        <t t-set="rows" t-value="doc._parameter_rows()"/>
+                        <t t-if="rows">
+                            <h4>Parámetros y especificaciones técnicas</h4>
+                            <table class="table table-sm table-bordered">
+                                <tr t-foreach="rows" t-as="row"><td><span t-out="row[0]"/></td><td><span t-out="row[1]"/></td></tr>
+                            </table>
+                        </t>
+                        <t t-foreach="doc._sections()" t-as="section">
+                            <h4 t-out="section[0]"/>
+                            <p style="white-space: pre-line" t-out="section[1]"/>
+                        </t>
+                        <t t-if="doc.tutor_comment">
+                            <h4>Devolución del tutor</h4>
+                            <p style="white-space: pre-line" t-out="doc.tutor_comment"/>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+    <record id="action_report_progress" model="ir.actions.report">
+        <field name="name">Informe de avance</field>
+        <field name="model">mirabilenet.internship.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mirabilenet_pasantias.report_progress</field>
+        <field name="report_file">mirabilenet_pasantias.report_progress</field>
+        <field name="binding_model_id" ref="model_mirabilenet_internship_report"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

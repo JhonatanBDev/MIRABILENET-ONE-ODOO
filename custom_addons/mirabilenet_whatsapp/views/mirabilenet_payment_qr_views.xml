@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- QR de pago -->
+    <record id="view_mirabilenet_payment_qr_list" model="ir.ui.view">
+        <field name="name">mirabilenet.payment.qr.list</field>
+        <field name="model">mirabilenet.payment.qr</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="not active">
+                <field name="region_id"/>
+                <field name="active"/>
+                <field name="create_date" string="Subido"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_payment_qr_form" model="ir.ui.view">
+        <field name="name">mirabilenet.payment.qr.form</field>
+        <field name="model">mirabilenet.payment.qr</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="region_id" readonly="id" options="{'no_create': True}"/>
+                            <field name="active"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="image" widget="image" readonly="id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_payment_qr" model="ir.actions.act_window">
+        <field name="name">QR de pago</field>
+        <field name="res_model">mirabilenet.payment.qr</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+</odoo>

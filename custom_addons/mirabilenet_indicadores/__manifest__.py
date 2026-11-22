@@ -1,0 +1,25 @@
+{
+    "name": "MIRABILENET: Indicadores",
+    "version": "19.0.1.0.0",
+    "summary": "Indicadores con mis_builder (OCA), tableros y vistas nativas de Odoo",
+    "description": "Un informe mis_builder por mes y vistas de gráfico y tabla "
+                   "dinámica sobre servicios, mora, routers y avisos. Detalle en readme/.",
+    "category": "MIRABILENET",
+    "author": "MIRABILENET",
+    "license": "AGPL-3",
+    "depends": ["mirabilenet_contratos", "mirabilenet_whatsapp", "mis_builder",
+                "spreadsheet_dashboard_account", "spreadsheet_dashboard_sale",
+                "spreadsheet_dashboard_pos_hr", "spreadsheet_dashboard_event_sale",
+                "spreadsheet_dashboard_website_sale"],
+    "data": [
+        "data/mirabilenet_indicadores_mis.xml",
+        "views/mirabilenet_service_views.xml",
+        "views/account_move_views.xml",
+        "views/mirabilenet_router_views.xml",
+        "views/mirabilenet_whatsapp_message_views.xml",
+        "views/mirabilenet_region_views.xml",
+        "views/mirabilenet_indicadores_menus.xml",
+    ],
+    "application": False,
+    "installable": True,
+}

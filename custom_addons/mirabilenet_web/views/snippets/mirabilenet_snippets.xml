@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Generado por la herramienta del sitio: bloques dinámicos de MIRABILENET. -->
+    <template id="s_mn_services" name="Servicios (MIRABILENET)">
+    <section class="s_mn_services s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_services" data-name="Servicios (MIRABILENET)" data-mn-filter="servicios" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_service_cards" data-number-of-records="4" data-column-classes="col-12 col-md-6 col-lg-3" data-extra-classes="g-4">
+        <div class="s_dynamic_snippet_container container">
+            <div class="row s_nb_column_fixed">
+                <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
+                    <div>
+                        <h2 class="h3">Servicios</h2>
+                        <p class="lead">Un solo proveedor para la conexión, las cámaras y el soporte.</p>
+                    </div>
+                    <div>
+                        <a href="/servicios">Ver todos los servicios<span class="fa fa-long-arrow-right ms-2"/></a>
+                    </div>
+                </section>
+                <section class="s_dynamic_snippet_content oe_unremovable oe_unmovable o_not_editable col s_col_no_resize">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="missing_option_warning alert alert-info fade show d-none d-print-none rounded-0">Todavía no hay datos publicados: cárguelos en MIRABILENET &gt; Sitio web.</div>
+                    </div>
+                    <div class="dynamic_snippet_template"/>
+                </section>
+            </div>
+        </div>
+    </section>
+    </template>
+    <template id="s_mn_plans" name="Planes de internet (MIRABILENET)">
+    <section class="s_mn_plans s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_plans" data-name="Planes de internet (MIRABILENET)" data-mn-filter="planes" data-template-key="mirabilenet_web.dynamic_filter_template_product_template_mn_plans" data-number-of-records="4" data-column-classes="col-12 col-md-6 col-lg-4" data-extra-classes="g-4">
+        <div class="s_dynamic_snippet_container container">
+            <div class="row s_nb_column_fixed">
+                <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
+                    <div>
+                        <h2 class="h3">Planes de internet</h2>
+                        <p class="lead">Precios mensuales en bolivianos. La instalación se cotiza aparte.</p>
+                    </div>
+                    <div>
+                        <a href="/planes">Ver todos los planes<span class="fa fa-long-arrow-right ms-2"/></a>
+                    </div>
+                </section>
+                <section class="s_dynamic_snippet_content oe_unremovable oe_unmovable o_not_editable col s_col_no_resize">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="missing_option_warning alert alert-info fade show d-none d-print-none rounded-0">Todavía no hay datos publicados: cárguelos en MIRABILENET &gt; Sitio web.</div>
+                    </div>
+                    <div class="dynamic_snippet_template"/>
+                </section>
+            </div>
+        </div>
+    </section>
+    </template>
+    <template id="s_mn_coverage" name="Cobertura (MIRABILENET)">
+    <section class="s_mn_coverage s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_coverage" data-name="Cobertura (MIRABILENET)" data-mn-filter="cobertura" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_coverage_cards" data-number-of-records="16" data-column-classes="col-6 col-md-4 col-lg-3" data-extra-classes="g-3">
+        <div class="s_dynamic_snippet_container container">
+            <div class="row s_nb_column_fixed">
+                <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
+                    <div>
+                        <h2 class="h3">Dónde damos servicio</h2>
+                        <p class="lead">Revisamos cada solicitud caso por caso.</p>
+                    </div>
+                    <div>
+                        <a href="/cobertura">Ver la cobertura completa<span class="fa fa-long-arrow-right ms-2"/></a>
+                    </div>
+                </section>
+                <section class="s_dynamic_snippet_content oe_unremovable oe_unmovable o_not_editable col s_col_no_resize">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="missing_option_warning alert alert-info fade show d-none d-print-none rounded-0">Todavía no hay datos publicados: cárguelos en MIRABILENET &gt; Sitio web.</div>
+                    </div>
+                    <div class="dynamic_snippet_template"/>
+                </section>
+            </div>
+        </div>
+    </section>
+    </template>
+    <template id="s_mn_projects" name="Proyectos (MIRABILENET)">
+    <section class="s_mn_projects s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_projects" data-name="Proyectos (MIRABILENET)" data-mn-filter="proyectos" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_project_cards" data-number-of-records="4" data-column-classes="col-12 col-md-6 col-lg-4" data-extra-classes="g-4">
+        <div class="s_dynamic_snippet_container container">
+            <div class="row s_nb_column_fixed">
+                <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
+                    <div>
+                        <h2 class="h3">Trabajos realizados</h2>
+                        <p class="lead">Redes que instalamos y mantenemos.</p>
+                    </div>
+                    <div>
+                        <a href="/proyectos">Ver todos los proyectos<span class="fa fa-long-arrow-right ms-2"/></a>
+                    </div>
+                </section>
+                <section class="s_dynamic_snippet_content oe_unremovable oe_unmovable o_not_editable col s_col_no_resize">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="missing_option_warning alert alert-info fade show d-none d-print-none rounded-0">Todavía no hay datos publicados: cárguelos en MIRABILENET &gt; Sitio web.</div>
+                    </div>
+                    <div class="dynamic_snippet_template"/>
+                </section>
+            </div>
+        </div>
+    </section>
+    </template>
+    <template id="s_mn_faq" name="Preguntas frecuentes (MIRABILENET)">
+    <section class="s_mn_faq s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_faq" data-name="Preguntas frecuentes (MIRABILENET)" data-mn-filter="preguntas" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_faq_list" data-number-of-records="16" data-column-classes="col-12" data-extra-classes="g-2">
+        <div class="s_dynamic_snippet_container container">
+            <div class="row s_nb_column_fixed">
+                <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
+                    <div>
+                        <h2 class="h3">Preguntas frecuentes</h2>
+                        <p class="lead">Si no encuentra su respuesta, escríbanos.</p>
+                    </div>
+                    <div>
+                        <a href="/preguntas-frecuentes">Ver todas las preguntas<span class="fa fa-long-arrow-right ms-2"/></a>
+                    </div>
+                </section>
+                <section class="s_dynamic_snippet_content oe_unremovable oe_unmovable o_not_editable col s_col_no_resize">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="missing_option_warning alert alert-info fade show d-none d-print-none rounded-0">Todavía no hay datos publicados: cárguelos en MIRABILENET &gt; Sitio web.</div>
+                    </div>
+                    <div class="dynamic_snippet_template"/>
+                </section>
+            </div>
+        </div>
+    </section>
+    </template>
+    <template id="s_mn_advantages" name="Ventajas (MIRABILENET)">
+    <section class="s_mn_advantages s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_advantages" data-name="Ventajas (MIRABILENET)" data-mn-filter="ventajas" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_advantage_list" data-number-of-records="4" data-column-classes="col-12 col-md-4" data-extra-classes="g-4">
+        <div class="s_dynamic_snippet_container container">
+            <div class="row s_nb_column_fixed">
+                <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
+                    <div>
+                        <h2 class="h3">Por qué elegirnos</h2>
+                    </div>
+                </section>
+                <section class="s_dynamic_snippet_content oe_unremovable oe_unmovable o_not_editable col s_col_no_resize">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="missing_option_warning alert alert-info fade show d-none d-print-none rounded-0">Todavía no hay datos publicados: cárguelos en MIRABILENET &gt; Sitio web.</div>
+                    </div>
+                    <div class="dynamic_snippet_template"/>
+                </section>
+            </div>
+        </div>
+    </section>
+    </template>
+    <template id="s_mn_figures" name="Cifras (MIRABILENET)">
+    <section class="s_mn_figures s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_figures" data-name="Cifras (MIRABILENET)" data-mn-filter="cifras" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_figure_list" data-number-of-records="4" data-column-classes="col-6 col-md-3" data-extra-classes="g-4">
+        <div class="s_dynamic_snippet_container container">
+            <div class="row s_nb_column_fixed">
+                <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
+                    <div>
+                        <h2 class="h3">En números</h2>
+                    </div>
+                </section>
+                <section class="s_dynamic_snippet_content oe_unremovable oe_unmovable o_not_editable col s_col_no_resize">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="missing_option_warning alert alert-info fade show d-none d-print-none rounded-0">Todavía no hay datos publicados: cárguelos en MIRABILENET &gt; Sitio web.</div>
+                    </div>
+                    <div class="dynamic_snippet_template"/>
+                </section>
+            </div>
+        </div>
+    </section>
+    </template>
+    <template id="s_mn_allies" name="Tecnologías y aliados (MIRABILENET)">
+    <section class="s_mn_allies s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_allies" data-name="Tecnologías y aliados (MIRABILENET)" data-mn-filter="aliados" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_ally_list" data-number-of-records="16" data-column-classes="col-auto" data-extra-classes="g-2">
+        <div class="s_dynamic_snippet_container container">
+            <div class="row s_nb_column_fixed">
+                <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
+                    <div>
+                        <h2 class="h3">Tecnologías y aliados</h2>
+                    </div>
+                </section>
+                <section class="s_dynamic_snippet_content oe_unremovable oe_unmovable o_not_editable col s_col_no_resize">
+                    <div class="css_non_editable_mode_hidden">
+                        <div class="missing_option_warning alert alert-info fade show d-none d-print-none rounded-0">Todavía no hay datos publicados: cárguelos en MIRABILENET &gt; Sitio web.</div>
+                    </div>
+                    <div class="dynamic_snippet_template"/>
+                </section>
+            </div>
+        </div>
+    </section>
+    </template>
+    <template id="dynamic_filter_template_mirabilenet_web_service_cards" name="MIRABILENET: Servicios">
+        <t t-foreach="records" t-as="data" data-column-classes="col-12 col-md-6 col-lg-3" data-extra-classes="g-4">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body">
+                    <i t-attf-class="fa fa-2x text-primary mb-3 fa-#{data.get('mn_icon', 'circle')}"/>
+                    <h3 class="h5" t-out="data.get('name')"/>
+                    <p class="text-muted" t-out="data.get('summary')"/>
+                    <a t-if="data.get('mn_url')" t-att-href="data['mn_url']">Ver detalle <i class="fa fa-long-arrow-right"/></a>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="dynamic_filter_template_product_template_mn_plans" name="MIRABILENET: Planes de internet">
+        <t t-foreach="records" t-as="data" data-column-classes="col-12 col-md-6 col-lg-4" data-extra-classes="g-4">
+            <div t-attf-class="card h-100 shadow-sm text-center #{'border-primary' if data_index == 1 else ''}">
+                <div class="card-body">
+                    <span t-if="data_index == 1" class="badge text-bg-primary mb-2">Más contratado</span>
+                    <h3 class="h5" t-out="data.get('name')"/>
+                    <p t-if="data.get('mn_price')" class="display-6 mb-0">
+                        <small class="h5">Bs</small> <span t-out="data['mn_price']"/>
+                        <small class="h6 text-muted">/mes</small>
+                    </p>
+                    <p t-if="data.get('mn_down')" class="mt-3 mb-1"><strong t-out="data['mn_down']"/> Mbps de bajada</p>
+                    <p t-if="data.get('mn_up')" class="mb-1"><strong t-out="data['mn_up']"/> Mbps de subida</p>
+                    <p t-if="data.get('mn_tv')" class="mb-1">Incluye servicio de TV</p>
+                    <p t-if="data.get('mn_region')" class="text-muted small" t-out="data['mn_region']"/>
+                    <a t-att-href="data.get('mn_url', '/contacto?tipo=cotizacion')"
+                       t-attf-class="btn mt-2 #{'btn-primary' if data_index == 1 else 'btn-outline-primary'}">Lo quiero</a>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="dynamic_filter_template_mirabilenet_web_coverage_cards" name="MIRABILENET: Cobertura">
+        <t t-foreach="records" t-as="data" data-column-classes="col-6 col-md-4 col-lg-3" data-extra-classes="g-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <strong t-out="data.get('name')"/>
+                    <span t-if="data.get('mn_state')" t-attf-class="badge ms-2 #{data.get('mn_badge', 'text-bg-secondary')}" t-out="data['mn_state']"/>
+                    <div t-if="data.get('mn_region')" class="small text-primary mt-1" t-out="data['mn_region']"/>
+                    <div t-if="data.get('detail')" class="text-muted small mt-1" t-out="data['detail']"/>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="dynamic_filter_template_mirabilenet_web_project_cards" name="MIRABILENET: Proyectos">
+        <t t-foreach="records" t-as="data" data-column-classes="col-12 col-md-6 col-lg-4" data-extra-classes="g-4">
+            <div class="card h-100 shadow-sm">
+                <img t-if="data.get('mn_image')" class="card-img-top" t-att-src="data['mn_image']" t-att-alt="data.get('title')"/>
+                <div class="card-body">
+                    <small t-if="data.get('mn_kind')" class="text-uppercase text-primary" t-out="data['mn_kind']"/>
+                    <h3 class="h5 mt-1">
+                        <a t-if="data.get('mn_url')" t-att-href="data['mn_url']" t-out="data.get('title')"/>
+                        <t t-else="" t-out="data.get('title')"/>
+                    </h3>
+                    <p class="text-muted" t-out="data.get('summary')"/>
+                    <small t-if="data.get('mn_place')" class="text-muted" t-out="data['mn_place']"/>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="dynamic_filter_template_mirabilenet_web_faq_list" name="MIRABILENET: Preguntas frecuentes">
+        <t t-foreach="records" t-as="data" data-column-classes="col-12" data-extra-classes="g-2">
+            <details class="border rounded p-3 w-100">
+                <summary class="fw-bold" t-out="data.get('question')"/>
+                <small t-if="data.get('mn_category')" class="text-primary" t-out="data['mn_category']"/>
+                <p t-foreach="data.get('mn_answer', [])" t-as="parrafo" class="mt-2 mb-0" t-out="parrafo"/>
+            </details>
+        </t>
+    </template>
+    <template id="dynamic_filter_template_mirabilenet_web_advantage_list" name="MIRABILENET: Ventajas">
+        <t t-foreach="records" t-as="data" data-column-classes="col-12 col-md-4" data-extra-classes="g-4">
+            <div class="d-flex">
+                <i t-attf-class="fa fa-lg text-primary me-3 mt-1 fa-#{data.get('mn_icon', 'check')}"/>
+                <div>
+                    <strong t-out="data.get('title')"/>
+                    <div t-if="data.get('detail')" class="text-muted" t-out="data['detail']"/>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="dynamic_filter_template_mirabilenet_web_figure_list" name="MIRABILENET: Cifras">
+        <t t-foreach="records" t-as="data" data-column-classes="col-6 col-md-3" data-extra-classes="g-4">
+            <div class="text-center">
+                <div class="h2 text-primary mb-0" t-out="data.get('value')"/>
+                <div class="text-muted" t-out="data.get('label')"/>
+            </div>
+        </t>
+    </template>
+    <template id="dynamic_filter_template_mirabilenet_web_ally_list" name="MIRABILENET: Tecnologías y aliados">
+        <t t-foreach="records" t-as="data" data-column-classes="col-auto" data-extra-classes="g-2">
+            <span class="badge text-bg-light border p-2">
+                <t t-out="data.get('name')"/>
+                <small t-if="data.get('detail')" class="text-muted"> · <t t-out="data['detail']"/></small>
+            </span>
+        </t>
+    </template>
+    <template id="snippets" inherit_id="website.snippets" name="MIRABILENET: bloques">
+        <xpath expr="//t[@id='installed_snippets_hook']" position="before">
+            <t snippet-group="mirabilenet" t-snippet="website.s_snippet_group" string="MIRABILENET"
+               t-thumbnail="/mirabilenet_web/static/description/icon.png"/>
+        </xpath>
+        <xpath expr="//snippets[@id='snippet_structure']" position="inside">
+            <t t-snippet="mirabilenet_web.s_mn_services" string="Servicios" group="mirabilenet">
+                <keywords>mirabilenet, servicios</keywords>
+            </t>
+            <t t-snippet="mirabilenet_web.s_mn_plans" string="Planes de internet" group="mirabilenet">
+                <keywords>mirabilenet, planes de internet</keywords>
+            </t>
+            <t t-snippet="mirabilenet_web.s_mn_coverage" string="Cobertura" group="mirabilenet">
+                <keywords>mirabilenet, cobertura</keywords>
+            </t>
+            <t t-snippet="mirabilenet_web.s_mn_projects" string="Proyectos" group="mirabilenet">
+                <keywords>mirabilenet, proyectos</keywords>
+            </t>
+            <t t-snippet="mirabilenet_web.s_mn_faq" string="Preguntas frecuentes" group="mirabilenet">
+                <keywords>mirabilenet, preguntas frecuentes</keywords>
+            </t>
+            <t t-snippet="mirabilenet_web.s_mn_advantages" string="Ventajas" group="mirabilenet">
+                <keywords>mirabilenet, ventajas</keywords>
+            </t>
+            <t t-snippet="mirabilenet_web.s_mn_figures" string="Cifras" group="mirabilenet">
+                <keywords>mirabilenet, cifras</keywords>
+            </t>
+            <t t-snippet="mirabilenet_web.s_mn_allies" string="Tecnologías y aliados" group="mirabilenet">
+                <keywords>mirabilenet, tecnologías y aliados</keywords>
+            </t>
+        </xpath>
+    </template>
+</odoo>

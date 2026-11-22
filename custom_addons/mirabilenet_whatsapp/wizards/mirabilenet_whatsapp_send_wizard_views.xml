@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Envío manual -->
+    <record id="view_mirabilenet_whatsapp_send_wizard_form" model="ir.ui.view">
+        <field name="name">mirabilenet.whatsapp.send.wizard.form</field>
+        <field name="model">mirabilenet.whatsapp.send.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <div class="alert alert-info" role="alert">
+                    Sale ahora, con la plantilla aprobada de la región. No se salta el
+                    consentimiento, las bajas, el tope diario ni el silencio por atención humana.
+                </div>
+                <group>
+                    <field name="partner_id" options="{'no_create': True}"/>
+                    <field name="charge_id" options="{'no_create': True}"/>
+                    <field name="event"/>
+                </group>
+                <footer>
+                    <button name="action_send" type="object" string="Enviar" class="btn-primary"/>
+                    <button string="Cancelar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_whatsapp_send_wizard" model="ir.actions.act_window">
+        <field name="name">Enviar aviso</field>
+        <field name="res_model">mirabilenet.whatsapp.send.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

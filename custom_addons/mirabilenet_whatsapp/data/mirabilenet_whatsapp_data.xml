@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="param_meta_gateway" model="ir.config_parameter">
+        <field name="key">mirabilenet.meta_gateway</field>
+        <field name="value">real</field>
+    </record>
+
+    <record id="param_n8n_client" model="ir.config_parameter">
+        <field name="key">mirabilenet.n8n_client</field>
+        <field name="value">real</field>
+    </record>
+    <record id="param_n8n_internal_hosts" model="ir.config_parameter">
+        <field name="key">mirabilenet.n8n_internal_hosts</field>
+        <field name="value">n8n,localhost,127.0.0.1</field>
+    </record>
+
+    <record id="cron_dispatch_conversations" model="ir.cron">
+        <field name="name">MIRABILENET: despachar respuestas de conversaciones</field>
+        <field name="model_id" ref="model_mirabilenet_conversation_message"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_dispatch()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+    </record>
+    <record id="cron_deliver_n8n_events" model="ir.cron">
+        <field name="name">MIRABILENET: entregar eventos a n8n</field>
+        <field name="model_id" ref="model_mirabilenet_n8n_event"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_deliver()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+    </record>
+
+    <record id="cron_dispatch_pending" model="ir.cron">
+        <field name="name">MIRABILENET: despachar WhatsApp pendientes</field>
+        <field name="model_id" ref="model_mirabilenet_whatsapp_message"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_dispatch_pending()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">minutes</field>
+    </record>
+    <record id="cron_reminders" model="ir.cron">
+        <field name="name">MIRABILENET: recordatorios antes del vencimiento</field>
+        <field name="model_id" ref="model_mirabilenet_whatsapp_message"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_reminders()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <!-- 13:00 UTC = 09:00 en Bolivia -->
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 13:00:00')"/>
+    </record>
+    <record id="cron_overdue" model="ir.cron">
+        <field name="name">MIRABILENET: avisos de mora</field>
+        <field name="model_id" ref="model_mirabilenet_whatsapp_message"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_overdue()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 13:10:00')"/>
+    </record>
+    <record id="cron_mora_retries" model="ir.cron">
+        <field name="name">MIRABILENET: recordatorios repetidos de mora</field>
+        <field name="model_id" ref="model_mirabilenet_whatsapp_message"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_mora_retries()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 13:20:00')"/>
+    </record>
+</odoo>

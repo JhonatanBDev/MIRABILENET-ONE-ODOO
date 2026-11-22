@@ -1,0 +1,21 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_web_settings_user,mirabilenet.web.settings user,model_mirabilenet_web_settings,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_web_settings_publisher,mirabilenet.web.settings publisher,model_mirabilenet_web_settings,group_mirabilenet_web_publisher,1,1,1,0
+access_web_service_user,mirabilenet.web.service user,model_mirabilenet_web_service,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_web_service_publisher,mirabilenet.web.service publisher,model_mirabilenet_web_service,group_mirabilenet_web_publisher,1,1,1,1
+access_web_coverage_user,mirabilenet.web.coverage user,model_mirabilenet_web_coverage,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_web_coverage_publisher,mirabilenet.web.coverage publisher,model_mirabilenet_web_coverage,group_mirabilenet_web_publisher,1,1,1,1
+access_web_project_user,mirabilenet.web.project user,model_mirabilenet_web_project,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_web_project_publisher,mirabilenet.web.project publisher,model_mirabilenet_web_project,group_mirabilenet_web_publisher,1,1,1,1
+access_web_faq_user,mirabilenet.web.faq user,model_mirabilenet_web_faq,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_web_faq_publisher,mirabilenet.web.faq publisher,model_mirabilenet_web_faq,group_mirabilenet_web_publisher,1,1,1,1
+access_web_advantage_user,mirabilenet.web.advantage user,model_mirabilenet_web_advantage,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_web_advantage_publisher,mirabilenet.web.advantage publisher,model_mirabilenet_web_advantage,group_mirabilenet_web_publisher,1,1,1,1
+access_web_figure_user,mirabilenet.web.figure user,model_mirabilenet_web_figure,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_web_figure_publisher,mirabilenet.web.figure publisher,model_mirabilenet_web_figure,group_mirabilenet_web_publisher,1,1,1,1
+access_web_ally_user,mirabilenet.web.ally user,model_mirabilenet_web_ally,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_web_ally_publisher,mirabilenet.web.ally publisher,model_mirabilenet_web_ally,group_mirabilenet_web_publisher,1,1,1,1
+access_web_legal_user,mirabilenet.web.legal user,model_mirabilenet_web_legal,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_web_legal_publisher,mirabilenet.web.legal publisher,model_mirabilenet_web_legal,group_mirabilenet_web_publisher,1,1,1,0
+access_crm_lead_mirabilenet_user,crm.lead mirabilenet user,crm.model_crm_lead,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_crm_lead_mirabilenet_manager,crm.lead mirabilenet manager,crm.model_crm_lead,mirabilenet_isp.group_mirabilenet_customer_manager,1,1,1,0

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Ajustes -->
+    <record id="view_mirabilenet_whatsapp_settings_form" model="ir.ui.view">
+        <field name="name">mirabilenet.whatsapp.settings.form</field>
+        <field name="model">mirabilenet.whatsapp.settings</field>
+        <field name="arch" type="xml">
+            <form create="0" delete="0">
+                <sheet>
+                    <div class="alert alert-warning" role="alert" invisible="not test_mode">
+                        Modo de prueba: los mensajes se arman y quedan como enviados, pero no
+                        llegan a Meta ni a ningún cliente.
+                    </div>
+                    <group>
+                        <group string="Estado">
+                            <field name="active_messaging"/>
+                            <field name="test_mode"/>
+                            <field name="configured"/>
+                        </group>
+                        <group string="Meta">
+                            <field name="api_version"/>
+                            <field name="waba_id"/>
+                            <field name="app_id"/>
+                            <field name="has_access_token"/>
+                            <field name="access_token" password="True"/>
+                            <field name="has_app_secret"/>
+                            <field name="app_secret" password="True"/>
+                            <field name="has_verify_token"/>
+                            <field name="webhook_verify_token" password="True"/>
+                        </group>
+                        <group string="Horario y topes">
+                            <field name="hour_start" widget="float_time"/>
+                            <field name="hour_end" widget="float_time"/>
+                            <field name="daily_limit"/>
+                            <field name="max_retries"/>
+                        </group>
+                        <group string="Cobranza">
+                            <field name="reminder_days"/>
+                            <field name="mora_interval_days"/>
+                            <field name="mora_max_reminders"/>
+                        </group>
+                        <group string="Cuidado del cliente">
+                            <field name="require_consent"/>
+                            <field name="silence_hours"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_whatsapp_settings" model="ir.actions.server">
+        <field name="name">Ajustes de WhatsApp</field>
+        <field name="model_id" ref="model_mirabilenet_whatsapp_settings"/>
+        <field name="state">code</field>
+        <field name="code">action = {
+    "type": "ir.actions.act_window", "name": "Ajustes de WhatsApp",
+    "res_model": "mirabilenet.whatsapp.settings", "view_mode": "form",
+    "res_id": model._load().id,
+}</field>
+    </record>
+</odoo>

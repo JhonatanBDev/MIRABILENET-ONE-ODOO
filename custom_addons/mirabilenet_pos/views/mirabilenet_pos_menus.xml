@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mirabilenet_branch_pos" name="Cajas de sucursal"
+              parent="mirabilenet_base.menu_mirabilenet_org" sequence="15"
+              action="point_of_sale.action_pos_config_kanban"
+              groups="point_of_sale.group_pos_manager"/>
+</odoo>

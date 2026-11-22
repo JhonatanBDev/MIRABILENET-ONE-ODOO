@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="group_mirabilenet_whatsapp_config" model="res.groups">
+            <field name="name">MIRABILENET / Configura WhatsApp (números, plantillas, QR)</field>
+            <field name="implied_ids" eval="[(4, ref('mirabilenet_base.group_mirabilenet_user'))]"/>
+        </record>
+        <record id="group_mirabilenet_whatsapp_operator" model="res.groups">
+            <field name="name">MIRABILENET / Envía avisos y registra bajas y consentimientos</field>
+            <field name="implied_ids" eval="[(4, ref('mirabilenet_base.group_mirabilenet_user'))]"/>
+        </record>
+        <record id="group_mirabilenet_whatsapp_promos" model="res.groups">
+            <field name="name">MIRABILENET / Administra promociones de retención</field>
+            <field name="implied_ids" eval="[(4, ref('mirabilenet_base.group_mirabilenet_user'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_superadmin" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_mirabilenet_whatsapp_config')), (4, ref('group_mirabilenet_whatsapp_operator')), (4, ref('group_mirabilenet_whatsapp_promos'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_gerencia" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_mirabilenet_whatsapp_config')), (4, ref('group_mirabilenet_whatsapp_operator')), (4, ref('group_mirabilenet_whatsapp_promos'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_admin_regional" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_mirabilenet_whatsapp_config')), (4, ref('group_mirabilenet_whatsapp_operator')), (4, ref('group_mirabilenet_whatsapp_promos'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_finanzas" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_mirabilenet_whatsapp_config')), (4, ref('group_mirabilenet_whatsapp_operator'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_cobrador" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_mirabilenet_whatsapp_operator'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_cajero" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_mirabilenet_whatsapp_operator'))]"/>
+        </record>
+        <record id="mirabilenet_base.group_role_vendedor" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_mirabilenet_whatsapp_operator'))]"/>
+        </record>
+    </data>
+
+    <!-- Aislamiento por región. -->
+    <data noupdate="1">
+        <record id="rule_mirabilenet_whatsapp_number_region" model="ir.rule">
+            <field name="name">MIRABILENET: números de WhatsApp de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_number"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_number_global" model="ir.rule">
+            <field name="name">MIRABILENET: números de WhatsApp, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_number"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_template_region" model="ir.rule">
+            <field name="name">MIRABILENET: plantillas de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_template"/>
+            <field name="domain_force">['|', ('region_id', '=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_template_global" model="ir.rule">
+            <field name="name">MIRABILENET: plantillas, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_template"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_message_region" model="ir.rule">
+            <field name="name">MIRABILENET: mensajes de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_message"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_message_global" model="ir.rule">
+            <field name="name">MIRABILENET: mensajes, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_message"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_optout_region" model="ir.rule">
+            <field name="name">MIRABILENET: bajas de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_optout"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_optout_global" model="ir.rule">
+            <field name="name">MIRABILENET: bajas, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_optout"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_consent_region" model="ir.rule">
+            <field name="name">MIRABILENET: consentimientos de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_consent"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_consent_global" model="ir.rule">
+            <field name="name">MIRABILENET: consentimientos, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_consent"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_agent_activity_region" model="ir.rule">
+            <field name="name">MIRABILENET: actividad de personas de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_agent_activity"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_agent_activity_global" model="ir.rule">
+            <field name="name">MIRABILENET: actividad de personas, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_agent_activity"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_payment_qr_region" model="ir.rule">
+            <field name="name">MIRABILENET: QR de pago de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_payment_qr"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_payment_qr_global" model="ir.rule">
+            <field name="name">MIRABILENET: QR de pago, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_payment_qr"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_conversation_region" model="ir.rule">
+            <field name="name">MIRABILENET: conversaciones de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_conversation"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_conversation_global" model="ir.rule">
+            <field name="name">MIRABILENET: conversaciones, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_conversation"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_conversation_message_region" model="ir.rule">
+            <field name="name">MIRABILENET: mensajes de conversación de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_conversation_message"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_conversation_message_global" model="ir.rule">
+            <field name="name">MIRABILENET: mensajes de conversación, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_conversation_message"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_proof_region" model="ir.rule">
+            <field name="name">MIRABILENET: comprobantes de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_proof"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_whatsapp_proof_global" model="ir.rule">
+            <field name="name">MIRABILENET: comprobantes, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_whatsapp_proof"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_support_case_region" model="ir.rule">
+            <field name="name">MIRABILENET: solicitudes de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_support_case"/>
+            <field name="domain_force">[('region_id', '!=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_support_case_global" model="ir.rule">
+            <field name="name">MIRABILENET: solicitudes, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_support_case"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+        <record id="rule_mirabilenet_retention_promo_region" model="ir.rule">
+            <field name="name">MIRABILENET: promociones de retención de la región del usuario</field>
+            <field name="model_id" ref="model_mirabilenet_retention_promo"/>
+            <field name="domain_force">['|', ('region_id', '=', False), ('region_id', '=', user.mirabilenet_region_id.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        <record id="rule_mirabilenet_retention_promo_global" model="ir.rule">
+            <field name="name">MIRABILENET: promociones de retención, alcance global</field>
+            <field name="model_id" ref="model_mirabilenet_retention_promo"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('mirabilenet_base.group_mirabilenet_global'))]"/>
+        </record>
+    </data>
+</odoo>

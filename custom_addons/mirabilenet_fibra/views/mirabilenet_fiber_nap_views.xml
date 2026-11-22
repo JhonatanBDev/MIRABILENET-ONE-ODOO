@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mirabilenet_fiber_nap_list" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.nap.list</field>
+        <field name="model">mirabilenet.fiber.nap</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state in ('por_verificar', 'inactiva')"
+                  decoration-danger="state == 'danada'">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="branch_line"/>
+                <field name="neighborhood" optional="show"/>
+                <field name="locality" optional="hide"/>
+                <field name="region_id" optional="hide"/>
+                <field name="port_count" sum="Puertos"/>
+                <field name="ports_used" sum="Ocupados"/>
+                <field name="ports_free" sum="Libres"/>
+                <field name="ports_damaged" optional="hide" sum="Dañados"/>
+                <field name="occupancy_rate" widget="progressbar" optional="show"/>
+                <field name="olt" optional="hide"/>
+                <field name="pon_port" optional="hide"/>
+                <field name="needs_review" optional="show" widget="boolean_toggle" readonly="1"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'activa'"
+                       decoration-warning="state == 'por_verificar'"
+                       decoration-danger="state == 'danada'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_fiber_nap_search" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.nap.search</field>
+        <field name="model">mirabilenet.fiber.nap</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code" filter_domain="['|', ('code', 'ilike', self), ('name', 'ilike', self)]"
+                       string="Código o nombre"/>
+                <field name="branch_line"/>
+                <field name="neighborhood"/>
+                <field name="olt"/>
+                <field name="region_id"/>
+                <filter name="con_libres" string="Con puertos libres"
+                        domain="[('ports_free', '>', 0)]"/>
+                <filter name="llenas" string="Llenas"
+                        domain="[('port_count', '>', 0), ('ports_free', '=', 0)]"/>
+                <filter name="baja_ocupacion" string="Baja ocupación"
+                        domain="[('low_occupancy', '=', True)]"/>
+                <filter name="sin_puertos" string="Falta definir cantidad de puertos"
+                        domain="[('port_count', '=', 0)]"/>
+                <filter name="revisar" string="Revisar en campo"
+                        domain="[('needs_review', '=', True)]"/>
+                <separator/>
+                <filter name="activas" string="Activas" domain="[('state', '=', 'activa')]"/>
+                <filter name="por_verificar" string="Por verificar"
+                        domain="[('state', '=', 'por_verificar')]"/>
+                <filter name="danadas" string="Dañadas" domain="[('state', '=', 'danada')]"/>
+                <separator/>
+                <filter name="archivadas" string="Archivadas" domain="[('active', '=', False)]"/>
+                <group>
+                    <filter name="por_ramal" string="Ramal" context="{'group_by': 'branch_line'}"/>
+                    <filter name="por_zona" string="Zona o barrio"
+                            context="{'group_by': 'neighborhood'}"/>
+                    <filter name="por_estado" string="Estado" context="{'group_by': 'state'}"/>
+                    <filter name="por_olt" string="OLT" context="{'group_by': 'olt'}"/>
+                    <filter name="por_region" string="Región" context="{'group_by': 'region_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_fiber_nap_form" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.nap.form</field>
+        <field name="model">mirabilenet.fiber.nap</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_open_map" type="object" string="Ver en el mapa"
+                            class="btn-primary" invisible="not id"/>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"
+                           statusbar_visible="por_verificar,activa"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-warning" role="alert" invisible="not needs_review">
+                        <strong>Revisar en campo.</strong>
+                        <field name="review_note" readonly="1" class="d-block"/>
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="not ports_missing">
+                        Falta definir cantidad de puertos.
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_services" type="object" class="oe_stat_button"
+                                icon="fa-users">
+                            <field name="service_count" widget="statinfo" string="Clientes"/>
+                        </button>
+                        <button name="action_view_ports" type="object" class="oe_stat_button"
+                                icon="fa-plug">
+                            <field name="ports_free" widget="statinfo" string="Libres"/>
+                        </button>
+                        <button name="action_view_maintenance" type="object"
+                                class="oe_stat_button" icon="fa-wrench">
+                            <field name="maintenance_count" widget="statinfo" string="Averías"/>
+                        </button>
+                        <button name="action_view_segments" type="object" class="oe_stat_button"
+                                icon="fa-code-fork">
+                            <field name="segment_count" widget="statinfo" string="Tramos"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archivada" bg_color="text-bg-danger"
+                            invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <field name="ports_missing" invisible="1"/>
+                    <field name="needs_review" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="code"/>
+                        <h1><field name="code" placeholder="YAP-D-01"/></h1>
+                        <label for="name"/>
+                        <h2><field name="name" placeholder="1D"/></h2>
+                    </div>
+                    <group>
+                        <group string="Ubicación">
+                            <field name="region_id" options="{'no_create': True}"/>
+                            <field name="locality"/>
+                            <field name="neighborhood"/>
+                            <field name="branch_line"/>
+                            <field name="address_reference"/>
+                            <field name="latitude"/>
+                            <field name="longitude"/>
+                            <field name="maps_url" widget="url" text="Abrir en Google Maps"
+                                   invisible="not maps_url"/>
+                        </group>
+                        <group string="Red">
+                            <field name="port_count"/>
+                            <field name="ports_used"/>
+                            <field name="ports_free"/>
+                            <field name="ports_damaged"/>
+                            <field name="ports_reserved"/>
+                            <field name="occupancy_rate" widget="progressbar"/>
+                            <field name="olt"/>
+                            <field name="pon_port"/>
+                            <field name="feeder_color"/>
+                        </group>
+                        <group string="Según el relevamiento"
+                               invisible="not reported_ports_used and not reported_ports_damaged">
+                            <field name="reported_ports_used"/>
+                            <field name="reported_ports_damaged"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Puertos" name="ports">
+                            <field name="port_ids">
+                                <list create="0" delete="0"
+                                      decoration-success="state == 'libre'"
+                                      decoration-danger="state == 'danado'"
+                                      decoration-warning="state == 'reservado'">
+                                    <field name="number"/>
+                                    <field name="state"/>
+                                    <field name="service_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="assigned_date"/>
+                                    <field name="notes" optional="show"/>
+                                    <button name="action_assign_wizard" type="object"
+                                            string="Asignar" icon="fa-user-plus"
+                                            invisible="state not in ('libre', 'reservado')"/>
+                                    <button name="action_release" type="object"
+                                            string="Liberar" icon="fa-unlink"
+                                            invisible="not service_id"
+                                            confirm="¿Liberar este puerto?"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Revisión" name="review">
+                            <group>
+                                <field name="needs_review" widget="boolean_toggle"/>
+                                <field name="review_note"/>
+                            </group>
+                        </page>
+                        <page string="Notas" name="notes">
+                            <field name="notes"/>
+                        </page>
+                        <page string="Otros datos" name="other">
+                            <group>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_fiber_nap_pivot" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.nap.pivot</field>
+        <field name="model">mirabilenet.fiber.nap</field>
+        <field name="arch" type="xml">
+            <pivot string="Ocupación de NAP" sample="1">
+                <field name="branch_line" type="row"/>
+                <field name="neighborhood" type="col"/>
+                <field name="port_count" type="measure"/>
+                <field name="ports_used" type="measure"/>
+                <field name="ports_free" type="measure"/>
+                <field name="occupancy_rate" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_fiber_nap_graph" model="ir.ui.view">
+        <field name="name">mirabilenet.fiber.nap.graph</field>
+        <field name="model">mirabilenet.fiber.nap</field>
+        <field name="arch" type="xml">
+            <graph string="Ocupación por ramal" type="bar" stacked="1" sample="1">
+                <field name="branch_line"/>
+                <field name="ports_used" type="measure"/>
+                <field name="ports_free" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_fiber_nap" model="ir.actions.act_window">
+        <field name="name">Cajas NAP</field>
+        <field name="res_model">mirabilenet.fiber.nap</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+        <field name="search_view_id" ref="view_mirabilenet_fiber_nap_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Registre la primera caja NAP</p>
+            <p>También puede importarlas desde el CSV del relevamiento.</p>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_fiber_nap_analysis" model="ir.actions.act_window">
+        <field name="name">Ocupación por ramal y zona</field>
+        <field name="res_model">mirabilenet.fiber.nap</field>
+        <field name="view_mode">pivot,graph,list,form</field>
+        <field name="search_view_id" ref="view_mirabilenet_fiber_nap_search"/>
+    </record>
+
+    <record id="action_mirabilenet_fiber_nap_review" model="ir.actions.act_window">
+        <field name="name">NAP a revisar en campo</field>
+        <field name="res_model">mirabilenet.fiber.nap</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_mirabilenet_fiber_nap_search"/>
+        <field name="context">{'search_default_revisar': 1}</field>
+    </record>
+
+    <record id="action_mirabilenet_fiber_low_occupancy" model="ir.actions.server">
+        <field name="name">Zonas con pocos clientes</field>
+        <field name="model_id" ref="model_mirabilenet_fiber_nap"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_low_occupancy_zones()</field>
+    </record>
+
+    <record id="action_mirabilenet_fiber_map" model="ir.actions.client">
+        <field name="name">Mapa de fibra</field>
+        <field name="tag">mirabilenet_fibra.fiber_map</field>
+    </record>
+</odoo>
