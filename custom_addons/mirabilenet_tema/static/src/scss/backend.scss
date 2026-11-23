@@ -1,0 +1,86 @@
+// Retoques modernos y limpios para la parte interna de Odoo.
+// Solo usa variables de Odoo y Bootstrap ($border-color, $o-view-background-color, ...):
+// el paquete oscuro compila este mismo archivo con los valores oscuros.
+
+$mn-shadow-sm: 0 1px 2px rgba(15, 23, 42, .06), 0 1px 3px rgba(15, 23, 42, .08);
+$mn-shadow-md: 0 4px 12px rgba(15, 23, 42, .10), 0 2px 4px rgba(15, 23, 42, .06);
+
+// Barra superior con un toque de la marca
+.o_main_navbar {
+    background: linear-gradient(90deg, $o-navbar-background 0%, mix($o-navbar-background, $o-brand-primary, 82%) 100%);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .18);
+
+    .o_menu_brand {
+        font-weight: 600;
+        letter-spacing: .01em;
+    }
+}
+
+// Botones: un poco más de peso y transiciones suaves
+.o_web_client .btn {
+    font-weight: 500;
+    transition: background-color .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+
+.o_web_client .btn-primary:not(:disabled):hover {
+    box-shadow: 0 2px 6px rgba($o-brand-primary, .30);
+}
+
+// Buscador con esquinas redondeadas
+.o_control_panel .o_searchview {
+    border-radius: $o-border-radius-lg;
+}
+
+// Formulario: la hoja como tarjeta con sombra suave, sin borde duro
+.o_form_view .o_form_sheet_bg > .o_form_sheet {
+    --formView-sheet-border-radius-md: #{$o-border-radius-lg};
+
+    @include media-breakpoint-up(md) {
+        border-color: transparent;
+        box-shadow: $mn-shadow-sm;
+    }
+}
+
+// Barra de estados: el paso actual con el color de la marca
+.o_form_view .o_statusbar_status .o_arrow_button_current {
+    font-weight: 600;
+}
+
+// Pestañas del formulario
+.o_form_view .o_notebook .nav-tabs .nav-link.active {
+    font-weight: 600;
+    border-top: 2px solid $o-brand-primary;
+}
+
+// Listas: cabecera más marcada y filas con algo más de aire
+.o_list_renderer .o_list_table {
+    thead th {
+        font-weight: 600;
+        border-bottom-width: 2px;
+    }
+
+    .o_data_row:hover > td {
+        background-color: rgba($o-brand-primary, .05);
+    }
+}
+
+// Tarjetas kanban: esquinas redondeadas y sombra al pasar el mouse
+.o_kanban_renderer .o_kanban_record:not(.o_kanban_ghost) {
+    border-radius: $o-border-radius-lg;
+    transition: box-shadow .15s ease, transform .15s ease;
+
+    &:hover {
+        box-shadow: $mn-shadow-md;
+    }
+}
+
+// Ventanas emergentes
+.modal-content {
+    border-radius: $o-border-radius-lg;
+    border: 0;
+    box-shadow: 0 10px 40px rgba(15, 23, 42, .25);
+}
+
+.modal-header {
+    border-bottom-color: $border-color;
+}

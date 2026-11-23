@@ -1,6 +1,6 @@
 {
     "name": "MIRABILENET: Modo oscuro automático",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "summary": "Odoo sigue el modo claro u oscuro del navegador, también en la pantalla de ingreso",
     "description": "Activa en todos los usuarios internos el modo oscuro según el dispositivo de "
                    "OCA web_dark_mode y oscurece la pantalla de ingreso, de registro y de cambio "

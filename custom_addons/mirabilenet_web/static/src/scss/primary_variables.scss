@@ -1,0 +1,29 @@
+// Paleta «mirabilenet» del sitio web, con los colores del logo. Aparece primera en
+// Editar > Tema > Colores y es la que aplica el módulo (models/website.py).
+//   o-color-1 azul, o-color-2 celeste, o-color-3 fondo claro azulado,
+//   o-color-4 blanco, o-color-5 azul noche.
+// Combinaciones: 1 blanco, 2 claro, 3 celeste, 4 azul, 5 azul noche.
+
+$o-color-palettes: map-merge($o-color-palettes, (
+    'mirabilenet': (
+        'o-color-1': #006db7,
+        'o-color-2': #00abda,
+        'o-color-3': #f1f6fb,
+        'o-color-4': #ffffff,
+        'o-color-5': #0f172a,
+
+        'o-cc1-text': #1e293b,
+        'o-cc1-headings': 'o-color-5',
+        'o-cc2-headings': 'o-color-5',
+        'o-cc3-link': 'o-color-4',
+        'o-cc3-btn-primary': 'o-color-5',
+        'o-cc4-link': 'o-color-4',
+        'o-cc4-btn-primary': 'o-color-5',
+
+        'menu': 1,
+        'footer': 5,
+        'copyright': 5,
+    ),
+));
+
+$o-selected-color-palettes-names: join(('mirabilenet',), $o-selected-color-palettes-names);

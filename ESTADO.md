@@ -41,6 +41,21 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
     celular. Respaldo previo en `traslado_odoo/respaldo_antes_dashboard`.
   - **Ojo:** la compañía de `mira_nativo_test` está en USD; las regiones, en BOB.
   - Usuario temporal `dashboard_tmp` archivado.
+- **Tema visual moderno con los colores del logo (22/11/2026, noche, en la PC original):** nuevo
+  módulo `mirabilenet_tema` 19.0.1.0.0 (parte interna: azul noche `#0f172a` en la barra, azul
+  `#006db7` en acciones, celeste `#00abda` en modo oscuro, esquinas redondeadas, sombras
+  suaves, ingreso como tarjeta). `mirabilenet_web` 19.0.2.1.0: paleta «mirabilenet» del sitio
+  (primera en Editar > Tema > Colores) y botones redondeados, aplicada a los sitios existentes
+  en `migrations/19.0.2.1.0/end-migrate.py` (en `post-migrate` falla: otros módulos del sitio
+  todavía no están cargados). `mirabilenet_modo_oscuro` 19.0.1.0.1: enlaces del ingreso oscuro
+  en celeste. 30 pruebas (tema, sitio, modo oscuro) en base limpia, 0 fallos. Instalado en
+  `mira_nativo_test`; respaldo previo en `traslado_odoo/respaldo_antes_tema`. Ojo: los radios
+  del sitio van en `rem` (con `px` el SCSS del sitio no compila). **Pendiente:** que el
+  usuario lo vea en claro y oscuro y pida ajustes. **Base limpia en esta PC:** crearla antes
+  con `LC_COLLATE 'C' LC_CTYPE 'C'` (si la crea Odoo, PostgreSQL 18 de Windows la rechaza).
+- **Actualización tras el traslado (22/11/2026, PC original):** `-u all` en `mira_nativo_test`
+  sin errores (184 módulos).
+
 - **Sincronización con GitHub (22/11/2026):** el proyecto propio (sin Odoo, OCA, claves ni datos de
   clientes) va en un repositorio privado aparte, `odoo/.mirabilenet.git`, autor JhonatanBDev.
   Script `documentacion/herramientas/sincronizar_github.ps1` (estado / subir / bajar / instalar)

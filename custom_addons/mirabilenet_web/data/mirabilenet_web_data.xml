@@ -4,5 +4,7 @@
         <record id="site_settings" model="mirabilenet.web.settings">
             <field name="trade_name">MIRABILENET</field>
         </record>
+        <!-- Al instalar: paleta «mirabilenet» y esquinas redondeadas (cambiables en Editar > Tema). -->
+        <function model="website" name="_mirabilenet_apply_theme"/>
     </data>
 </odoo>

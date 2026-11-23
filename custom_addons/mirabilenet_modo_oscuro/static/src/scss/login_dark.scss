@@ -8,7 +8,7 @@ $mn-dark-border: #303030;
 $mn-dark-muted: #8b8b8b;
 $mn-dark-text: #c8c8c8;
 $mn-dark-heading: #e6e6e6;
-$mn-dark-link: #c9a6c0;
+$mn-dark-link: #33bfe6; // celeste de la marca (mirabilenet_tema)
 
 @media (prefers-color-scheme: dark) {
     html:has(.oe_login_form, .oe_signup_form, .oe_reset_password_form) {

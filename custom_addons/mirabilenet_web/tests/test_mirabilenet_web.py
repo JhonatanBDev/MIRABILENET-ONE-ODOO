@@ -439,3 +439,28 @@ class TestWebCoverageHook(WebCommon, TransactionCase):
                              [("Localidad Uno", "Cobertura parcial"),
                               ("Zona Libre", "Cobertura disponible")])
             self.assertEqual(Api._region_by_locality("LOCALIDAD UNO"), self.norte)
+
+
+@tagged("mirabilenet", "post_install", "-at_install")
+class TestWebTheme(HttpCase):
+
+    def test_site_uses_the_mirabilenet_palette(self):
+        website = self.env["website"].get_current_website()
+        self.env["website"]._mirabilenet_apply_theme()
+        custom = self.env["ir.asset"].search([
+            ("path", "like", "user_values.scss"), ("website_id", "=", website.id)])
+        self.assertTrue(custom, "El sitio debería tener sus valores de tema guardados")
+        # Se compila el paquete del sitio con la personalización recién guardada.
+        self.env.registry.clear_cache("assets")
+        bundle = self.env["ir.qweb"].with_context(website_id=website.id)._get_asset_bundle(
+            "web.assets_frontend", css=True, js=False)
+        css = bundle.css().raw.decode().lower()
+        self.assertNotIn("css_error_message", css)  # el SCSS del sitio compila
+        self.assertIn("#006db7", css)  # o-color-1: azul de la marca
+        self.assertIn("#00abda", css)  # o-color-2: celeste
+
+    def test_palette_is_offered_in_the_editor(self):
+        # La lista de paletas que ofrece Editar > Tema sale del paquete interno.
+        response = self.url_open("/web/assets/_/web.assets_web.min.css")
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("mirabilenet", response.text)

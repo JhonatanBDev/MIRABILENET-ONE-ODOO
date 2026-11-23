@@ -1,6 +1,6 @@
 {
     "name": "MIRABILENET: Sitio web",
-    "version": "19.0.2.0.0",
+    "version": "19.0.2.1.0",
     "summary": "El sitio público, sus contenidos y las consultas que llegan por él",
     "description": "Páginas de MIRABILENET sobre el Sitio web de Odoo y consultas que entran "
                    "como oportunidades. Detalle en readme/.",
@@ -29,6 +29,13 @@
         "views/mirabilenet_web_menus.xml",
     ],
     "assets": {
+        "web._assets_primary_variables": [
+            (
+                "after",
+                "website/static/src/scss/primary_variables.scss",
+                "mirabilenet_web/static/src/scss/primary_variables.scss",
+            ),
+        ],
         "web.assets_frontend": [
             "mirabilenet_web/static/src/snippets/**/*.js",
             ("remove", "mirabilenet_web/static/src/snippets/**/*.edit.js"),

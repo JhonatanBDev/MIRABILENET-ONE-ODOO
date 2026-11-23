@@ -1,0 +1,32 @@
+// Colores de la marca MIRABILENET, tomados del logo (Static/LOGO MIRABILENET.png).
+// Se carga antes de web/static/src/scss/primary_variables.scss: como Odoo define todo con
+// !default, el primer valor gana. En oscuro, primary_variables.dark.scss se carga antes
+// que este archivo y pone sus propios valores: aquí no se tocan los grises para no pisar
+// los del modo oscuro de OCA.
+
+$mn-navy: #0f172a !default;   // azul noche (nodos de arriba)
+$mn-blue: #006db7 !default;   // azul (nodos de abajo a la izquierda)
+$mn-mid: #0095ce !default;    // azul medio
+$mn-cyan: #00abda !default;   // celeste (nodos de la derecha)
+
+// Marca y acciones
+$o-community-color: $mn-blue !default;
+$o-enterprise-color: $mn-blue !default;
+$o-enterprise-action-color: $mn-blue !default;
+$o-brand-odoo: $mn-blue !default;
+$o-brand-primary: $mn-blue !default;
+$o-action: $mn-blue !default;
+
+// Barra superior: azul noche con letras blancas (sirve en claro y en oscuro)
+$o-navbar-background: $mn-navy !default;
+$o-navbar-border-bottom: 1px solid rgba(#ffffff, .06) !default;
+$o-navbar-entry-color: rgba(#ffffff, .88) !default;
+$o-navbar-entry-color--hover: #ffffff !default;
+$o-navbar-entry-bg--hover: rgba(#ffffff, .10) !default;
+$o-navbar-entry-color--active: #ffffff !default;
+$o-navbar-entry-bg--active: rgba(#ffffff, .14) !default;
+
+// Esquinas más redondeadas
+$o-border-radius: o-to-rem(6px) !default;
+$o-border-radius-sm: o-to-rem(4px) !default;
+$o-border-radius-lg: o-to-rem(10px) !default;

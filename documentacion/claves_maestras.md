@@ -28,7 +28,12 @@ esos secretos.
 Se crearon el 20/11/2026 en la computadora anterior y **se regeneraron el 21/11/2026** en la
 computadora nueva (64 caracteres aleatorios cada una, variables de entorno del usuario de
 Windows). Las de la computadora anterior quedaron descartadas; las bases no tenían ningún
-secreto cifrado, así que no se perdió nada. Odoo las encuentra
+secreto cifrado, así que no se perdió nada.
+
+**22/11/2026:** se regeneraron otra vez en la computadora original (64 caracteres cada una),
+después de comprobar que ninguna de las dos bases tenía secretos cifrados. **Las mismas claves
+tienen que ponerse en la otra computadora**: si cada una tiene claves distintas, una base con
+secretos llevada de una a otra no se podrá leer. Odoo las encuentra
 solo en cada arranque; no hay que escribirlas.
 
 Verlas para respaldarlas (PowerShell, en una terminal abierta después de crearlas):

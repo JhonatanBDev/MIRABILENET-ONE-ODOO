@@ -1,0 +1,12 @@
+// Modo oscuro: se carga antes de primary_variables.scss de este módulo y antes de los
+// valores de OCA web_dark_mode, así que estos ganan. Sobre fondo oscuro el azul del logo
+// se ve apagado: las acciones usan el celeste.
+
+$mn-navy: #0b1220 !default;
+
+$o-enterprise-color: #00abda !default;
+$o-enterprise-action-color: #00abda !default;
+$o-brand-odoo: #00abda !default;
+$o-brand-primary: #00abda !default;
+$o-action: #00abda !default;
+$o-main-link-color: #33bfe6 !default;

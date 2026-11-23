@@ -1,0 +1,25 @@
+// Pantallas de ingreso, registro y cambio de contraseña como una tarjeta centrada.
+// Los colores de fondo y texto los ponen el sitio web y, en oscuro, mirabilenet_modo_oscuro:
+// aquí solo forma, espacio y sombra, para que sirva en los dos modos.
+
+form.oe_login_form,
+form.oe_signup_form,
+form.oe_reset_password_form {
+    max-width: 420px;
+    margin: 2.5rem auto;
+    padding: 2rem 2rem 1.5rem;
+    border-radius: 14px;
+    border: 1px solid rgba(15, 23, 42, .08);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .10);
+
+    .form-control {
+        border-radius: 8px;
+        padding: .6rem .8rem;
+    }
+
+    .btn-primary {
+        border-radius: 8px;
+        padding: .6rem 1rem;
+        font-weight: 600;
+    }
+}
