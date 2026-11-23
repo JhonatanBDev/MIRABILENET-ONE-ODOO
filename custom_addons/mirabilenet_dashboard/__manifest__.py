@@ -1,6 +1,6 @@
 {
     "name": "MIRABILENET: Dashboard",
-    "version": "19.0.1.0.0",
+    "version": "19.0.2.0.0",
     "summary": "Una pantalla con todo el sistema: clientes, cobros, cartera, red, capacidad y soporte",
     "description": "Dashboard dinámico que se actualiza solo, filtrado por periodo y región, con "
                    "gráficos y cada número enlazado a su lista. Es la pantalla de inicio. "

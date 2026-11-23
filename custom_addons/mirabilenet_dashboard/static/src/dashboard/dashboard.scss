@@ -10,13 +10,19 @@
 
     .o_mn_header {
         display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 1rem 1.25rem 0.75rem;
+        flex: 0 0 auto;
+        border-bottom: 1px solid var(--o-mn-line);
+    }
+
+    .o_mn_header_row {
+        display: flex;
         flex-wrap: wrap;
         gap: 0.75rem;
         justify-content: space-between;
         align-items: center;
-        padding: 1rem 1.25rem 0.5rem;
-        flex: 0 0 auto;
-        border-bottom: 1px solid var(--o-mn-line);
     }
 
     .o_mn_toolbar {
@@ -26,9 +32,103 @@
         align-items: center;
     }
 
-    .o_mn_region {
+    .o_mn_date {
         width: auto;
-        min-width: 12rem;
+    }
+
+    .o_mn_filterbar {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+        gap: 0.5rem;
+    }
+
+    .o_mn_chips,
+    .o_mn_customize {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        align-items: center;
+    }
+
+    .o_mn_chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.15rem 0.6rem;
+        border-radius: 1rem;
+        font-size: 0.82rem;
+        background-color: var(--o-mn-hover);
+        border: 1px solid var(--o-mn-line);
+    }
+
+    .o_mn_check {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.15rem 0.6rem;
+        border: 1px solid var(--o-mn-line);
+        border-radius: 1rem;
+        font-size: 0.82rem;
+        cursor: pointer;
+    }
+
+    .o_mn_alerts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .o_mn_alert_item {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--o-mn-line);
+        background-color: var(--o-mn-card-bg);
+        color: var(--body-color);
+        font-size: 0.88rem;
+
+        &:hover {
+            background-color: var(--o-mn-hover);
+        }
+
+        &.o_mn_alert_danger {
+            border-left: 4px solid var(--danger);
+            .fa { color: var(--danger); }
+        }
+        &.o_mn_alert_warning {
+            border-left: 4px solid var(--warning);
+            .fa { color: var(--warning); }
+        }
+        &.o_mn_alert_info {
+            border-left: 4px solid var(--info, var(--primary));
+            .fa { color: var(--info, var(--primary)); }
+        }
+    }
+
+    .o_mn_trend {
+        font-size: 0.75rem;
+        font-weight: 600;
+
+        .text-muted {
+            font-weight: 400;
+        }
+    }
+
+    .o_mn_stats.o_mn_stats_wide {
+        grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    }
+
+    .o_mn_aging {
+        padding: 0.3rem 0.4rem;
+        border-radius: 0.35rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .o_mn_selected {
+        background-color: var(--o-mn-hover);
+        font-weight: 600;
+        outline: 1px solid var(--primary);
     }
 
     > .o_content {
@@ -46,28 +146,33 @@
     .o_mn_grid {
         display: grid;
         gap: 1rem;
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+
+        // Un gráfico no debe estirar su columna más allá de la pantalla.
+        > * {
+            min-width: 0;
+        }
     }
 
     @media (min-width: 768px) {
         .o_mn_grid_4 {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .o_mn_grid_2,
         .o_mn_grid_3 {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 
     @media (min-width: 1200px) {
         .o_mn_grid_4 {
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, minmax(0, 1fr));
         }
         .o_mn_grid_3 {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
         }
         .o_mn_grid_2_1 {
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
         }
     }
 

@@ -7,6 +7,25 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
 
 ## Para retomar (22/11/2026)
 
+- **Dashboard 19.0.2.0.0 (23/11/2026, plan aprobado: limpiar + filtros + negocio + vistas por
+  rol):**
+  - Limpieza: quitados «Saldo vencido» y «Recibos de hoy» (repetidos), la segunda tarjeta de
+    capacidad y el aviso de «recibos internos». Las altas salen por `date_start` del servicio.
+    Las desincronizadas salen «—» sin router conectado.
+  - Franja de alertas: routers caídos, comprobantes por revisar, vencidas de más de 30 días,
+    NAP con 2 o más averías y MRR bajo el objetivo.
+  - Filtros dinámicos: periodo (también Este mes, Mes pasado y fechas), región, zona, nodo,
+    plan, modalidad y estado; chips con ✕ y «Limpiar»; clic en la dona o en un mes filtra el
+    tablero; ▲▼ contra el periodo anterior. Se guardan por usuario en
+    `res.users.settings.mirabilenet_dashboard_prefs`.
+  - Negocio: MRR con objetivo, ARPU, churn, recaudación, altas y bajas de 6 meses,
+    antigüedad de la cartera en 4 tramos, zonas con más mora y NAP con más averías.
+  - Orden de secciones por rol y «Personalizar» para ocultarlas.
+  - Sin filtro por sucursal: los servicios no la tienen.
+  - 16 pruebas; revisado con Playwright en claro, oscuro, celular y en español.
+  - Respaldo previo en `traslado_odoo/respaldo_antes_dashboard_v2`.
+  - **Pendiente (bloque 4):** sesiones y tráfico desde RouterOS v7 por REST. Primero hay que
+    confirmar la API en un router real.
 - **Dashboard (22/11/2026, módulo nuevo `mirabilenet_dashboard` 19.0.1.0.0):** una pantalla OWL
   con todo el dashboard de MIRABILENET ONE: resumen, ingresos vs gastos, estado de servicios,
   actividad (auditoría), accesos rápidos, puesta en marcha (8 pasos), cobranza diaria y por
