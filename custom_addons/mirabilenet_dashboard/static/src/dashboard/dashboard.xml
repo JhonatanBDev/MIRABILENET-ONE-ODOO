@@ -53,6 +53,7 @@
                 </div>
             </div>
 
+            <div class="o_content">
             <div t-if="data" class="o_mn_body">
                 <!-- 1. Las cuatro cifras principales -->
                 <div class="o_mn_grid o_mn_grid_4">
@@ -396,6 +397,7 @@
                 </div>
             </div>
             <div t-else="" class="o_mn_loading"><i class="fa fa-spinner fa-spin fa-2x"/></div>
+            </div>
         </div>
     </t>
 </templates>
