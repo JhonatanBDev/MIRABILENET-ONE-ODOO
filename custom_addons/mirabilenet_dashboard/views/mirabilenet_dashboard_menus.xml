@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mirabilenet_dashboard" name="Dashboard"
+              parent="mirabilenet_base.menu_mirabilenet_root"
+              action="action_mirabilenet_dashboard" sequence="1"/>
+</odoo>

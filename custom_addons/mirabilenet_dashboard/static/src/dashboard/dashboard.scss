@@ -1,0 +1,310 @@
+// Solo variables de Bootstrap: así el dashboard sigue el modo claro u oscuro.
+.o_mn_dashboard {
+    // Tarjeta y borde calculados sobre el fondo: se distinguen en modo claro y oscuro.
+    --o-mn-card-bg: color-mix(in srgb, var(--body-bg), var(--body-color) 4%);
+    --o-mn-line: color-mix(in srgb, var(--body-bg), var(--body-color) 14%);
+    --o-mn-hover: color-mix(in srgb, var(--body-bg), var(--body-color) 9%);
+    overflow: auto;
+    height: 100%;
+    background-color: var(--body-bg);
+    color: var(--body-color);
+
+    .o_mn_header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.25rem 0.5rem;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background-color: inherit;
+    }
+
+    .o_mn_toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .o_mn_region {
+        width: auto;
+        min-width: 12rem;
+    }
+
+    .o_mn_body {
+        padding: 0.5rem 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .o_mn_grid {
+        display: grid;
+        gap: 1rem;
+        grid-template-columns: 1fr;
+    }
+
+    @media (min-width: 768px) {
+        .o_mn_grid_4 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .o_mn_grid_2,
+        .o_mn_grid_3 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .o_mn_grid_4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .o_mn_grid_3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .o_mn_grid_2_1 {
+            grid-template-columns: 2fr 1fr;
+        }
+    }
+
+    .o_mn_card {
+        background-color: var(--o-mn-card-bg);
+        border: 1px solid var(--o-mn-line);
+        border-radius: 0.75rem;
+        padding: 1rem 1.1rem;
+        min-width: 0;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+        h5 {
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+    }
+
+    .o_mn_card_head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .o_mn_kpi {
+        position: relative;
+
+        .o_mn_stat {
+            padding: 0;
+            border: 0;
+        }
+
+        .o_mn_stat_value {
+            font-size: 1.9rem;
+        }
+    }
+
+    .o_mn_kpi_icon {
+        position: absolute;
+        top: 1rem;
+        right: 1.1rem;
+        font-size: 1.4rem;
+        opacity: 0.6;
+    }
+
+    .o_mn_stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+        gap: 0.5rem;
+    }
+
+    .o_mn_stat {
+        border: 1px solid var(--o-mn-line);
+        border-radius: 0.5rem;
+        padding: 0.55rem 0.7rem;
+        transition: background-color 0.15s;
+
+        &.o_mn_ok .o_mn_stat_value {
+            color: var(--success);
+        }
+        &.o_mn_warn .o_mn_stat_value {
+            color: var(--warning-text-emphasis, var(--warning));
+        }
+        &.o_mn_alert .o_mn_stat_value {
+            color: var(--danger);
+        }
+    }
+
+    .o_mn_stat_label {
+        font-size: 0.8rem;
+        color: var(--secondary-color);
+    }
+
+    .o_mn_stat_value {
+        font-size: 1.35rem;
+        font-weight: 700;
+        line-height: 1.25;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .o_mn_stat_hint {
+        font-size: 0.72rem;
+        color: var(--secondary-color);
+    }
+
+    .o_mn_clickable {
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--o-mn-hover);
+        }
+    }
+
+    .o_mn_big {
+        font-size: 1.3rem;
+        font-weight: 700;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .o_mn_chart {
+        position: relative;
+        height: 15rem;
+
+        &.o_mn_chart_sm {
+            height: 11rem;
+        }
+    }
+
+    .o_mn_legend {
+        margin-top: 0.5rem;
+    }
+
+    .o_mn_legend_row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.2rem 0.4rem;
+        border-radius: 0.35rem;
+        font-size: 0.88rem;
+    }
+
+    .o_mn_empty {
+        text-align: center;
+        color: var(--secondary-color);
+        padding: 2rem 0.5rem;
+    }
+
+    .o_mn_note {
+        font-size: 0.8rem;
+        color: var(--secondary-color);
+        background-color: var(--o-mn-hover);
+        border-radius: 0.4rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    .o_mn_timeline {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            border-left: 2px solid var(--o-mn-line);
+            padding: 0 0 0.6rem 0.75rem;
+            position: relative;
+
+            &::before {
+                content: "";
+                position: absolute;
+                left: -5px;
+                top: 0.35rem;
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-color: var(--primary);
+            }
+        }
+    }
+
+    .o_mn_shortcuts {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .o_mn_shortcut {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.8rem 0.4rem;
+        font-size: 0.85rem;
+        color: var(--body-color);
+        background-color: var(--body-bg);
+        border: 1px solid var(--o-mn-line);
+
+        &:hover {
+            background-color: var(--o-mn-hover);
+        }
+    }
+
+    .o_mn_progress,
+    .o_mn_gauge {
+        background-color: var(--o-mn-line);
+    }
+
+    .o_mn_progress {
+        height: 0.5rem;
+    }
+
+    .o_mn_steps {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            display: flex;
+            gap: 0.6rem;
+            align-items: flex-start;
+            padding: 0.35rem 0;
+            border-bottom: 1px solid var(--o-mn-line);
+
+            &:last-child {
+                border-bottom: 0;
+            }
+
+            .fa {
+                margin-top: 0.2rem;
+            }
+
+            &.o_mn_done > div > div:first-child {
+                color: var(--secondary-color);
+            }
+        }
+    }
+
+    .o_mn_gauge_value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .o_mn_gauge {
+        height: 1rem;
+        border-radius: 0.5rem;
+    }
+
+    .o_mn_table {
+        margin-bottom: 0;
+        --table-bg: transparent;
+
+        td {
+            vertical-align: middle;
+        }
+    }
+
+    .o_mn_loading {
+        text-align: center;
+        padding: 5rem;
+        color: var(--secondary-color);
+    }
+}

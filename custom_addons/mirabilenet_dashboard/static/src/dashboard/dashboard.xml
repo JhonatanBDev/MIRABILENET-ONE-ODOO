@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Una cifra: etiqueta, valor, ayuda y, si tiene clave, abre su lista. -->
+    <t t-name="mirabilenet_dashboard.Stat">
+        <div t-attf-class="o_mn_stat {{ key ? 'o_mn_clickable' : '' }} {{ statClass or '' }}"
+             t-on-click="() => key and this.open(key)"
+             t-att-title="key ? 'Ver el listado' : ''">
+            <div class="o_mn_stat_label" t-esc="label"/>
+            <div t-attf-class="o_mn_stat_value {{ value === '—' ? 'text-muted' : '' }}" t-esc="value"/>
+            <div t-if="hint" class="o_mn_stat_hint" t-esc="hint"/>
+        </div>
+    </t>
+
+    <t t-name="mirabilenet_dashboard.Empty">
+        <div class="o_mn_empty">
+            <i class="fa fa-inbox fa-2x mb-2"/>
+            <div class="fw-semibold" t-esc="title"/>
+            <div class="small" t-esc="text"/>
+        </div>
+    </t>
+
+    <t t-name="mirabilenet_dashboard.Dashboard">
+        <div class="o_action o_mn_dashboard">
+            <!-- Cabecera -->
+            <div class="o_mn_header">
+                <div>
+                    <h2 class="mb-0">Dashboard</h2>
+                    <div class="text-muted">
+                        Resumen general del sistema · <t t-esc="data?.titulo_region"/>
+                    </div>
+                </div>
+                <div class="o_mn_toolbar">
+                    <div class="btn-group" role="group">
+                        <t t-foreach="periods" t-as="p" t-key="p.key">
+                            <button type="button"
+                                    t-attf-class="btn btn-sm {{ state.period === p.key ? 'btn-primary' : 'btn-outline-secondary' }}"
+                                    t-on-click="() => this.setPeriod(p.key)" t-esc="p.label"/>
+                        </t>
+                    </div>
+                    <select t-if="data?.es_global" class="form-select form-select-sm o_mn_region"
+                            t-on-change="onRegionChange">
+                        <option value="" t-att-selected="!state.regionId">Todas las regiones</option>
+                        <t t-foreach="data.regiones" t-as="r" t-key="r.id">
+                            <option t-att-value="r.id" t-att-selected="state.regionId === r.id" t-esc="r.name"/>
+                        </t>
+                    </select>
+                    <button class="btn btn-sm btn-outline-secondary" t-on-click="() => this.load()"
+                            title="Actualizar ahora (se actualiza solo cada minuto)">
+                        <i t-attf-class="fa fa-refresh {{ state.loading ? 'fa-spin' : '' }}"/>
+                        <span class="ms-1" t-esc="readAt"/>
+                    </button>
+                </div>
+            </div>
+
+            <div t-if="data" class="o_mn_body">
+                <!-- 1. Las cuatro cifras principales -->
+                <div class="o_mn_grid o_mn_grid_4">
+                    <div class="o_mn_card o_mn_kpi">
+                        <t t-call="mirabilenet_dashboard.Stat">
+                            <t t-set="label">Clientes activos</t>
+                            <t t-set="value" t-value="number(data.resumen.clientes_activos)"/>
+                            <t t-set="hint">Servicios en estado activo</t>
+                            <t t-set="key" t-value="'servicios_activos'"/>
+                        </t>
+                        <i class="fa fa-users o_mn_kpi_icon text-success"/>
+                    </div>
+                    <div class="o_mn_card o_mn_kpi">
+                        <t t-call="mirabilenet_dashboard.Stat">
+                            <t t-set="label">Ingresos del periodo</t>
+                            <t t-set="value" t-value="money(data.resumen.ingresos)"/>
+                            <t t-set="hint" t-value="periodLabel"/>
+                            <t t-set="key" t-value="'pagos_periodo'"/>
+                        </t>
+                        <i class="fa fa-money o_mn_kpi_icon text-primary"/>
+                    </div>
+                    <div class="o_mn_card o_mn_kpi">
+                        <t t-call="mirabilenet_dashboard.Stat">
+                            <t t-set="label">Servicios totales</t>
+                            <t t-set="value" t-value="number(data.resumen.servicios_total)"/>
+                            <t t-set="hint">Contratados en la región</t>
+                            <t t-set="key" t-value="'servicios_total'"/>
+                        </t>
+                        <i class="fa fa-wifi o_mn_kpi_icon text-info"/>
+                    </div>
+                    <div class="o_mn_card o_mn_kpi">
+                        <t t-call="mirabilenet_dashboard.Stat">
+                            <t t-set="label">Cartera vencida</t>
+                            <t t-set="value" t-value="money(data.resumen.cartera_vencida)"/>
+                            <t t-set="hint">Saldo con plazo cumplido</t>
+                            <t t-set="key" t-value="'cartera_vencida'"/>
+                            <t t-set="statClass" t-value="data.resumen.cartera_vencida ? 'o_mn_alert' : ''"/>
+                        </t>
+                        <i class="fa fa-exclamation-triangle o_mn_kpi_icon text-danger"/>
+                    </div>
+                </div>
+
+                <!-- 2. Ingresos vs gastos y estado de servicios -->
+                <div class="o_mn_grid o_mn_grid_2_1">
+                    <div class="o_mn_card">
+                        <div class="o_mn_card_head">
+                            <div>
+                                <h5>Ingresos vs Gastos</h5>
+                                <div class="text-muted small">Últimos 6 meses</div>
+                            </div>
+                            <div t-if="data.ingresos_gastos" class="text-end">
+                                <div class="o_mn_big" t-esc="data.ingresos_gastos.con_gastos ? money(data.ingresos_gastos.margen) : money(data.ingresos_gastos.ingresos)"/>
+                                <div class="text-muted small" t-esc="data.ingresos_gastos.con_gastos ? 'margen del periodo' : 'cobrado (sin gastos cargados)'"/>
+                            </div>
+                        </div>
+                        <div t-if="data.ingresos_gastos and data.ingresos_gastos.con_movimientos" class="o_mn_chart">
+                            <canvas t-ref="incomeChart"/>
+                        </div>
+                        <t t-else="" t-call="mirabilenet_dashboard.Empty">
+                            <t t-set="title">Sin movimientos en los últimos meses</t>
+                            <t t-set="text">Aquí se compara lo cobrado con lo gastado, mes a mes.</t>
+                        </t>
+                        <div t-if="data.ingresos_gastos and data.ingresos_gastos.con_movimientos and !data.ingresos_gastos.con_gastos"
+                             class="o_mn_note">
+                            <i class="fa fa-info-circle me-1"/>Los gastos salen de las facturas de proveedor: todavía no hay ninguna cargada.
+                        </div>
+                    </div>
+                    <div class="o_mn_card">
+                        <div class="o_mn_card_head">
+                            <div>
+                                <h5>Estado de servicios</h5>
+                                <div class="text-muted small">Distribución de la cartera</div>
+                            </div>
+                        </div>
+                        <t t-if="totalServices">
+                            <div class="o_mn_chart o_mn_chart_sm"><canvas t-ref="statesChart"/></div>
+                            <div class="o_mn_legend">
+                                <t t-foreach="data.servicios_estado" t-as="s" t-key="s.clave">
+                                    <div class="o_mn_legend_row o_mn_clickable" t-on-click="() => this.open('servicios_' + s.clave)">
+                                        <span t-esc="s.etiqueta"/>
+                                        <span class="fw-semibold" t-esc="number(s.cantidad)"/>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-else="" t-call="mirabilenet_dashboard.Empty">
+                            <t t-set="title">Sin servicios registrados</t>
+                            <t t-set="text">Un servicio conecta un cliente con un plan y un router.</t>
+                        </t>
+                    </div>
+                </div>
+
+                <!-- 3. Actividad, accesos rápidos y puesta en marcha -->
+                <div class="o_mn_grid o_mn_grid_3">
+                    <div class="o_mn_card">
+                        <div class="o_mn_card_head">
+                            <h5>Actividad reciente</h5>
+                            <a href="#" class="small" t-on-click.prevent="() => this.openAction('mirabilenet_base.action_mirabilenet_audit_log')">Ver todo →</a>
+                        </div>
+                        <t t-if="data.actividad and data.actividad.length">
+                            <ul class="o_mn_timeline">
+                                <t t-foreach="data.actividad" t-as="a" t-key="a.id">
+                                    <li>
+                                        <div class="fw-semibold small" t-esc="actionLabel(a.accion)"/>
+                                        <div t-esc="a.descripcion"/>
+                                        <div class="text-muted small">
+                                            <t t-esc="when(a.fecha)"/><t t-if="a.usuario"> · <t t-esc="a.usuario"/></t>
+                                        </div>
+                                    </li>
+                                </t>
+                            </ul>
+                        </t>
+                        <t t-else="" t-call="mirabilenet_dashboard.Empty">
+                            <t t-set="title">Sin actividad registrada</t>
+                            <t t-set="text">Aquí aparece lo último que se hizo en el sistema.</t>
+                        </t>
+                    </div>
+                    <div class="o_mn_card">
+                        <h5>Accesos rápidos</h5>
+                        <div class="o_mn_shortcuts">
+                            <t t-foreach="shortcuts" t-as="s" t-key="s.xmlid">
+                                <button class="btn o_mn_shortcut" t-on-click="() => this.openAction(s.xmlid)">
+                                    <i t-attf-class="fa {{ s.icon }} fa-lg"/>
+                                    <span t-esc="s.label"/>
+                                </button>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="o_mn_card">
+                        <div class="o_mn_card_head">
+                            <h5>Puesta en marcha</h5>
+                            <span t-attf-class="badge {{ setupDone ? 'text-bg-success' : 'text-bg-warning' }}">
+                                <t t-esc="data.puesta_en_marcha.hechos"/> de <t t-esc="data.puesta_en_marcha.total"/>
+                            </span>
+                        </div>
+                        <div class="progress o_mn_progress mb-2">
+                            <div class="progress-bar bg-success"
+                                 t-attf-style="width: {{ 100 * data.puesta_en_marcha.hechos / data.puesta_en_marcha.total }}%"/>
+                        </div>
+                        <div t-if="!data.puesta_en_marcha.router_listo" class="o_mn_note mb-2">
+                            Hasta que enrole un router, el dashboard no puede mostrar datos de red en vivo.
+                        </div>
+                        <ul class="o_mn_steps">
+                            <t t-foreach="data.puesta_en_marcha.pasos" t-as="step" t-key="step.clave">
+                                <li t-attf-class="{{ step.hecho ? 'o_mn_done' : '' }}">
+                                    <i t-attf-class="fa {{ step.hecho ? 'fa-check-circle text-success' : 'fa-circle-o text-muted' }}"/>
+                                    <div class="flex-grow-1">
+                                        <div t-esc="step.titulo"/>
+                                        <div class="text-muted small" t-esc="step.detalle"/>
+                                    </div>
+                                    <a t-if="!step.hecho" href="#" class="small text-nowrap"
+                                       t-on-click.prevent="() => this.openAction(step.accion)">Configurar →</a>
+                                </li>
+                            </t>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 4. Cobranza diaria y por método -->
+                <div class="o_mn_grid o_mn_grid_2_1">
+                    <div class="o_mn_card">
+                        <div class="o_mn_card_head">
+                            <div>
+                                <h5>Cobranza diaria</h5>
+                                <div class="text-muted small">Pagos aprobados, últimos <t t-esc="data.cobranza_diaria ? data.cobranza_diaria.dias.length : 30"/> días</div>
+                            </div>
+                            <div class="text-end" t-if="data.cobranza_diaria">
+                                <div class="o_mn_big" t-esc="money(data.cobranza_diaria.total)"/>
+                                <div class="text-muted small">total del periodo</div>
+                            </div>
+                        </div>
+                        <div t-if="data.cobranza_diaria and data.cobranza_diaria.total" class="o_mn_chart">
+                            <canvas t-ref="dailyChart"/>
+                        </div>
+                        <t t-else="" t-call="mirabilenet_dashboard.Empty">
+                            <t t-set="title">Sin cobros en el periodo</t>
+                            <t t-set="text">Cuando registre pagos aparecerá aquí la evolución diaria.</t>
+                        </t>
+                    </div>
+                    <div class="o_mn_card">
+                        <h5>Cobranza por método</h5>
+                        <div class="text-muted small mb-2">Cómo entró el dinero</div>
+                        <t t-if="data.cobranza_metodo and data.cobranza_metodo.length">
+                            <div class="o_mn_chart o_mn_chart_sm"><canvas t-ref="methodsChart"/></div>
+                            <div class="o_mn_legend">
+                                <t t-foreach="data.cobranza_metodo" t-as="m" t-key="m.etiqueta">
+                                    <div class="o_mn_legend_row">
+                                        <span t-esc="m.etiqueta"/><span class="fw-semibold" t-esc="money(m.monto)"/>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-else="" t-call="mirabilenet_dashboard.Empty">
+                            <t t-set="title">Sin pagos en el periodo</t>
+                            <t t-set="text">Compara cuánto entró por efectivo, QR o transferencia.</t>
+                        </t>
+                    </div>
+                </div>
+
+                <!-- 5. Clientes, cobros y red -->
+                <div class="o_mn_grid o_mn_grid_3">
+                    <div class="o_mn_card">
+                        <div class="o_mn_card_head">
+                            <h5>Clientes</h5>
+                            <a href="#" class="small" t-on-click.prevent="() => this.open('clientes_total')">Ver listado →</a>
+                        </div>
+                        <div class="o_mn_stats">
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Nuevos hoy</t><t t-set="value" t-value="number(data.clientes.clientes_nuevos_hoy)"/><t t-set="key" t-value="'clientes_nuevos_hoy'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Nuevos del mes</t><t t-set="value" t-value="number(data.clientes.clientes_nuevos_mes)"/><t t-set="key" t-value="'clientes_nuevos_mes'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Total de clientes</t><t t-set="value" t-value="number(data.clientes.clientes_total)"/><t t-set="key" t-value="'clientes_total'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Prospectos</t><t t-set="value" t-value="number(data.clientes.clientes_prospectos)"/><t t-set="hint">Sin instalar todavía</t><t t-set="key" t-value="'clientes_prospectos'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Instalación pendiente</t><t t-set="value" t-value="number(data.clientes.clientes_instalacion)"/><t t-set="key" t-value="'clientes_instalacion'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Activos</t><t t-set="value" t-value="number(data.clientes.clientes_activos)"/><t t-set="key" t-value="'clientes_activos'"/><t t-set="statClass" t-value="'o_mn_ok'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Morosos</t><t t-set="value" t-value="number(data.clientes.clientes_morosos)"/><t t-set="key" t-value="'clientes_morosos'"/><t t-set="statClass" t-value="data.clientes.clientes_morosos ? 'o_mn_warn' : ''"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Suspendidos</t><t t-set="value" t-value="number(data.clientes.clientes_suspendidos)"/><t t-set="key" t-value="'clientes_suspendidos'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Bajas</t><t t-set="value" t-value="number(data.clientes.clientes_bajas)"/><t t-set="key" t-value="'clientes_bajas'"/></t>
+                        </div>
+                    </div>
+                    <div class="o_mn_card">
+                        <div class="o_mn_card_head">
+                            <h5>Cobros</h5>
+                            <a href="#" class="small" t-on-click.prevent="() => this.open('pagos_mes')">Ver pagos →</a>
+                        </div>
+                        <div class="o_mn_note mb-2">La plataforma emite recibos internos, no facturas fiscales.</div>
+                        <div class="o_mn_stats">
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Cobrado hoy</t><t t-set="value" t-value="money(data.cobros.hoy)"/><t t-set="key" t-value="'pagos_hoy'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Cobrado del mes</t><t t-set="value" t-value="money(data.cobros.mes)"/><t t-set="key" t-value="'pagos_mes'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Pagos por aprobar</t><t t-set="value" t-value="number(data.cobros.por_aprobar)"/><t t-set="hint">Comprobantes de WhatsApp</t><t t-set="key" t-value="'comprobantes_revision'"/><t t-set="statClass" t-value="data.cobros.por_aprobar ? 'o_mn_warn' : ''"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Saldo vencido</t><t t-set="value" t-value="money(data.cobros.vencido)"/><t t-set="key" t-value="'cartera_vencida'"/><t t-set="statClass" t-value="data.cobros.vencido ? 'o_mn_alert' : ''"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Vence en 7 días</t><t t-set="value" t-value="money(data.cobros.vence_7)"/><t t-set="key" t-value="'vence_7'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Recibos emitidos hoy</t><t t-set="value" t-value="number(data.cobros.recibos_hoy)"/><t t-set="key" t-value="'pagos_hoy'"/></t>
+                        </div>
+                    </div>
+                    <div class="o_mn_card">
+                        <div class="o_mn_card_head">
+                            <h5>Red</h5>
+                            <a href="#" class="small" t-on-click.prevent="() => this.open('routers_total')">Ver routers →</a>
+                        </div>
+                        <div class="o_mn_stats">
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Routers registrados</t><t t-set="value" t-value="number(data.red.routers_total)"/><t t-set="hint">Alta desde Red → Routers</t><t t-set="key" t-value="'routers_total'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Routers conectados</t><t t-set="value" t-value="number(data.red.routers_conectados)"/><t t-set="hint">Con los cinco chequeos en verde</t><t t-set="key" t-value="'routers_conectados'"/><t t-set="statClass" t-value="'o_mn_ok'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Cuentas PPPoE registradas</t><t t-set="value" t-value="number(data.red.pppoe_total)"/><t t-set="hint">Dadas de alta en la plataforma</t><t t-set="key" t-value="'pppoe_total'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Sesiones PPPoE en línea</t><t t-set="value" t-value="number(data.red.sesiones_en_linea)"/><t t-set="hint">Sin datos: requiere lectura del router</t></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Cuentas desincronizadas</t><t t-set="value" t-value="number(data.red.pppoe_desincronizadas)"/><t t-set="hint">Difieren entre la plataforma y RouterOS</t><t t-set="key" t-value="'pppoe_desincronizadas'"/><t t-set="statClass" t-value="data.red.pppoe_desincronizadas ? 'o_mn_warn' : ''"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Tráfico agregado</t><t t-set="value" t-value="number(data.red.trafico)"/><t t-set="hint">Sin datos: requiere lectura del router</t></t>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Capacidad y soporte -->
+                <div class="o_mn_grid o_mn_grid_2">
+                    <div class="o_mn_card">
+                        <h5>Capacidad</h5>
+                        <div t-if="!data.capacidad.instalada" class="o_mn_note mb-2">
+                            Declare la capacidad instalada de cada nodo para ver la ocupación.
+                        </div>
+                        <div class="o_mn_stats">
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Capacidad instalada</t><t t-set="value" t-value="number(data.capacidad.instalada)"/><t t-set="hint" t-value="data.capacidad.instalada ? 'conexiones' : 'Sin datos: ningún nodo tiene capacidad declarada'"/><t t-set="key" t-value="'nodos'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Ocupada</t><t t-set="value" t-value="number(data.capacidad.ocupada)"/><t t-set="hint">clientes (activos, morosos y suspendidos)</t></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Disponible</t><t t-set="value" t-value="number(data.capacidad.disponible)"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Ocupación</t><t t-set="value" t-value="percent(data.capacidad.ocupacion)"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Puertos NAP ocupados</t><t t-set="value" t-value="number(data.capacidad.puertos_ocupados)"/><t t-set="hint" t-value="data.capacidad.puertos_total ? 'de ' + number(data.capacidad.puertos_total) + ' puertos' : 'Sin cajas NAP o sin permiso de fibra'"/><t t-set="key" t-value="'puertos_ocupados'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Ocupación de la fibra</t><t t-set="value" t-value="percent(data.capacidad.ocupacion_puertos)"/></t>
+                        </div>
+                    </div>
+                    <div class="o_mn_card">
+                        <h5>Soporte</h5>
+                        <div class="o_mn_stats">
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Averías abiertas</t><t t-set="value" t-value="number(data.soporte.averias_abiertas)"/><t t-set="hint">Mantenimiento de la red de fibra</t><t t-set="key" t-value="'averias_abiertas'"/><t t-set="statClass" t-value="data.soporte.averias_abiertas ? 'o_mn_warn' : ''"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Casos de soporte abiertos</t><t t-set="value" t-value="number(data.soporte.casos_abiertos)"/><t t-set="hint">Ayuda y bajas pedidas por WhatsApp</t><t t-set="key" t-value="'casos_abiertos'"/></t>
+                            <t t-call="mirabilenet_dashboard.Stat"><t t-set="label">Instalaciones pendientes</t><t t-set="value" t-value="number(data.soporte.instalaciones_pendientes)"/><t t-set="hint">Todavía sin agenda con fecha</t><t t-set="key" t-value="'instalaciones_pendientes'"/></t>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Ocupación, cartera vencida y últimos pagos -->
+                <div class="o_mn_grid o_mn_grid_3">
+                    <div class="o_mn_card">
+                        <h5>Ocupación de capacidad</h5>
+                        <div class="text-muted small mb-3">Servicios sobre la capacidad declarada</div>
+                        <t t-if="data.capacidad.ocupacion !== null">
+                            <div class="o_mn_gauge_value" t-esc="percent(data.capacidad.ocupacion)"/>
+                            <div class="progress o_mn_gauge">
+                                <div t-attf-class="progress-bar {{ occupancyClass }}" t-attf-style="width: {{ occupancyWidth }}%"/>
+                            </div>
+                            <div class="d-flex justify-content-between text-muted small mt-1">
+                                <span><t t-esc="number(data.capacidad.ocupada)"/> ocupadas</span>
+                                <span><t t-esc="number(data.capacidad.disponible)"/> libres</span>
+                            </div>
+                        </t>
+                        <t t-else="" t-call="mirabilenet_dashboard.Empty">
+                            <t t-set="title">Ocupación no calculable</t>
+                            <t t-set="text">Ningún nodo declara capacidad instalada.</t>
+                        </t>
+                    </div>
+                    <div class="o_mn_card">
+                        <div class="o_mn_card_head">
+                            <h5>Cartera vencida</h5>
+                            <a href="#" class="small" t-on-click.prevent="() => this.open('cartera_vencida')">Ver todo →</a>
+                        </div>
+                        <t t-if="data.cartera and data.cartera.clientes.length">
+                            <table class="table table-sm o_mn_table">
+                                <tbody>
+                                    <tr t-foreach="data.cartera.clientes" t-as="c" t-key="c_index">
+                                        <td t-esc="c.cliente"/>
+                                        <td class="text-muted small text-nowrap"><t t-if="c.dias !== null"><t t-esc="c.dias"/> días</t></td>
+                                        <td class="text-end fw-semibold text-nowrap" t-esc="money(c.monto)"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-else="" t-call="mirabilenet_dashboard.Empty">
+                            <t t-set="title">Sin cartera vencida</t>
+                            <t t-set="text">Nadie tiene facturas con el plazo cumplido.</t>
+                        </t>
+                    </div>
+                    <div class="o_mn_card">
+                        <div class="o_mn_card_head">
+                            <h5>Últimos pagos</h5>
+                            <a href="#" class="small" t-on-click.prevent="() => this.openAction('account.action_account_payments')">Ver todos →</a>
+                        </div>
+                        <t t-if="data.ultimos_pagos and data.ultimos_pagos.length">
+                            <table class="table table-sm o_mn_table">
+                                <tbody>
+                                    <tr t-foreach="data.ultimos_pagos" t-as="p" t-key="p.id" class="o_mn_clickable"
+                                        t-on-click="() => this.openPayment(p.id)">
+                                        <td>
+                                            <div t-esc="p.cliente"/>
+                                            <div class="text-muted small"><t t-esc="day(p.fecha)"/> · <t t-esc="p.metodo"/></div>
+                                        </td>
+                                        <td class="text-end fw-semibold text-nowrap" t-esc="money(p.monto)"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                        <t t-else="" t-call="mirabilenet_dashboard.Empty">
+                            <t t-set="title">Todavía no se registró ningún pago</t>
+                            <t t-set="text">Los cobros aparecen aquí apenas se registran.</t>
+                        </t>
+                    </div>
+                </div>
+            </div>
+            <div t-else="" class="o_mn_loading"><i class="fa fa-spinner fa-spin fa-2x"/></div>
+        </div>
+    </t>
+</templates>

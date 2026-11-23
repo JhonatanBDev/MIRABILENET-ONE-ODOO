@@ -7,6 +7,21 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
 
 ## Para retomar (22/11/2026)
 
+- **Dashboard (22/11/2026, módulo nuevo `mirabilenet_dashboard` 19.0.1.0.0):** una pantalla OWL
+  con todo el dashboard de MIRABILENET ONE: resumen, ingresos vs gastos, estado de servicios,
+  actividad (auditoría), accesos rápidos, puesta en marcha (8 pasos), cobranza diaria y por
+  método, clientes, cobros, red, capacidad, soporte, cartera vencida y últimos pagos.
+  - Periodo Hoy/7/30/90 y región para usuarios globales; se actualiza solo cada minuto.
+  - Cada número abre su lista con el mismo filtro (`action_open`).
+  - Sin sudo (cada rol ve lo suyo; lo que no puede ver sale «—»).
+  - Es la pantalla de inicio (hook + `ir.default`). Sigue el modo oscuro (variables de
+    Odoo 19 sin prefijo `bs-`).
+  - Sin datos todavía, con aviso: sesiones PPPoE en línea, tráfico, instalaciones con fecha y
+    gastos (salen de facturas de proveedor).
+  - 9 pruebas; instalado en `mira_nativo_test` y revisado con Playwright en claro, oscuro y
+    celular. Respaldo previo en `traslado_odoo/respaldo_antes_dashboard`.
+  - **Ojo:** la compañía de `mira_nativo_test` está en USD; las regiones, en BOB.
+  - Usuario temporal `dashboard_tmp` archivado.
 - **Sincronización con GitHub (22/11/2026):** el proyecto propio (sin Odoo, OCA, claves ni datos de
   clientes) va en un repositorio privado aparte, `odoo/.mirabilenet.git`, autor JhonatanBDev.
   Script `documentacion/herramientas/sincronizar_github.ps1` (estado / subir / bajar / instalar)
@@ -499,7 +514,7 @@ env\Scripts\python.exe odoo-bin -c odoo.conf
 
 # Base de pruebas desde cero e instalación de todo, con sus pruebas (unos 6 minutos)
 env\Scripts\python.exe documentacion\herramientas\crear_base_nativo.py odoo.conf
-env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -i mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion,mirabilenet_fibra,mirabilenet_cartera,mirabilenet_modo_oscuro,hr_attendance,sale_management,purchase,point_of_sale,project,mrp,maintenance --without-demo=all --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079
+env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -i mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion,mirabilenet_fibra,mirabilenet_cartera,mirabilenet_modo_oscuro,mirabilenet_dashboard,hr_attendance,sale_management,purchase,point_of_sale,project,mrp,maintenance --without-demo=all --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079
 
 # Todas las pruebas sobre esa base ya creada (SIAT + MIRABILENET)
 env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -u mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079

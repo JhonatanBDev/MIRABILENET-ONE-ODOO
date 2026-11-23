@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Todo usuario nuevo entra al dashboard (lo puede cambiar en su ficha: «Acción inicial»). -->
+    <function model="ir.default" name="set"
+              eval="('res.users', 'action_id', ref('mirabilenet_dashboard.action_mirabilenet_dashboard'))"/>
+</odoo>
