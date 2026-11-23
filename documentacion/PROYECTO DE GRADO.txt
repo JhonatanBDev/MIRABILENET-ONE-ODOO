@@ -1,0 +1,43 @@
+PROYECTO DE GRADO
+&
+VPS:
+ssh root@169.58.107.154
+password: 164698026
+
+CLAUDE CODE:
+Correo: geovannyt26@gmail.com
+password: 164698026Nit..
+
+https://mirabilenet.com/admin/login/
+
+INICIALIZAR LA APLICACION:
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d api panel
+DETENER LA APLICACION:
+docker compose -f docker-compose.yml -f docker-compose.local.yml up -d
+
+PUERTO:
+Vuelve a http://localhost:3000/panel/login e ingresa exactamente:
+
+Usuario: localadmin
+Contraseña: MirabiLocal-2026!   164698026Ni$
+
+Thank you very much once again for your order at Contabo. We sent you the order confirmation in a separate email a few moments ago.
+
+With this email you receive the login credentials to our Customer Control Panel at https://my.contabo.com
+
+Login: geovannyt26@gmail.com
+Password: GTJdCfdqFXVLgdQ9
+
+
+
+INICIA N8N LOCAL:
+
+ssh -L 5678:localhost:5678 root@169.58.107.154
+
+usuario: Callisaya
+
+Endiosconfio123
+
+
+
+clave_local

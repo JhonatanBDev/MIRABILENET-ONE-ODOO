@@ -6,7 +6,9 @@ name: mirabilenet-odoo
 
 services:
   odoo_db:
-    image: postgres:16-alpine
+    # La misma versión que el desarrollo: las copias de la base se hacen con PostgreSQL 19 y
+    # una versión anterior no las carga completas.
+    image: postgres:19-alpine
     restart: unless-stopped
     env_file: .env.odoo
     environment:

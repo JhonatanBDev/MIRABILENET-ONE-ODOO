@@ -14,7 +14,7 @@ de datos y márgenes de ganancia. Cómo conseguir cada cosa está en el paso 6 y
 |---|---|---|
 | Git | cualquiera reciente | Incluye Git Bash |
 | Python | 3.10 | Marcar «Add to PATH» |
-| PostgreSQL | 16 o superior | Crear un usuario para Odoo (aquí se llama `admin`) |
+| PostgreSQL | 19 (la misma del VPS) | Crear un usuario para Odoo (aquí se llama `admin`) |
 | wkhtmltopdf | 0.12.6 (con Qt parchado) | Para los PDF; queda en `C:\Program Files\wkhtmltopdf\bin` |
 | Docker Desktop | cualquiera reciente | Solo si se va a usar n8n |
 
