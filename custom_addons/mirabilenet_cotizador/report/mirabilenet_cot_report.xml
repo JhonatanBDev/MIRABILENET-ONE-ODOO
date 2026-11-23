@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- PDF para el cliente. NUNCA lleva costo, recargo, ganancia, stock, alertas ni notas
+         internas (hay una prueba que lo verifica). -->
+    <record id="action_report_mirabilenet_cot" model="ir.actions.report">
+        <field name="name">Cotización para el cliente</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mirabilenet_cotizador.report_mirabilenet_cot</field>
+        <field name="report_file">mirabilenet_cotizador.report_mirabilenet_cot</field>
+        <field name="print_report_name">'%s' % object.name</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_mirabilenet_cot_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang or 'es_BO')"/>
+            <t t-set="currency" t-value="o.currency_id.symbol or 'Bs'"/>
+            <div class="page" style="font-size: 12px;">
+                <div t-if="o.mirabilenet_cot_stage == 'borrador'"
+                     style="position: absolute; top: 40%; left: 10%; font-size: 90px; color: #e6e6e6; transform: rotate(-30deg); z-index: -1;">
+                    BORRADOR
+                </div>
+                <h3 style="margin-bottom: 2px;">Cotización <span t-field="o.name"/></h3>
+                <div t-if="o.mirabilenet_cot_title" style="font-size: 14px;" t-esc="o.mirabilenet_cot_title"/>
+                <table class="table table-borderless table-sm" style="margin-top: 8px;">
+                    <tr>
+                        <td><b>Cliente:</b> <span t-field="o.partner_id.name"/><br/>
+                            <t t-if="o.partner_id.vat"><b>NIT/CI:</b> <span t-esc="o.partner_id.vat"/><br/></t>
+                            <t t-if="o.partner_id.phone or o.partner_id.mobile"><b>Teléfono:</b>
+                                <span t-esc="o.partner_id.phone or o.partner_id.mobile"/></t>
+                        </td>
+                        <td class="text-end"><b>Fecha:</b> <span t-esc="o.date_order.strftime('%d/%m/%Y')"/><br/>
+                            <t t-if="o.validity_date"><b>Válida hasta:</b> <span t-esc="o.validity_date.strftime('%d/%m/%Y')"/><br/></t>
+                            <t t-if="o.mirabilenet_cot_city_id"><b>Ciudad:</b> <span t-esc="o.mirabilenet_cot_city_id.name"/></t>
+                        </td>
+                    </tr>
+                </table>
+
+                <table class="table table-sm" style="margin-top: 6px;">
+                    <thead>
+                        <tr><th>Descripción</th><th class="text-end">Cant.</th><th>Unid.</th>
+                            <th class="text-end">Precio unit.</th><th class="text-end">Total</th></tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.order_line" t-as="line">
+                            <tr t-if="line.display_type == 'line_section'" style="background: #f2f2f2;">
+                                <td colspan="5"><b t-esc="line.name"/></td>
+                            </tr>
+                            <tr t-elif="not line.display_type">
+                                <td t-esc="line.name"/>
+                                <td class="text-end" t-esc="o.mirabilenet_cot_fmt(line.product_uom_qty, qty=True)"/>
+                                <td t-esc="line.mirabilenet_cot_unit or 'u'"/>
+                                <td class="text-end" t-esc="o.mirabilenet_cot_fmt(line.price_unit)"/>
+                                <td class="text-end" t-esc="o.mirabilenet_cot_fmt(line.price_subtotal)"/>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <table class="table table-sm" style="width: 45%; margin-left: auto;">
+                    <tr><td>Subtotal</td><td class="text-end"><span t-esc="currency"/> <span t-esc="o.mirabilenet_cot_fmt(o.mirabilenet_cot_subtotal)"/></td></tr>
+                    <t t-if="o.mirabilenet_cot_invoice">
+                        <tr><td>IVA (13 %)</td><td class="text-end"><span t-esc="currency"/> <span t-esc="o.mirabilenet_cot_fmt(o.mirabilenet_cot_iva)"/></td></tr>
+                        <tr><td>IT (3 %)</td><td class="text-end"><span t-esc="currency"/> <span t-esc="o.mirabilenet_cot_fmt(o.mirabilenet_cot_it)"/></td></tr>
+                    </t>
+                    <tr><td><b>Total</b></td><td class="text-end"><b><span t-esc="currency"/> <span t-esc="o.mirabilenet_cot_fmt(o.mirabilenet_cot_total)"/></b></td></tr>
+                    <tr t-if="o.mirabilenet_cot_rate"><td class="text-muted">Equivalente en USD</td>
+                        <td class="text-end text-muted">USD <span t-esc="o.mirabilenet_cot_fmt(o.mirabilenet_cot_total_usd)"/>
+                            (T/C <span t-esc="o.mirabilenet_cot_fmt(o.mirabilenet_cot_rate)"/>)</td></tr>
+                </table>
+                <p t-if="not o.mirabilenet_cot_invoice" class="text-muted">Precios sin factura.</p>
+
+                <div t-if="o.mirabilenet_cot_storage" style="margin-top: 8px;">
+                    <b>Almacenamiento estimado de la grabación</b>
+                    <div style="white-space: pre-line;" t-esc="o.mirabilenet_cot_storage"/>
+                </div>
+                <div t-if="o.note" style="margin-top: 8px;">
+                    <b>Condiciones</b>
+                    <div t-field="o.note"/>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_mirabilenet_cot">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="mirabilenet_cotizador.report_mirabilenet_cot_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

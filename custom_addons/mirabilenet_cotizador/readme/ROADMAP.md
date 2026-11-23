@@ -1,0 +1,4 @@
+- Conector DigiCorp: catálogo, precio, stock por ciudad y tipo de cambio (fase 3 del plan).
+- Envío por WhatsApp al trabajador y al cliente; herramientas para el bot de n8n (fases 4 a 6).
+- Migrar las 28 cotizaciones del SQLite del programa original.
+- Interpretación con IA local (Ollama), opcional.

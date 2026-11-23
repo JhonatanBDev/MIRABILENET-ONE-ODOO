@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mirabilenet_cot_root" name="Cotizaciones"
+              parent="mirabilenet_base.menu_mirabilenet_root" sequence="35"
+              groups="group_mirabilenet_cot_user"/>
+    <menuitem id="menu_mirabilenet_cot_quotes" name="Cotizaciones" parent="menu_mirabilenet_cot_root"
+              action="action_mirabilenet_cot_quotes" sequence="10"/>
+    <menuitem id="menu_mirabilenet_cot_new" name="Nueva cotización" parent="menu_mirabilenet_cot_root"
+              action="action_mirabilenet_cot_wizard" sequence="20"/>
+    <menuitem id="menu_mirabilenet_cot_catalog" name="Catálogo" parent="menu_mirabilenet_cot_root"
+              action="action_mirabilenet_cot_catalog" sequence="30"/>
+    <menuitem id="menu_mirabilenet_cot_config" name="Configuración" parent="menu_mirabilenet_cot_root"
+              sequence="90" groups="group_mirabilenet_cot_manager"/>
+    <menuitem id="menu_mirabilenet_cot_markup" name="Recargos (márgenes)"
+              parent="menu_mirabilenet_cot_config" action="action_mirabilenet_cot_markup" sequence="10"/>
+    <menuitem id="menu_mirabilenet_cot_kit" name="Kits" parent="menu_mirabilenet_cot_config"
+              action="action_mirabilenet_cot_kit" sequence="20"/>
+    <menuitem id="menu_mirabilenet_cot_material" name="Materiales" parent="menu_mirabilenet_cot_config"
+              action="action_mirabilenet_cot_material" sequence="30"/>
+    <menuitem id="menu_mirabilenet_cot_tariff" name="Mano de obra" parent="menu_mirabilenet_cot_config"
+              action="action_mirabilenet_cot_tariff" sequence="40"/>
+    <menuitem id="menu_mirabilenet_cot_city" name="Ciudades y viáticos"
+              parent="menu_mirabilenet_cot_config" action="action_mirabilenet_cot_city" sequence="50"/>
+</odoo>

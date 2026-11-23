@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Recargos DE EJEMPLO. Los márgenes reales de MIRABILENET no van al repositorio: se
+         cargan en cada base desde MIRABILENET > Cotizaciones > Configuración > Recargos (o con
+         documentacion/herramientas/cargar_margenes_cotizador.py). -->
+    <record id="markup_example_low_cost" model="mirabilenet.cot.markup">
+        <field name="kind">costo</field>
+        <field name="below">10</field>
+        <field name="markup">60</field>
+    </record>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_mirabilenet_cot_user" model="res.groups">
+        <field name="name">Cotizador: cotizar y enviar</field>
+        <field name="comment">Arma cotizaciones de CCTV y redes, las aprueba y las envía al
+            cliente (decisión de MIRABILENET: quien cotiza, aprueba).</field>
+        <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+    </record>
+    <record id="group_mirabilenet_cot_manager" model="res.groups">
+        <field name="name">Cotizador: configuración</field>
+        <field name="comment">Además edita recargos, kits, materiales, tarifas y ciudades.</field>
+        <field name="implied_ids" eval="[(4, ref('group_mirabilenet_cot_user'))]"/>
+    </record>
+    <!-- Quien administra Odoo configura el cotizador. -->
+    <record id="base.group_system" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_mirabilenet_cot_manager'))]"/>
+    </record>
+</odoo>

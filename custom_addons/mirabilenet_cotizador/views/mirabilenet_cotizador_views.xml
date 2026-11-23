@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ============ Cotización (sale.order) ============ -->
+    <record id="view_order_form_mirabilenet_cot" model="ir.ui.view">
+        <field name="name">sale.order.form.mirabilenet.cot</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="mirabilenet_cot_is_quote" invisible="1"/>
+                <button name="action_mirabilenet_cot_approve" type="object" string="Aprobar"
+                        class="btn-primary"
+                        invisible="not mirabilenet_cot_is_quote or mirabilenet_cot_stage != 'borrador'"
+                        groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <button name="action_mirabilenet_cot_pdf" type="object" string="PDF para el cliente"
+                        invisible="not mirabilenet_cot_is_quote"/>
+                <button name="action_mirabilenet_cot_mark_sent" type="object" string="Marcar enviada"
+                        invisible="not mirabilenet_cot_is_quote or mirabilenet_cot_stage != 'aprobada'"
+                        groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <button name="action_mirabilenet_cot_won" type="object" string="Ganada"
+                        invisible="not mirabilenet_cot_is_quote or mirabilenet_cot_stage not in ('aprobada', 'enviada')"
+                        groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <button name="action_mirabilenet_cot_lost" type="object" string="Perdida"
+                        invisible="not mirabilenet_cot_is_quote or mirabilenet_cot_stage in ('ganada', 'perdida')"
+                        groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <button name="action_mirabilenet_cot_draft" type="object" string="Volver a borrador"
+                        invisible="not mirabilenet_cot_is_quote or mirabilenet_cot_stage in ('borrador', 'ganada')"
+                        groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <button name="action_mirabilenet_cot_renew" type="object" string="Renovar vigencia"
+                        invisible="not mirabilenet_cot_is_quote or mirabilenet_cot_stage in ('ganada', 'perdida')"
+                        groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <button name="action_mirabilenet_cot_duplicate" type="object" string="Duplicar"
+                        invisible="not mirabilenet_cot_is_quote"
+                        groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <field name="mirabilenet_cot_stage" widget="statusbar"
+                       statusbar_visible="borrador,aprobada,enviada,ganada"
+                       invisible="not mirabilenet_cot_is_quote"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/list//field[@name='price_unit']" position="after">
+                <field name="mirabilenet_cot_cost" optional="hide"
+                       column_invisible="not parent.mirabilenet_cot_is_quote"
+                       groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <field name="mirabilenet_cot_markup" optional="hide"
+                       column_invisible="not parent.mirabilenet_cot_is_quote"
+                       groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <field name="mirabilenet_cot_stock" optional="hide"
+                       column_invisible="not parent.mirabilenet_cot_is_quote"/>
+                <field name="mirabilenet_cot_alerts" optional="hide"
+                       column_invisible="not parent.mirabilenet_cot_is_quote"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Cotizador" name="mirabilenet_cot" invisible="not mirabilenet_cot_is_quote">
+                    <div class="alert alert-warning" role="alert" invisible="not mirabilenet_cot_alerts">
+                        <b>Revisar antes de aprobar:</b>
+                        <field name="mirabilenet_cot_alerts" nolabel="1" readonly="1"/>
+                    </div>
+                    <group>
+                        <group string="Cotización">
+                            <field name="mirabilenet_cot_title"/>
+                            <field name="mirabilenet_cot_origin"/>
+                            <field name="mirabilenet_cot_kit_id"/>
+                            <field name="mirabilenet_cot_city_id"/>
+                            <field name="mirabilenet_cot_invoice"/>
+                            <field name="mirabilenet_cot_rate"/>
+                            <field name="mirabilenet_cot_requester_id"/>
+                            <field name="mirabilenet_cot_approved_by"/>
+                            <field name="mirabilenet_cot_sent_at"/>
+                        </group>
+                        <group string="Totales">
+                            <field name="mirabilenet_cot_subtotal"/>
+                            <field name="mirabilenet_cot_iva"/>
+                            <field name="mirabilenet_cot_it"/>
+                            <field name="mirabilenet_cot_total"/>
+                            <field name="mirabilenet_cot_total_usd"/>
+                            <field name="mirabilenet_cot_cost"
+                                   groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                            <field name="mirabilenet_cot_profit"
+                                   groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                        </group>
+                    </group>
+                    <group string="Almacenamiento (va en el PDF)">
+                        <field name="mirabilenet_cot_storage" nolabel="1" colspan="2"/>
+                    </group>
+                    <group string="Notas internas (no van en el PDF)">
+                        <field name="mirabilenet_cot_notes" nolabel="1" colspan="2"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_cot_list" model="ir.ui.view">
+        <field name="name">sale.order.mirabilenet.cot.list</field>
+        <field name="model">sale.order</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="mirabilenet_cot_stage == 'perdida'"
+                  decoration-success="mirabilenet_cot_stage == 'ganada'">
+                <field name="name"/>
+                <field name="date_order" widget="date"/>
+                <field name="partner_id"/>
+                <field name="mirabilenet_cot_title"/>
+                <field name="mirabilenet_cot_city_id" optional="show"/>
+                <field name="mirabilenet_cot_origin" optional="show"/>
+                <field name="mirabilenet_cot_requester_id" optional="show"/>
+                <field name="validity_date" optional="show"/>
+                <field name="mirabilenet_cot_stage" widget="badge"
+                       decoration-info="mirabilenet_cot_stage == 'borrador'"
+                       decoration-warning="mirabilenet_cot_stage == 'aprobada'"
+                       decoration-primary="mirabilenet_cot_stage == 'enviada'"
+                       decoration-success="mirabilenet_cot_stage == 'ganada'"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="mirabilenet_cot_total" sum="Total"/>
+                <field name="mirabilenet_cot_profit" optional="hide" sum="Ganancia"
+                       groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_cot_search" model="ir.ui.view">
+        <field name="name">sale.order.mirabilenet.cot.search</field>
+        <field name="model">sale.order</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="mirabilenet_cot_title"/>
+                <filter name="open" string="Abiertas"
+                        domain="[('mirabilenet_cot_stage', 'in', ('borrador', 'aprobada', 'enviada'))]"/>
+                <filter name="mine" string="Mías"
+                        domain="[('mirabilenet_cot_requester_id', '=', uid)]"/>
+                <filter name="bot" string="Del bot" domain="[('mirabilenet_cot_origin', '=', 'bot')]"/>
+                <group>
+                    <filter name="by_stage" string="Etapa" context="{'group_by': 'mirabilenet_cot_stage'}"/>
+                    <filter name="by_requester" string="Quién cotizó"
+                            context="{'group_by': 'mirabilenet_cot_requester_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_cot_quotes" model="ir.actions.act_window">
+        <field name="name">Cotizaciones de CCTV y redes</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('mirabilenet_cot_is_quote', '=', True)]</field>
+        <field name="context">{'search_default_open': 1}</field>
+        <field name="search_view_id" ref="view_mirabilenet_cot_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_mirabilenet_cot_list')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('sale.view_order_form')})]"/>
+    </record>
+
+    <!-- ============ Nueva cotización ============ -->
+    <record id="view_mirabilenet_cot_wizard_form" model="ir.ui.view">
+        <field name="name">mirabilenet.cot.wizard.form</field>
+        <field name="model">mirabilenet.cot.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Nueva cotización">
+                <group>
+                    <group>
+                        <field name="partner_id"/>
+                        <field name="mode" widget="radio"/>
+                        <field name="kit_id" invisible="mode != 'kit'" required="mode == 'kit'"/>
+                        <field name="title" invisible="mode != 'kit'"/>
+                    </group>
+                    <group>
+                        <field name="city_id"/>
+                        <field name="invoice"/>
+                        <field name="meters" invisible="mode != 'kit'"/>
+                        <field name="km" invisible="mode != 'kit'"/>
+                    </group>
+                </group>
+                <field name="text" invisible="mode != 'texto'" required="mode == 'texto'"
+                       placeholder="Ej.: 6 cámaras para mi tienda, 2 afuera, que graben 20 días"/>
+                <footer>
+                    <button name="action_create" type="object" string="Armar cotización"
+                            class="btn-primary"/>
+                    <button special="cancel" string="Cancelar"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_cot_wizard" model="ir.actions.act_window">
+        <field name="name">Nueva cotización</field>
+        <field name="res_model">mirabilenet.cot.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- ============ Catálogo ============ -->
+    <record id="view_mirabilenet_cot_catalog_list" model="ir.ui.view">
+        <field name="name">product.template.mirabilenet.cot.list</field>
+        <field name="model">product.template</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="mirabilenet_cot_sku"/>
+                <field name="name"/>
+                <field name="mirabilenet_cot_brand"/>
+                <field name="mirabilenet_cot_category"/>
+                <field name="standard_price" string="Costo"
+                       groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <field name="mirabilenet_cot_price"/>
+                <field name="mirabilenet_cot_price_invoiced"/>
+                <field name="mirabilenet_cot_stock_total"/>
+                <field name="mirabilenet_cot_cost_at" optional="hide"/>
+                <field name="mirabilenet_cot_offer_bot" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_cot_catalog_search" model="ir.ui.view">
+        <field name="name">product.template.mirabilenet.cot.search</field>
+        <field name="model">product.template</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" filter_domain="['|', '|', ('name', 'ilike', self), ('mirabilenet_cot_sku', 'ilike', self), ('mirabilenet_cot_brand', 'ilike', self)]"/>
+                <field name="mirabilenet_cot_category"/>
+                <filter name="bot" string="Se ofrece en el bot" domain="[('mirabilenet_cot_offer_bot', '=', True)]"/>
+                <filter name="stock" string="Con stock en el proveedor" domain="[('mirabilenet_cot_stock_total', '>', 0)]"/>
+                <group>
+                    <filter name="by_category" string="Categoría" context="{'group_by': 'mirabilenet_cot_category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_cot_catalog" model="ir.actions.act_window">
+        <field name="name">Catálogo del cotizador</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('mirabilenet_cot_category', '!=', False)]</field>
+        <field name="search_view_id" ref="view_mirabilenet_cot_catalog_search"/>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_mirabilenet_cot_catalog_list')})]"/>
+    </record>
+
+    <record id="view_product_template_form_mirabilenet_cot" model="ir.ui.view">
+        <field name="name">product.template.form.mirabilenet.cot</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Cotizador" name="mirabilenet_cot">
+                    <group>
+                        <group>
+                            <field name="mirabilenet_cot_sku"/>
+                            <field name="mirabilenet_cot_category"/>
+                            <field name="mirabilenet_cot_subcategory"/>
+                            <field name="mirabilenet_cot_brand"/>
+                            <field name="mirabilenet_cot_offer_bot"/>
+                        </group>
+                        <group>
+                            <field name="mirabilenet_cot_price"/>
+                            <field name="mirabilenet_cot_price_invoiced"/>
+                            <field name="mirabilenet_cot_cost_at"/>
+                            <field name="mirabilenet_cot_stock_total"/>
+                            <field name="mirabilenet_cot_stock"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ============ Configuración ============ -->
+    <record id="view_mirabilenet_cot_markup_list" model="ir.ui.view">
+        <field name="name">mirabilenet.cot.markup.list</field>
+        <field name="model">mirabilenet.cot.markup</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="kind"/>
+                <field name="category" required="kind == 'categoria'" invisible="kind != 'categoria'"/>
+                <field name="below" invisible="kind != 'costo'"/>
+                <field name="markup"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_mirabilenet_cot_markup" model="ir.actions.act_window">
+        <field name="name">Recargos (márgenes)</field>
+        <field name="res_model">mirabilenet.cot.markup</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html"><p>El recargo se suma al costo del proveedor. Orden:
+            primero el escalón por costo (ítems baratos), después la subcategoría, la categoría y,
+            si ninguna aplica, el recargo por defecto (parámetro
+            mirabilenet_cotizador.recargo_defecto).</p></field>
+    </record>
+
+    <record id="view_mirabilenet_cot_material_list" model="ir.ui.view">
+        <field name="name">mirabilenet.cot.material.list</field>
+        <field name="model">mirabilenet.cot.material</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="words"/>
+                <field name="exclude" optional="hide"/>
+                <field name="sku" optional="hide"/>
+                <field name="unit"/>
+                <field name="purchase_unit"/>
+                <field name="price_ref"/>
+                <field name="optional"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_mirabilenet_cot_material" model="ir.actions.act_window">
+        <field name="name">Materiales</field>
+        <field name="res_model">mirabilenet.cot.material</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_mirabilenet_cot_tariff_list" model="ir.ui.view">
+        <field name="name">mirabilenet.cot.tariff.list</field>
+        <field name="model">mirabilenet.cot.tariff</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="price"/>
+                <field name="unit"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_mirabilenet_cot_tariff" model="ir.actions.act_window">
+        <field name="name">Mano de obra</field>
+        <field name="res_model">mirabilenet.cot.tariff</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_mirabilenet_cot_city_list" model="ir.ui.view">
+        <field name="name">mirabilenet.cot.city.list</field>
+        <field name="model">mirabilenet.cot.city</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="viatico"/>
+                <field name="is_base"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_mirabilenet_cot_city" model="ir.actions.act_window">
+        <field name="name">Ciudades y viáticos</field>
+        <field name="res_model">mirabilenet.cot.city</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_mirabilenet_cot_kit_list" model="ir.ui.view">
+        <field name="name">mirabilenet.cot.kit.list</field>
+        <field name="model">mirabilenet.cot.kit</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="cameras"/>
+                <field name="technology"/>
+                <field name="range_"/>
+                <field name="days"/>
+                <field name="offer_bot" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_mirabilenet_cot_kit_form" model="ir.ui.view">
+        <field name="name">mirabilenet.cot.kit.form</field>
+        <field name="model">mirabilenet.cot.kit</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="offer_bot"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="cameras"/>
+                            <field name="technology"/>
+                            <field name="range_"/>
+                            <field name="days"/>
+                        </group>
+                    </group>
+                    <group string="Definición (cámaras, grabación, NVR, materiales, mano de obra)">
+                        <field name="definition" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_mirabilenet_cot_kit" model="ir.actions.act_window">
+        <field name="name">Kits</field>
+        <field name="res_model">mirabilenet.cot.kit</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

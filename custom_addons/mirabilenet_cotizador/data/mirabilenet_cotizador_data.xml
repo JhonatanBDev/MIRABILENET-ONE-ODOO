@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generado con documentacion/herramientas/generar_datos_cotizador.py desde
+     referencia/config. Las tarifas de mano de obra y los viáticos son de ejemplo:
+     cámbielos en MIRABILENET > Cotizaciones > Configuración. -->
+<odoo noupdate="1">
+    <record id="tariff_punto_camara" model="mirabilenet.cot.tariff">
+        <field name="code">punto_camara</field>
+        <field name="name">Instalación, fijación y orientación de cámara (por punto)</field>
+        <field name="price">180</field>
+        <field name="unit">pto</field>
+    </record>
+    <record id="tariff_metro_cable" model="mirabilenet.cot.tariff">
+        <field name="code">metro_cable</field>
+        <field name="name">Tendido de cable UTP con canalización</field>
+        <field name="price">6</field>
+        <field name="unit">m</field>
+    </record>
+    <record id="tariff_config_nvr" model="mirabilenet.cot.tariff">
+        <field name="code">config_nvr</field>
+        <field name="name">Configuración de grabador: canales, grabación, usuarios</field>
+        <field name="price">300</field>
+        <field name="unit">glb</field>
+    </record>
+    <record id="tariff_config_switch" model="mirabilenet.cot.tariff">
+        <field name="code">config_switch</field>
+        <field name="name">Instalación y configuración de switch PoE</field>
+        <field name="price">100</field>
+        <field name="unit">glb</field>
+    </record>
+    <record id="tariff_acceso_remoto" model="mirabilenet.cot.tariff">
+        <field name="code">acceso_remoto</field>
+        <field name="name">Acceso remoto por app móvil y capacitación</field>
+        <field name="price">150</field>
+        <field name="unit">glb</field>
+    </record>
+    <record id="city_la_paz" model="mirabilenet.cot.city">
+        <field name="name">La Paz</field>
+        <field name="viatico">0</field>
+        <field name="sequence">0</field>
+        <field name="is_base" eval="True"/>
+    </record>
+    <record id="city_el_alto" model="mirabilenet.cot.city">
+        <field name="name">El Alto</field>
+        <field name="viatico">60</field>
+        <field name="sequence">10</field>
+        <field name="is_base" eval="False"/>
+    </record>
+    <record id="city_cochabamba" model="mirabilenet.cot.city">
+        <field name="name">Cochabamba</field>
+        <field name="viatico">800</field>
+        <field name="sequence">20</field>
+        <field name="is_base" eval="False"/>
+    </record>
+    <record id="city_santa_cruz" model="mirabilenet.cot.city">
+        <field name="name">Santa Cruz</field>
+        <field name="viatico">1000</field>
+        <field name="sequence">30</field>
+        <field name="is_base" eval="False"/>
+    </record>
+    <record id="material_cable_utp" model="mirabilenet.cot.material">
+        <field name="code">cable_utp</field>
+        <field name="name">Cable UTP Cat6 exterior</field>
+        <field name="unit">m</field>
+        <field name="purchase_unit">305</field>
+        <field name="price_ref">4.0</field>
+        <field name="optional" eval="False"/>
+        <field name="category">CABLES DE RED</field>
+        <field name="words">UTP, CAT6, EXT</field>
+    </record>
+    <record id="material_conector_rj45" model="mirabilenet.cot.material">
+        <field name="code">conector_rj45</field>
+        <field name="name">Conector RJ45 Cat6</field>
+        <field name="unit">u</field>
+        <field name="purchase_unit">1</field>
+        <field name="price_ref">2.5</field>
+        <field name="optional" eval="False"/>
+        <field name="category">ACCESORIOS CABLEADO DE COBRE</field>
+        <field name="words">CONECTOR, RJ45, CAT</field>
+        <field name="exclude">CAT5|ADAPTADOR|TAPA|JACK|HEMBRA</field>
+    </record>
+    <record id="material_caja_paso" model="mirabilenet.cot.material">
+        <field name="code">caja_paso</field>
+        <field name="name">Soporte para cámara</field>
+        <field name="unit">u</field>
+        <field name="purchase_unit">1</field>
+        <field name="price_ref">20</field>
+        <field name="optional" eval="True"/>
+        <field name="category">ACCESORIOS CCTV</field>
+        <field name="words">SOPORTE PARA CAMARA</field>
+        <field name="exclude">PTZ|COMPATIBLE CON</field>
+    </record>
+    <record id="material_canaleta" model="mirabilenet.cot.material">
+        <field name="code">canaleta</field>
+        <field name="name">Cable canal PVC 10x20 mm</field>
+        <field name="unit">m</field>
+        <field name="purchase_unit">2</field>
+        <field name="price_ref">4</field>
+        <field name="optional" eval="False"/>
+        <field name="category">CANALIZACION</field>
+        <field name="words">CABLE CANAL PVC, 10X20</field>
+    </record>
+    <record id="material_fuente_12v" model="mirabilenet.cot.material">
+        <field name="code">fuente_12v</field>
+        <field name="name">Fuente 12 VDC</field>
+        <field name="unit">u</field>
+        <field name="purchase_unit">1</field>
+        <field name="price_ref">60</field>
+        <field name="optional" eval="False"/>
+        <field name="category">FUENTES DE ALIMENTACION</field>
+        <field name="words">FUENTE, 12V</field>
+        <field name="exclude">SUPERVISADA</field>
+    </record>
+    <record id="material_cable_utp_5e" model="mirabilenet.cot.material">
+        <field name="code">cable_utp_5e</field>
+        <field name="name">Cable UTP Cat5e</field>
+        <field name="unit">m</field>
+        <field name="purchase_unit">305</field>
+        <field name="price_ref">1.5</field>
+        <field name="optional" eval="False"/>
+        <field name="category">CABLES DE RED</field>
+        <field name="words">UTP, CAT5E</field>
+    </record>
+    <record id="material_video_balun" model="mirabilenet.cot.material">
+        <field name="code">video_balun</field>
+        <field name="name">Video balun pasivo HD (transmisor / receptor)</field>
+        <field name="unit">u</field>
+        <field name="purchase_unit">1</field>
+        <field name="price_ref">25</field>
+        <field name="optional" eval="False"/>
+        <field name="category">VIDEO BALUMS</field>
+        <field name="words">BALUN PASIVO</field>
+        <field name="exclude">VGA|ENERG</field>
+    </record>
+    <record id="material_plug_dc" model="mirabilenet.cot.material">
+        <field name="code">plug_dc</field>
+        <field name="name">Conector plug DC macho para alimentación</field>
+        <field name="unit">u</field>
+        <field name="purchase_unit">1</field>
+        <field name="price_ref">5</field>
+        <field name="optional" eval="False"/>
+        <field name="category">ACCESORIOS CCTV</field>
+        <field name="words">PLUG, DC, MACHO</field>
+    </record>
+    <record id="material_patch_cord" model="mirabilenet.cot.material">
+        <field name="code">patch_cord</field>
+        <field name="name">Patch cord Cat6 1 m</field>
+        <field name="unit">u</field>
+        <field name="purchase_unit">1</field>
+        <field name="price_ref">20</field>
+        <field name="optional" eval="False"/>
+        <field name="category">ACCESORIOS CABLEADO DE COBRE</field>
+        <field name="words">PATCH CORD, CAT6, 1 METRO</field>
+    </record>
+    <record id="kit_casa_4" model="mirabilenet.cot.kit">
+        <field name="code">casa_4</field>
+        <field name="name">Casa 4 cámaras</field>
+        <field name="sequence">0</field>
+        <field name="definition" eval="{'camaras': [{'cantidad': 2, 'ubicacion': 'exterior', 'resolucion_min': 4, 'poe': True, 'tipos': ['BULLET', 'TURRET', 'EYEBALL']}, {'cantidad': 2, 'ubicacion': 'interior', 'resolucion_min': 4, 'poe': True, 'tipos': ['DOMO', 'TURRET', 'EYEBALL']}], 'dias_grabacion': 15, 'codec': 'H.265', 'modo_grabacion': 'continua', 'nvr': {'poe_integrado': True, 'canales_extra': 0}, 'cable_m_por_camara': 25, 'mano_obra': {'punto_camara': 'por_camara', 'metro_cable': 'por_metro', 'config_nvr': 1, 'acceso_remoto': 1}, 'materiales': {'por_camara': {'conector_rj45': 2, 'caja_paso': 1}, 'por_metro': {'cable_utp': 1.0, 'canaleta': 0.5}, 'fijos': {'patch_cord': 1}}}"/>
+    </record>
+    <record id="kit_tienda_8" model="mirabilenet.cot.kit">
+        <field name="code">tienda_8</field>
+        <field name="name">Tienda 8 cámaras</field>
+        <field name="sequence">10</field>
+        <field name="definition" eval="{'camaras': [{'cantidad': 6, 'ubicacion': 'interior', 'resolucion_min': 4, 'poe': True, 'tipos': ['DOMO', 'TURRET', 'EYEBALL']}, {'cantidad': 2, 'ubicacion': 'exterior', 'resolucion_min': 4, 'poe': True, 'tipos': ['BULLET', 'TURRET']}], 'dias_grabacion': 20, 'codec': 'H.265', 'modo_grabacion': 'continua', 'nvr': {'poe_integrado': True, 'canales_extra': 0}, 'cable_m_por_camara': 25, 'mano_obra': {'punto_camara': 'por_camara', 'metro_cable': 'por_metro', 'config_nvr': 1, 'acceso_remoto': 1}, 'materiales': {'por_camara': {'conector_rj45': 2, 'caja_paso': 1}, 'por_metro': {'cable_utp': 1.0, 'canaleta': 0.6}, 'fijos': {'patch_cord': 1}}}"/>
+    </record>
+    <record id="kit_bodega_exterior" model="mirabilenet.cot.kit">
+        <field name="code">bodega_exterior</field>
+        <field name="name">Bodega exterior</field>
+        <field name="sequence">20</field>
+        <field name="definition" eval="{'camaras': [{'cantidad': 6, 'ubicacion': 'exterior', 'resolucion_min': 4, 'poe': True, 'tipos': ['BULLET', 'TURRET']}], 'dias_grabacion': 30, 'codec': 'H.265', 'modo_grabacion': 'continua', 'nvr': {'poe_integrado': True, 'canales_extra': 2}, 'cable_m_por_camara': 40, 'mano_obra': {'punto_camara': 'por_camara', 'metro_cable': 'por_metro', 'config_nvr': 1, 'acceso_remoto': 1}, 'materiales': {'por_camara': {'conector_rj45': 2, 'caja_paso': 1}, 'por_metro': {'cable_utp': 1.0, 'canaleta': 0.3}, 'fijos': {'patch_cord': 1}}}"/>
+    </record>
+    <record id="kit_colegio_16" model="mirabilenet.cot.kit">
+        <field name="code">colegio_16</field>
+        <field name="name">Colegio 16 cámaras</field>
+        <field name="sequence">30</field>
+        <field name="definition" eval="{'camaras': [{'cantidad': 10, 'ubicacion': 'interior', 'resolucion_min': 4, 'poe': True, 'tipos': ['DOMO', 'TURRET', 'EYEBALL']}, {'cantidad': 6, 'ubicacion': 'exterior', 'resolucion_min': 4, 'poe': True, 'tipos': ['BULLET', 'TURRET']}], 'dias_grabacion': 30, 'codec': 'H.265', 'modo_grabacion': 'continua', 'nvr': {'poe_integrado': False, 'canales_extra': 0}, 'cable_m_por_camara': 35, 'mano_obra': {'punto_camara': 'por_camara', 'metro_cable': 'por_metro', 'config_nvr': 1, 'config_switch': 1, 'acceso_remoto': 1}, 'materiales': {'por_camara': {'conector_rj45': 2, 'caja_paso': 1}, 'por_metro': {'cable_utp': 1.0, 'canaleta': 0.6}, 'fijos': {'patch_cord': 2}}}"/>
+    </record>
+    <record id="kit_casa_4_eco" model="mirabilenet.cot.kit">
+        <field name="code">casa_4_eco</field>
+        <field name="name">Casa 4 cámaras IP (económico)</field>
+        <field name="sequence">40</field>
+        <field name="definition" eval="{'gama': 'economica', 'camaras': [{'cantidad': 2, 'ubicacion': 'exterior', 'resolucion_min': 2, 'poe': True, 'tipos': ['BULLET', 'TURRET', 'EYEBALL']}, {'cantidad': 2, 'ubicacion': 'interior', 'resolucion_min': 2, 'poe': True, 'tipos': ['DOMO', 'TURRET', 'EYEBALL']}], 'dias_grabacion': 15, 'codec': 'H.265', 'modo_grabacion': 'continua', 'nvr': {'poe_integrado': True, 'canales_extra': 0}, 'cable_m_por_camara': 25, 'mano_obra': {'punto_camara': 'por_camara', 'metro_cable': 'por_metro', 'config_nvr': 1, 'acceso_remoto': 1}, 'materiales': {'por_camara': {'conector_rj45': 2, 'caja_paso': 1}, 'por_metro': {'cable_utp_5e': 1.0, 'canaleta': 0.5}, 'fijos': {'patch_cord': 1}}}"/>
+    </record>
+    <record id="kit_tienda_8_eco" model="mirabilenet.cot.kit">
+        <field name="code">tienda_8_eco</field>
+        <field name="name">Tienda 8 cámaras IP (económico)</field>
+        <field name="sequence">50</field>
+        <field name="definition" eval="{'gama': 'economica', 'camaras': [{'cantidad': 6, 'ubicacion': 'interior', 'resolucion_min': 2, 'poe': True, 'tipos': ['DOMO', 'TURRET', 'EYEBALL']}, {'cantidad': 2, 'ubicacion': 'exterior', 'resolucion_min': 2, 'poe': True, 'tipos': ['BULLET', 'TURRET']}], 'dias_grabacion': 15, 'codec': 'H.265', 'modo_grabacion': 'continua', 'nvr': {'poe_integrado': True, 'canales_extra': 0}, 'cable_m_por_camara': 25, 'mano_obra': {'punto_camara': 'por_camara', 'metro_cable': 'por_metro', 'config_nvr': 1, 'acceso_remoto': 1}, 'materiales': {'por_camara': {'conector_rj45': 2, 'caja_paso': 1}, 'por_metro': {'cable_utp_5e': 1.0, 'canaleta': 0.6}, 'fijos': {'patch_cord': 1}}}"/>
+    </record>
+    <record id="kit_casa_4_analogico" model="mirabilenet.cot.kit">
+        <field name="code">casa_4_analogico</field>
+        <field name="name">Casa 4 cámaras analógicas (económico)</field>
+        <field name="sequence">60</field>
+        <field name="definition" eval="{'tecnologia': 'analogica', 'gama': 'economica', 'camaras': [{'cantidad': 2, 'ubicacion': 'exterior', 'resolucion_min': 2, 'tipos': ['BULLET']}, {'cantidad': 2, 'ubicacion': 'interior', 'resolucion_min': 2, 'tipos': ['DOMO']}], 'dias_grabacion': 15, 'codec': 'H.265', 'modo_grabacion': 'continua', 'nvr': {'canales_extra': 0}, 'cable_m_por_camara': 25, 'mano_obra': {'punto_camara': 'por_camara', 'metro_cable': 'por_metro', 'config_nvr': 1, 'acceso_remoto': 1}, 'materiales': {'por_camara': {'video_balun': 2, 'plug_dc': 1, 'caja_paso': 1}, 'por_metro': {'cable_utp_5e': 1.0, 'canaleta': 0.5}}}"/>
+    </record>
+    <record id="kit_tienda_8_analogico" model="mirabilenet.cot.kit">
+        <field name="code">tienda_8_analogico</field>
+        <field name="name">Tienda 8 cámaras analógicas</field>
+        <field name="sequence">70</field>
+        <field name="definition" eval="{'tecnologia': 'analogica', 'camaras': [{'cantidad': 6, 'ubicacion': 'interior', 'resolucion_min': 2, 'tipos': ['DOMO']}, {'cantidad': 2, 'ubicacion': 'exterior', 'resolucion_min': 2, 'tipos': ['BULLET']}], 'dias_grabacion': 20, 'codec': 'H.265', 'modo_grabacion': 'continua', 'nvr': {'canales_extra': 0}, 'cable_m_por_camara': 25, 'mano_obra': {'punto_camara': 'por_camara', 'metro_cable': 'por_metro', 'config_nvr': 1, 'acceso_remoto': 1}, 'materiales': {'por_camara': {'video_balun': 2, 'plug_dc': 1, 'caja_paso': 1}, 'por_metro': {'cable_utp_5e': 1.0, 'canaleta': 0.6}}}"/>
+    </record>
+    <record id="kit_colegio_16_analogico" model="mirabilenet.cot.kit">
+        <field name="code">colegio_16_analogico</field>
+        <field name="name">Colegio 16 cámaras analógicas</field>
+        <field name="sequence">80</field>
+        <field name="definition" eval="{'tecnologia': 'analogica', 'camaras': [{'cantidad': 10, 'ubicacion': 'interior', 'resolucion_min': 2, 'tipos': ['DOMO']}, {'cantidad': 6, 'ubicacion': 'exterior', 'resolucion_min': 2, 'tipos': ['BULLET']}], 'dias_grabacion': 30, 'codec': 'H.265', 'modo_grabacion': 'continua', 'nvr': {'canales_extra': 0}, 'cable_m_por_camara': 35, 'mano_obra': {'punto_camara': 'por_camara', 'metro_cable': 'por_metro', 'config_nvr': 1, 'acceso_remoto': 1}, 'materiales': {'por_camara': {'video_balun': 2, 'plug_dc': 1, 'caja_paso': 1}, 'por_metro': {'cable_utp_5e': 1.0, 'canaleta': 0.6}}}"/>
+    </record>
+</odoo>

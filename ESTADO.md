@@ -7,6 +7,38 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
 
 ## Para retomar (22/11/2026)
 
+- **Cotizador de CCTV y redes, fase 2 del plan (23/11/2026, módulo nuevo `mirabilenet_cotizador`):**
+  - `documentacion/MIGRACION_ODOO19.md` es la especificación del Cotizador DigiCorp
+    (`referencia/`), no la migración de MIRABILENET ONE. **No va a GitHub** (márgenes del
+    negocio).
+  - Decisiones del usuario:
+    - mismo Odoo y misma empresa;
+    - solo CCTV, redes y lo que usan los kits;
+    - el bot manda la cotización directo con el margen del motor;
+    - el trabajador recibe el PDF con «Enviar al cliente»;
+    - quien cotiza, aprueba;
+    - IVA: modo «agregar» hasta confirmar si DigiCorp ya lo incluye;
+    - **márgenes fuera del repositorio**: en GitHub solo hay ejemplos, y los reales se cargan
+      con `documentacion/herramientas/cargar_margenes_cotizador.py` desde
+      `referencia/config/pricing.yaml`.
+  - **Hecho:**
+    - motor puro traído del original (precios, disco, pedido, selector, kits);
+    - cotización sobre `sale.order` con etapas, COT-AAAA-NNNN, precios congelados, IVA + IT
+      y ganancia interna;
+    - asistente «desde un kit o desde el pedido escrito»;
+    - catálogo con precio de venta;
+    - configuración de recargos, kits (los 10 del original), materiales, mano de obra y
+      ciudades;
+    - PDF sin datos internos.
+    - 12 pruebas. Instalado en `mira_nativo_test` con los márgenes reales (15 recargos).
+      Respaldo previo en `traslado_odoo/respaldo_antes_cotizador`.
+  - **Falta:**
+    - fase 3: conector DigiCorp (necesita las credenciales);
+    - fases 4 a 6: WhatsApp al trabajador y al cliente, herramientas del bot (flujos 17 y
+      15) y «cotizar» en el flujo 20;
+    - wkhtmltopdf en esta PC para el PDF real;
+    - productos reales del catálogo (los traerá el conector);
+    - las tarifas reales de mano de obra y viáticos.
 - **Personal y avisos de trabajo por WhatsApp (23/11/2026, módulo nuevo `mirabilenet_personal`):**
   - **Plantilla del personal e «Importar personal».** Los cargos son los roles que ya existen.
     En el usuario se guardan el WhatsApp, las zonas que atiende y el jefe directo.
@@ -587,7 +619,7 @@ env\Scripts\python.exe odoo-bin -c odoo.conf
 
 # Base de pruebas desde cero e instalación de todo, con sus pruebas (unos 6 minutos)
 env\Scripts\python.exe documentacion\herramientas\crear_base_nativo.py odoo.conf
-env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -i mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion,mirabilenet_fibra,mirabilenet_cartera,mirabilenet_modo_oscuro,mirabilenet_dashboard,mirabilenet_personal,hr_attendance,sale_management,purchase,point_of_sale,project,mrp,maintenance --without-demo=all --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079
+env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -i mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion,mirabilenet_fibra,mirabilenet_cartera,mirabilenet_modo_oscuro,mirabilenet_dashboard,mirabilenet_personal,mirabilenet_cotizador,hr_attendance,sale_management,purchase,point_of_sale,project,mrp,maintenance --without-demo=all --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079
 
 # Todas las pruebas sobre esa base ya creada (SIAT + MIRABILENET)
 env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -u mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079

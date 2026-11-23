@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cot_markup_user,recargos: lectura,model_mirabilenet_cot_markup,group_mirabilenet_cot_user,1,0,0,0
+access_cot_markup_manager,recargos: configuración,model_mirabilenet_cot_markup,group_mirabilenet_cot_manager,1,1,1,1
+access_cot_material_user,materiales: lectura,model_mirabilenet_cot_material,group_mirabilenet_cot_user,1,0,0,0
+access_cot_material_manager,materiales: configuración,model_mirabilenet_cot_material,group_mirabilenet_cot_manager,1,1,1,1
+access_cot_tariff_user,tarifas: lectura,model_mirabilenet_cot_tariff,group_mirabilenet_cot_user,1,0,0,0
+access_cot_tariff_manager,tarifas: configuración,model_mirabilenet_cot_tariff,group_mirabilenet_cot_manager,1,1,1,1
+access_cot_city_user,ciudades: lectura,model_mirabilenet_cot_city,group_mirabilenet_cot_user,1,0,0,0
+access_cot_city_manager,ciudades: configuración,model_mirabilenet_cot_city,group_mirabilenet_cot_manager,1,1,1,1
+access_cot_kit_user,kits: lectura,model_mirabilenet_cot_kit,group_mirabilenet_cot_user,1,0,0,0
+access_cot_kit_manager,kits: configuración,model_mirabilenet_cot_kit,group_mirabilenet_cot_manager,1,1,1,1
+access_cot_wizard,nueva cotización,model_mirabilenet_cot_wizard,group_mirabilenet_cot_user,1,1,1,1

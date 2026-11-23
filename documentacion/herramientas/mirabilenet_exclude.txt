@@ -19,3 +19,5 @@ __pycache__/
 .env.odoo
 /odoo.conf
 /deploy/odoo.conf
+# Información del negocio (márgenes de ganancia): no va a GitHub.
+/documentacion/MIGRACION_ODOO19.md
