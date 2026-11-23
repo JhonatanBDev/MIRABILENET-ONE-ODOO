@@ -122,6 +122,9 @@ class ConversationCommon(WhatsappCommon):
         cls.startClassPatcher(patch.dict(os.environ, ENV))
         Param = cls.env["ir.config_parameter"]
         Param.set_param("mirabilenet.n8n_client", "fake")
+        # Las pruebas entregan cada mensaje al instante; la espera para juntar mensajes
+        # seguidos tiene su propia prueba.
+        Param.set_param("mirabilenet.n8n_agrupar_segundos", "0")
         Param.set_param("mirabilenet.n8n_inbound_webhook_url",
                         "http://n8n:5678/webhook/mirabilenet-entrante")
         cls.api = cls.env["mirabilenet.n8n.api"]
@@ -150,6 +153,37 @@ class ConversationCommon(WhatsappCommon):
 
 @tagged("mirabilenet", "post_install", "-at_install")
 class TestConversations(ConversationCommon):
+
+    def test_messages_in_a_row_reach_the_assistant_as_one(self):
+        """«Hola», y enseguida la pregunta en otros mensajes: el asistente recibe todo junto."""
+        Param = self.env["ir.config_parameter"]
+        Param.set_param("mirabilenet.n8n_agrupar_segundos", "8")
+        Event = self.env["mirabilenet.n8n.event"]
+        self._incoming("Hola", wamid="wamid.R-1")
+        self._incoming("quiero saber", wamid="wamid.R-2")
+        self._incoming("qué planes tienen", wamid="wamid.R-3")
+        other = self._meta_text("Buenas", origin="59170000555", wamid="wamid.R-4")
+        self.Conversation._process_meta_incoming(other, "PN-N")
+        # Recién escribieron: se espera, no sale nada.
+        self.assertEqual(self._deliver(), [])
+        self.assertEqual(Event.search_count([("state", "=", "pendiente")]), 4)
+        # Pasó la espera: sale un evento por conversación, con los textos unidos.
+        self.env.cr.execute("UPDATE mirabilenet_n8n_event SET create_date = create_date - "
+                            "interval '20 seconds' WHERE state = 'pendiente'")
+        Event.invalidate_model()
+        received = self._deliver()
+        self.assertEqual(len(received), 2)
+        texts = sorted(r["payload"]["mensaje"]["texto"] for r in received)
+        self.assertEqual(texts, ["Buenas", "Hola\nquiero saber\nqué planes tienen"])
+        merged = next(r["payload"] for r in received if "planes" in r["payload"]["mensaje"]["texto"])
+        self.assertEqual(len(merged["mensajes_agrupados"]), 3)
+        self.assertFalse(Event.search_count([("state", "=", "pendiente")]))
+        # Un mensaje con varios renglones llega entero.
+        self._incoming("Hola\n\n¿qué planes tienen?\n¿y cuánto cuesta?", wamid="wamid.R-5")
+        Param.set_param("mirabilenet.n8n_agrupar_segundos", "0")
+        FakeN8NClient.reset()
+        self.assertEqual(self._deliver()[0]["payload"]["mensaje"]["texto"],
+                         "Hola\n\n¿qué planes tienen?\n¿y cuánto cuesta?")
 
     def test_incoming_is_registered_and_forwarded(self):
         conversation = self._incoming("Hola, ¿cuánto debo?")

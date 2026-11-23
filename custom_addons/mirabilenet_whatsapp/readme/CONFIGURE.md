@@ -10,3 +10,8 @@
 7. Parámetros del sistema: `mirabilenet.messaging_public_url` (dirección pública desde la que
    Meta descarga el QR) y `mirabilenet.n8n_controls_collection` (en `1`, los recordatorios los
    lleva n8n y aquí no se encolan).
+- **Mensajes seguidos:** si una persona manda varios mensajes de texto uno tras otro («hola»,
+  y enseguida la pregunta), Odoo espera unos segundos y se los pasa al asistente juntos, en
+  un solo mensaje. La espera es de 8 segundos desde el último mensaje y se cambia con el
+  parámetro `mirabilenet.n8n_agrupar_segundos` (0 la apaga). Los botones, los adjuntos y lo
+  que el sistema ya resolvió (bajas, comprobantes) no se juntan.

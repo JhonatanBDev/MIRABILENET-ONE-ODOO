@@ -7,6 +7,11 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
 
 ## Para retomar (22/11/2026)
 
+- **Mensajes seguidos al bot (23/11/2026, `mirabilenet_whatsapp`):** antes cada mensaje iba
+  solo a n8n y el bot contestaba al «hola» sin leer la pregunta que venía después. Ahora
+  `mirabilenet.n8n.event._group_bursts` espera 8 s desde el último mensaje (parámetro
+  `mirabilenet.n8n_agrupar_segundos`) y entrega uno solo con los textos unidos. Probado con
+  n8n real. No aplica a los mensajes del personal (flujo 20).
 - **Sitio web con estilo nuevo (23/11/2026, `mirabilenet_web` 19.0.2.2.0):**
   - Estilo limpio de titulares grandes, mosaicos y tarjetas (`static/src/scss/sitio.scss`).
     Portada nueva: dos portadas (fibra y videovigilancia), mosaico de cuatro servicios y los
