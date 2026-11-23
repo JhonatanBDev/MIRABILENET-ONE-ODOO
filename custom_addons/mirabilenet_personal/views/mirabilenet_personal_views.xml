@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Usuario: lo que necesita para recibir trabajo por WhatsApp -->
+    <record id="view_mirabilenet_users_form_staff" model="ir.ui.view">
+        <field name="name">res.users.mirabilenet.form.staff</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="mirabilenet_base.view_mirabilenet_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="Avisos de trabajo por WhatsApp">
+                    <group>
+                        <field name="mirabilenet_whatsapp"/>
+                        <field name="mirabilenet_staff_notify"/>
+                        <field name="mirabilenet_supervisor_id"/>
+                    </group>
+                    <group>
+                        <field name="mirabilenet_zone_ids" widget="many2many_tags"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_users_list_staff" model="ir.ui.view">
+        <field name="name">res.users.mirabilenet.list.staff</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="mirabilenet_base.view_mirabilenet_users_list"/>
+        <field name="arch" type="xml">
+            <field name="mirabilenet_branch_id" position="after">
+                <field name="mirabilenet_whatsapp" optional="show"/>
+                <field name="mirabilenet_zone_ids" widget="many2many_tags" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_user_wizard_form_staff" model="ir.ui.view">
+        <field name="name">mirabilenet.user.wizard.form.staff</field>
+        <field name="model">mirabilenet.user.wizard</field>
+        <field name="inherit_id" ref="mirabilenet_base.view_mirabilenet_user_wizard_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//footer" position="before">
+                <group string="Avisos de trabajo por WhatsApp">
+                    <group>
+                        <field name="staff_whatsapp" placeholder="71234567"/>
+                        <field name="staff_notify"/>
+                        <field name="staff_supervisor_id"/>
+                    </group>
+                    <group>
+                        <field name="staff_zone_ids" widget="many2many_tags"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Avería: cómo va la atención en campo -->
+    <record id="view_maintenance_request_form_staff" model="ir.ui.view">
+        <field name="name">maintenance.request.form.staff</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_mirabilenet_notify_again" type="object"
+                        string="Avisar de nuevo al técnico"
+                        invisible="not mirabilenet_service_id or not user_id"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page string="Atención en campo" name="mirabilenet_field"
+                      invisible="not mirabilenet_service_id">
+                    <group>
+                        <group>
+                            <field name="mirabilenet_dispatch_state"/>
+                            <field name="mirabilenet_assigned_at"/>
+                            <field name="mirabilenet_accepted_at"/>
+                            <field name="mirabilenet_closed_at"/>
+                        </group>
+                        <group>
+                            <field name="mirabilenet_result_note"/>
+                            <field name="mirabilenet_reminded"/>
+                            <field name="mirabilenet_supervisor_alerted"/>
+                        </group>
+                    </group>
+                    <field name="mirabilenet_notice_ids" readonly="1">
+                        <list>
+                            <field name="create_date" string="Fecha"/>
+                            <field name="user_id"/>
+                            <field name="kind"/>
+                            <field name="state"/>
+                            <field name="answer"/>
+                            <field name="error_detail"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_maintenance_request_list_staff" model="ir.ui.view">
+        <field name="name">maintenance.request.list.staff</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="stage_id" position="after">
+                <field name="mirabilenet_dispatch_state" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Avisos al personal -->
+    <record id="view_mirabilenet_staff_notice_list" model="ir.ui.view">
+        <field name="name">mirabilenet.staff.notice.list</field>
+        <field name="model">mirabilenet.staff.notice</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" decoration-danger="state == 'fallido'"
+                  decoration-muted="state == 'descartado'">
+                <field name="create_date" string="Fecha"/>
+                <field name="user_id"/>
+                <field name="kind"/>
+                <field name="request_id"/>
+                <field name="task_id" optional="hide"/>
+                <field name="state"/>
+                <field name="answer"/>
+                <field name="text" optional="hide"/>
+                <field name="error_detail" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_staff_notice_search" model="ir.ui.view">
+        <field name="name">mirabilenet.staff.notice.search</field>
+        <field name="model">mirabilenet.staff.notice</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="user_id"/>
+                <field name="request_id"/>
+                <filter name="failed" string="Con problemas"
+                        domain="[('state', 'in', ('fallido', 'descartado'))]"/>
+                <filter name="answered" string="Respondidos"
+                        domain="[('answered_at', '!=', False)]"/>
+                <group>
+                    <filter name="by_user" string="Persona" context="{'group_by': 'user_id'}"/>
+                    <filter name="by_kind" string="Aviso" context="{'group_by': 'kind'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_staff_notice" model="ir.actions.act_window">
+        <field name="name">Avisos al personal</field>
+        <field name="res_model">mirabilenet.staff.notice</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_mirabilenet_staff_template_list" model="ir.ui.view">
+        <field name="name">mirabilenet.staff.template.list</field>
+        <field name="model">mirabilenet.staff.template</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="kind"/>
+                <field name="meta_name"/>
+                <field name="language"/>
+                <field name="variables"/>
+                <field name="buttons"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_staff_template" model="ir.actions.act_window">
+        <field name="name">Plantillas de avisos al personal</field>
+        <field name="res_model">mirabilenet.staff.template</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <!-- Importar personal -->
+    <record id="view_mirabilenet_staff_import_form" model="ir.ui.view">
+        <field name="name">mirabilenet.staff.import.form</field>
+        <field name="model">mirabilenet.staff.import</field>
+        <field name="arch" type="xml">
+            <form string="Importar personal">
+                <field name="state" invisible="1"/>
+                <div invisible="state != 'draft'">
+                    <p>Cargue la plantilla con su personal: nombre, usuario, correo, WhatsApp,
+                        rol, región, sucursal, zonas que atiende y jefe directo. Primero verá
+                        qué se va a cargar; recién después se guarda.</p>
+                    <button name="action_download_template" type="object" class="btn-link"
+                            icon="fa-download" string="Descargar plantilla"/>
+                    <group>
+                        <field name="file" filename="filename"/>
+                        <field name="filename" invisible="1"/>
+                    </group>
+                </div>
+                <field name="summary" invisible="state == 'draft'" nolabel="1"/>
+                <group invisible="not review_file">
+                    <field name="review_file" filename="review_filename"/>
+                    <field name="review_filename" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="action_preview" type="object" string="Revisar"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_import" type="object" string="Cargar"
+                            class="btn-primary" invisible="state != 'preview'"/>
+                    <button name="action_back" type="object" string="Elegir otro archivo"
+                            invisible="state == 'draft'"/>
+                    <button special="cancel" string="Cerrar"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mirabilenet_staff_import" model="ir.actions.act_window">
+        <field name="name">Importar personal</field>
+        <field name="res_model">mirabilenet.staff.import</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

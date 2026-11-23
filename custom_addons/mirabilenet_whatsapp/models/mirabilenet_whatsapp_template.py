@@ -18,11 +18,13 @@ EVENTS = [
     ("servicio_suspendido", "Servicio suspendido"),
     ("servicio_reactivado", "Servicio reactivado"),
     ("incidencia_masiva", "Incidencia o mantenimiento"),
+    ("servicio_reparado", "Servicio reparado tras una avería"),
 ]
 #: Eventos con gancho vivo. Los demás se rechazan al encolar.
 ACTIVE_EVENTS = frozenset({
     "aviso_emitido", "recordatorio_pago", "aviso_vencido", "recordatorio_mora",
-    "comprobante_verificado", "comprobante_rechazado", "comprobante_recibido"})
+    "comprobante_verificado", "comprobante_rechazado", "comprobante_recibido",
+    "servicio_reparado"})
 #: Lista blanca cerrada de lo que una plantilla puede pedir. La plantilla nombra claves de
 #: aquí, nunca rutas de campos.
 VARIABLES = {

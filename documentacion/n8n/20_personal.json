@@ -1,0 +1,291 @@
+{
+  "id": "Prsnl20MrblNtWA",
+  "name": "MIRABILENET · 20 Personal: respuestas de técnicos",
+  "active": true,
+  "nodes": [
+    {
+      "id": "p20-webhook",
+      "name": "Recibir mensaje del personal",
+      "webhookId": "p20-mirabilenet-personal",
+      "notesInFlow": true,
+      "notes": "Credencial «MIRABILENET Webhook (JWT)»: passphrase = N8N_WEBHOOK_SECRET, HS256. Django firma un JWT de 2 minutos con el hash del cuerpo.",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mirabilenet-personal",
+        "authentication": "jwtAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "credentials": {
+        "jwtAuth": {
+          "id": "bpl2iAqOcUwRkfq3",
+          "name": "MIRABILENET Webhook (JWT)"
+        }
+      }
+    },
+    {
+      "id": "p20-hash",
+      "name": "Hash del cuerpo recibido",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "parameters": {
+        "binaryData": true,
+        "dataPropertyName": "hash_cuerpo"
+      }
+    },
+    {
+      "id": "p20-if",
+      "name": "¿El cuerpo coincide con la firma?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c10-if-1",
+              "leftValue": "={{ $json.hash_cuerpo }}",
+              "rightValue": "={{ $json.jwtPayload?.sha256 ?? '' }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "p20-ok",
+      "name": "Aceptar mensaje",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        660,
+        -120
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true } }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "p20-reject",
+      "name": "Rechazar cuerpo alterado",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        660,
+        120
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: false, detalle: 'El cuerpo no coincide con la firma.' } }}",
+        "options": {
+          "responseCode": 401
+        }
+      }
+    },
+    {
+      "id": "p20-model",
+      "name": "Modelo Gemini",
+      "notesInFlow": true,
+      "notes": "El modelo lo decide Django en cada mensaje (Mensajería → Bot con IA): principal, respaldo o ninguno si se agotó el cupo.",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        880,
+        160
+      ],
+      "parameters": {
+        "modelName": "models/gemini-flash-lite-latest",
+        "options": {
+          "maxOutputTokens": 2048,
+          "temperature": 0.2
+        }
+      },
+      "credentials": {
+        "googlePalmApi": {
+          "id": "pzyfLfB9SwjYQ68p",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Eres el asistente de operaciones de MIRABILENET (internet por fibra). Un técnico o alguien del personal escribió por WhatsApp. Decide qué quiso decir sobre sus averías.\n\nPersona: {{ $('Recibir mensaje del personal').item.json.body.persona.nombre }} (rol {{ $('Recibir mensaje del personal').item.json.body.persona.rol }})\nMensaje: {{ $('Recibir mensaje del personal').item.json.body.texto }}\nAverías abiertas (la primera es la más reciente): {{ JSON.stringify($('Recibir mensaje del personal').item.json.body.averias_abiertas) }}\n\nResponde SOLO un JSON, sin texto alrededor, con estas claves:\n{\"accion\": \"arreglado\" | \"no_resuelto\" | \"en_camino\" | \"nota\" | \"ninguna\", \"averia_id\": número o null, \"nota\": texto corto o \"\", \"respuesta\": texto breve y amable en español para la persona}\nReglas: «no_resuelto» necesita la nota del motivo. Si no menciona cuál avería, usa la primera. Si no habla de una avería, accion=\"ninguna\" y responde qué puede hacer.",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.7,
+      "position": [
+        880,
+        -120
+      ],
+      "id": "p20-chain",
+      "name": "Interpretar el mensaje"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = ($input.first().json.text || '').trim();\nconst m = raw.match(/\\{[\\s\\S]*\\}/);\nlet d = {};\ntry { d = m ? JSON.parse(m[0]) : {}; } catch (e) { d = {}; }\nconst ok = ['arreglado', 'no_resuelto', 'en_camino', 'nota', 'ninguna'];\nconst body = $('Recibir mensaje del personal').first().json.body;\nreturn [{ json: {\n  mensaje_id: body.mensaje_id,\n  accion: ok.includes(d.accion) ? d.accion : 'ninguna',\n  averia_id: Number.isInteger(d.averia_id) ? d.averia_id : null,\n  nota: typeof d.nota === 'string' ? d.nota.slice(0, 1000) : '',\n  respuesta: typeof d.respuesta === 'string' ? d.respuesta.slice(0, 900) : ''\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1100,
+        -120
+      ],
+      "id": "p20-parse",
+      "name": "Ordenar la decisión"
+    },
+    {
+      "id": "p20-send",
+      "name": "Avisar a Odoo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1320,
+        -120
+      ],
+      "onError": "continueRegularOutput",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Kv5LPHIDptIliTMh",
+          "name": "MIRABILENET API"
+        }
+      },
+      "notes": "Why HTTP: la API de MIRABILENET no tiene nodo propio. Django marca el modelo agotado por el día y cambia al de respaldo.",
+      "notesInFlow": true,
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8069/api/v1/messaging/n8n/personal/resultado",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 10000
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Recibir mensaje del personal": {
+      "main": [
+        [
+          {
+            "node": "Hash del cuerpo recibido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hash del cuerpo recibido": {
+      "main": [
+        [
+          {
+            "node": "¿El cuerpo coincide con la firma?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿El cuerpo coincide con la firma?": {
+      "main": [
+        [
+          {
+            "node": "Aceptar mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rechazar cuerpo alterado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aceptar mensaje": {
+      "main": [
+        [
+          {
+            "node": "Interpretar el mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Modelo Gemini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Interpretar el mensaje",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Interpretar el mensaje": {
+      "main": [
+        [
+          {
+            "node": "Ordenar la decisión",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ordenar la decisión": {
+      "main": [
+        [
+          {
+            "node": "Avisar a Odoo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "errorWorkflow": "XVfOGnpSqEJoVAgX",
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "pinData": {}
+}

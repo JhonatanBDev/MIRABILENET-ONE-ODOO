@@ -7,6 +7,30 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
 
 ## Para retomar (22/11/2026)
 
+- **Personal y avisos de trabajo por WhatsApp (23/11/2026, módulo nuevo `mirabilenet_personal`):**
+  - **Plantilla del personal e «Importar personal».** Los cargos son los roles que ya existen.
+    En el usuario se guardan el WhatsApp, las zonas que atiende y el jefe directo.
+  - **Averías.** Se asignan solas al técnico de la zona (el de menos carga) y le llega un
+    WhatsApp con la caja NAP, el puerto, el link de Maps y el diagnóstico de los vecinos.
+    - Botones «Voy en camino», «Arreglado» y «No se pudo».
+    - Arreglado: cierra la avería, avisa al cliente (evento nuevo `servicio_reparado`) y a
+      los demás técnicos de la zona.
+    - No se pudo: pide el motivo y avisa al jefe.
+    - Recordatorios a la hora y a las 8 horas.
+  - **Tareas de proyectos.** Las recibe cualquier persona, con «Recibido» y «Terminada».
+  - **Odoo reconoce al personal** que escribe, y no lo pasa al bot de ventas.
+  - **Flujo n8n «20 Personal».** Usa Gemini para lo que escriben con sus palabras. Probado de
+    punta a punta.
+  - **Cambios en `mirabilenet_whatsapp`:** las plantillas pueden llevar botones de respuesta
+    rápida.
+  - **Pruebas:** 16 propias y 130 contando WhatsApp y fibra.
+  - **Respaldo previo:** `traslado_odoo/respaldo_antes_personal`.
+  - **Falta (del usuario):**
+    - crear en Meta las 6 plantillas (textos en `mirabilenet_personal/readme/CONFIGURE.md`)
+      y la del cliente «servicio reparado»;
+    - cargar el personal real con su WhatsApp y sus zonas;
+    - que los servicios tengan nodo con zona;
+    - configurar la mensajería de Meta en esta base.
 - **n8n traído de la otra PC y conectado a Odoo (23/11/2026):**
   - n8n 2.43.7 en Docker, en `C:\ING.SISTEMAS\n8n_local` (volumen `n8n_local`, puerto 5679),
     con los 10 flujos (9 activos) y las 5 credenciales.
@@ -563,7 +587,7 @@ env\Scripts\python.exe odoo-bin -c odoo.conf
 
 # Base de pruebas desde cero e instalación de todo, con sus pruebas (unos 6 minutos)
 env\Scripts\python.exe documentacion\herramientas\crear_base_nativo.py odoo.conf
-env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -i mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion,mirabilenet_fibra,mirabilenet_cartera,mirabilenet_modo_oscuro,mirabilenet_dashboard,hr_attendance,sale_management,purchase,point_of_sale,project,mrp,maintenance --without-demo=all --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079
+env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -i mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion,mirabilenet_fibra,mirabilenet_cartera,mirabilenet_modo_oscuro,mirabilenet_dashboard,mirabilenet_personal,hr_attendance,sale_management,purchase,point_of_sale,project,mrp,maintenance --without-demo=all --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079
 
 # Todas las pruebas sobre esa base ya creada (SIAT + MIRABILENET)
 env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -u mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079

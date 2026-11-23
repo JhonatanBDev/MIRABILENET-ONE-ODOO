@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_staff_notice_user,aviso al personal: lectura,model_mirabilenet_staff_notice,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_staff_notice_admin,aviso al personal: administración,model_mirabilenet_staff_notice,mirabilenet_base.group_mirabilenet_user_admin,1,1,0,0
+access_staff_template_user,plantilla del personal: lectura,model_mirabilenet_staff_template,mirabilenet_base.group_mirabilenet_user,1,0,0,0
+access_staff_template_admin,plantilla del personal: administración,model_mirabilenet_staff_template,mirabilenet_base.group_mirabilenet_user_admin,1,1,1,1
+access_staff_inbox_admin,mensajes del personal,model_mirabilenet_staff_inbox,mirabilenet_base.group_mirabilenet_user_admin,1,0,0,0
+access_staff_import,importar personal,model_mirabilenet_staff_import,mirabilenet_base.group_mirabilenet_user_admin,1,1,1,1

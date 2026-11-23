@@ -1,0 +1,7 @@
+﻿nombre;usuario;correo;whatsapp;rol;region;sucursal;zonas;jefe;activo
+María Gerente Ejemplo;maria.gerente;gerencia@ejemplo.bo;70000001;gerencia;;;;;si
+Pedro Subgerente Ejemplo;pedro.sub;;70000002;subgerente;YAP;YAP-CENTRAL;;maria.gerente;si
+Juan Técnico Ejemplo;juan.tecnico;;70000003;tecnico;YAP;YAP-CENTRAL;Z-NORTE, Z-CENTRO;pedro.sub;si
+Ana Técnica Ejemplo;ana.tecnica;;70000004;tecnico;YAP;YAP-CENTRAL;Z-SUR;pedro.sub;si
+Luis NOC Ejemplo;luis.noc;;70000005;noc;YAP;YAP-CENTRAL;;pedro.sub;si
+Carla Pasante Ejemplo;carla.pasante;;70000006;pasante;YAP;YAP-CENTRAL;;luis.noc;si

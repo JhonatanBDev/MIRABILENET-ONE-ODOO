@@ -5,6 +5,7 @@ En esta carpeta hay tres plantillas con datos de EJEMPLO. Los nombres, carnets, 
 IP y series son inventados: borre esas filas y ponga las suyas antes de importar.
 
   plantilla_cartera_clientes.csv   clientes, servicios, cuentas PPPoE y ONU
+  plantilla_personal.csv           personal: rol, región, WhatsApp, zonas y jefe
   plantilla_cajas_nap.csv          cajas NAP de la red de fibra
   plantilla_tramos_fibra.csv       tramos (recorridos) de la red de fibra
 
@@ -136,6 +137,18 @@ tipo_cable, estado (activa o por_verificar). Opcionales: color y geometria_json.
 - El ramal de un tramo es lo que va antes de «:» en su nombre («Ruta B: Central - 1B»).
 - El recorrido exacto se carga después con «Importar KML/KMZ» (archivo de Google Earth).
 
+
+4. PERSONAL  (plantilla_personal.csv)
+--------------------------------------
+MIRABILENET > Usuarios > Importar personal. Una fila por persona:
+  nombre, usuario, correo, whatsapp, rol, region, sucursal, zonas, jefe, activo
+- rol: los que ya existen (gerencia, admin regional, noc, tecnico, finanzas, cajero,
+  cobrador, almacenista, vendedor, auditor, pasante...). «gerente» = gerencia y
+  «subgerente» = admin regional.
+- whatsapp: el celular (71234567 o 59171234567). Ahí le llegan sus avisos de trabajo.
+- zonas: códigos de zona separados por coma. Las averías de esas zonas le llegan a él.
+- jefe: el usuario de su jefe directo (puede estar en el mismo archivo).
+Primero «Revisar», después «Cargar». Lo que tiene problemas sale en un CSV aparte.
 
 Antes de importar datos reales
 ------------------------------

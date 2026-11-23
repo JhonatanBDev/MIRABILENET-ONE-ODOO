@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_mirabilenet_staff_import" name="Importar personal"
+              parent="mirabilenet_base.menu_mirabilenet_users_root"
+              action="action_mirabilenet_staff_import" sequence="30"
+              groups="mirabilenet_base.group_mirabilenet_user_admin"/>
+    <menuitem id="menu_mirabilenet_staff_notice" name="Avisos al personal"
+              parent="mirabilenet_base.menu_mirabilenet_users_root"
+              action="action_mirabilenet_staff_notice" sequence="40"/>
+    <menuitem id="menu_mirabilenet_staff_template" name="Plantillas de avisos"
+              parent="mirabilenet_base.menu_mirabilenet_users_root"
+              action="action_mirabilenet_staff_template" sequence="50"
+              groups="mirabilenet_base.group_mirabilenet_user_admin"/>
+</odoo>

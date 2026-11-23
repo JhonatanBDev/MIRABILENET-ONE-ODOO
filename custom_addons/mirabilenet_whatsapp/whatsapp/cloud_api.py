@@ -92,7 +92,7 @@ def _peticion(metodo, url, token, cuerpo=None):
 def enviar_plantilla(
     *, phone_number_id, token, destino, plantilla, idioma, parametros,
     header_image_url="", requiere_imagen_encabezado=False,
-    parameter_format="POSITIONAL", parameter_names=None, api_version="v21.0"
+    parameter_format="POSITIONAL", parameter_names=None, api_version="v21.0", botones=None
 ):
     """Envia un mensaje de plantilla. Devuelve el `wa_message_id`.
 
@@ -156,6 +156,13 @@ def enviar_plantilla(
                 }
                 for i in range(len(valores))
             ],
+        })
+    # Botones de respuesta rápida de la plantilla: cada uno lleva el dato que vuelve en la
+    # respuesta (button.payload), en el mismo orden en que se declararon en Meta.
+    for indice, payload in enumerate(botones or []):
+        componentes.append({
+            "type": "button", "sub_type": "quick_reply", "index": str(indice),
+            "parameters": [{"type": "payload", "payload": str(payload)[:256]}],
         })
     if componentes:
         cuerpo["template"]["components"] = componentes

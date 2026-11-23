@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cron_dispatch_staff_notices" model="ir.cron">
+        <field name="name">MIRABILENET: enviar avisos al personal</field>
+        <field name="model_id" ref="model_mirabilenet_staff_notice"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_dispatch()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+    </record>
+    <record id="cron_deliver_staff_inbox" model="ir.cron">
+        <field name="name">MIRABILENET: mensajes del personal hacia n8n</field>
+        <field name="model_id" ref="model_mirabilenet_staff_inbox"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_deliver()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+    </record>
+    <record id="cron_staff_reminders" model="ir.cron">
+        <field name="name">MIRABILENET: recordar averías sin atender</field>
+        <field name="model_id" ref="maintenance.model_maintenance_request"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_mirabilenet_reminders()</field>
+        <field name="interval_number">15</field>
+        <field name="interval_type">minutes</field>
+    </record>
+</odoo>

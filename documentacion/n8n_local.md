@@ -31,6 +31,20 @@ Nada de esto está dentro del proyecto `odoo\`.
 - **Odoo entrega los eventos con un cron**, así que hay que arrancarlo con `--max-cron-threads 1` o
   más.
 
+## Flujo «20 Personal» (técnicos y personal)
+
+Lo que el personal escribe con sus palabras, por ejemplo «ya quedó, era el conector», le
+llega a n8n en `/webhook/mirabilenet-personal`, firmado igual que los mensajes de clientes.
+- Gemini lo interpreta y n8n le contesta a Odoo en
+  `/api/v1/messaging/n8n/personal/resultado`.
+- En Odoo, el parámetro `mirabilenet.n8n_staff_webhook_url` vale
+  `http://127.0.0.1:5679/webhook/mirabilenet-personal`.
+- El flujo se arma con `documentacion/herramientas/generar_flujo_20_personal.py`, a partir
+  de los flujos 10 y 15, así usa las mismas credenciales. El resultado está en
+  `documentacion/n8n/20_personal.json`.
+- Probado de punta a punta el 23/11/2026: el técnico escribió con sus palabras, Gemini lo
+  entendió como «arreglado» y Odoo cerró la avería con la nota.
+
 ## Arrancar
 
 1. Abrir Docker Desktop. n8n arranca solo (`restart: unless-stopped`). Si no:

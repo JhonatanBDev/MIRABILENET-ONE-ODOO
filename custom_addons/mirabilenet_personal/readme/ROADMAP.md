@@ -1,0 +1,3 @@
+- Agenda de instalaciones con fecha, asignadas igual que las averías.
+- Turnos y disponibilidad de los técnicos (hoy se reparte por carga, no por turno).
+- Foto del trabajo terminado adjunta a la avería.

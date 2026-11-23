@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Los nombres y el orden de las variables tienen que coincidir con las plantillas
+         aprobadas en Meta (los textos sugeridos están en readme/CONFIGURE.md). -->
+    <record id="tpl_averia_asignada" model="mirabilenet.staff.template">
+        <field name="kind">averia_asignada</field>
+        <field name="meta_name">averia_asignada</field>
+        <field name="variables">persona, referencia, cliente, telefono, direccion, caja, puerto, vecinos, mapa</field>
+        <field name="buttons">en_camino, arreglado, no_resuelto</field>
+    </record>
+    <record id="tpl_averia_recordatorio" model="mirabilenet.staff.template">
+        <field name="kind">averia_recordatorio</field>
+        <field name="meta_name">averia_recordatorio</field>
+        <field name="variables">persona, referencia, cliente, caja, horas</field>
+        <field name="buttons">en_camino, arreglado, no_resuelto</field>
+    </record>
+    <record id="tpl_averia_resuelta" model="mirabilenet.staff.template">
+        <field name="kind">averia_resuelta</field>
+        <field name="meta_name">averia_resuelta</field>
+        <field name="variables">persona, tecnico, referencia, caja, pendientes_caja, pendientes_zona</field>
+    </record>
+    <record id="tpl_averia_no_resuelta" model="mirabilenet.staff.template">
+        <field name="kind">averia_no_resuelta</field>
+        <field name="meta_name">averia_no_resuelta</field>
+        <field name="variables">persona, tecnico, referencia, cliente, caja, nota</field>
+    </record>
+    <record id="tpl_averia_sin_atender" model="mirabilenet.staff.template">
+        <field name="kind">averia_sin_atender</field>
+        <field name="meta_name">averia_sin_atender</field>
+        <field name="variables">persona, tecnico, referencia, cliente, horas</field>
+    </record>
+    <record id="tpl_tarea_asignada" model="mirabilenet.staff.template">
+        <field name="kind">tarea_asignada</field>
+        <field name="meta_name">tarea_asignada</field>
+        <field name="variables">persona, tarea, proyecto, fecha_limite, asignado_por</field>
+        <field name="buttons">recibido, terminada</field>
+    </record>
+</odoo>

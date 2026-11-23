@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="param_horas_aceptar" model="ir.config_parameter">
+        <field name="key">mirabilenet.personal_horas_aceptar</field>
+        <field name="value">1</field>
+    </record>
+    <record id="param_horas_cerrar" model="ir.config_parameter">
+        <field name="key">mirabilenet.personal_horas_cerrar</field>
+        <field name="value">8</field>
+    </record>
+</odoo>
