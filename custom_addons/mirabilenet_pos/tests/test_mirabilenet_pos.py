@@ -95,3 +95,25 @@ class TestMirabilenetPos(TestPoSCommon):
         Config = self.env["pos.config"]
         self.assertFalse(Config.with_user(self.cajero_s).search([("id", "=", self.config.id)]))
         self.assertTrue(self.cajero_n.has_group("point_of_sale.group_pos_user"))
+
+    def test_saving_settings_keeps_the_branch_pricelist(self):
+        """Con «Listas de precios» apagada, guardar Ajustes no archiva la de las sucursales y
+        el aviso de archivado no sale por ella."""
+        Settings = self.env["res.config.settings"].sudo()
+        pricelist = self.env.ref("mirabilenet_pos.pricelist_branch").sudo()
+        pricelist.action_unarchive()  # la base de pruebas del punto de venta la deja archivada
+        others = self.env["product.pricelist"].sudo().search([("id", "!=", pricelist.id)])
+        others.action_archive()
+        self.env.ref("base.group_user").sudo().write(
+            {"implied_ids": [(3, self.env.ref("product.group_product_pricelist").id)]})
+        settings = Settings.create({"group_product_pricelist": False})
+        self.assertFalse(settings._onchange_group_sale_pricelist())
+        settings.execute()
+        pricelist.invalidate_recordset()
+        self.assertTrue(pricelist.active)
+        self.assertEqual(self.config.pricelist_id, pricelist)
+        # Si hubiera otra lista activa, el aviso sí sale.
+        others[:1].action_unarchive()
+        if others:
+            self.assertIn("warning", Settings.create(
+                {"group_product_pricelist": False})._onchange_group_sale_pricelist())

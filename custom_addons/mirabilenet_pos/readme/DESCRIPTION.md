@@ -28,3 +28,7 @@ con la sucursal y la venta con la red. OCA no tiene para la 19 nada que cubra es
   (MIRABILENET > Cobros > Facturas a clientes > Registrar pago), con el diario de caja de su
   sucursal.
 - Una sucursal en otra moneda o empresa necesita su propia lista de precios.
+- **Lista de precios de las sucursales** («Sucursales MIRABILENET», planes a Bs 0 en caja):
+  funciona con la opción «Listas de precios» de Ajustes apagada, a propósito (encendida, las
+  ventas y el sitio tomarían esa lista). Guardar Ajustes no la archiva y el aviso «se
+  archivarán todas las listas de precios activas» no sale por ella.

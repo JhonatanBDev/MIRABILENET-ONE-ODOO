@@ -7,6 +7,10 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
 
 ## Para retomar (22/11/2026)
 
+- **Aviso de listas de precios en Ajustes (23/11/2026, `mirabilenet_pos`):** al abrir Ajustes
+  salía «se archivarán todas las listas de precios activas» y, al guardar cualquier ajuste,
+  Odoo archivaba la lista de las sucursales (la caja habría cobrado los planes). Ahora el
+  aviso no cuenta esa lista y se reactiva al guardar. La opción sigue apagada a propósito.
 - **Mensajes seguidos al bot (23/11/2026, `mirabilenet_whatsapp`):** antes cada mensaje iba
   solo a n8n y el bot contestaba al «hola» sin leer la pregunta que venía después. Ahora
   `mirabilenet.n8n.event._group_bursts` espera 8 s desde el último mensaje (parámetro
