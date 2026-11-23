@@ -25,7 +25,7 @@
             <!-- Cabecera -->
             <div class="o_mn_header">
                 <div>
-                    <h2 class="mb-0">Dashboard</h2>
+                    <h2 class="mb-0" t-translation="off">Dashboard</h2>
                     <div class="text-muted">
                         Resumen general del sistema · <t t-esc="data?.titulo_region"/>
                     </div>
@@ -289,7 +289,7 @@
                     </div>
                     <div class="o_mn_card">
                         <div class="o_mn_card_head">
-                            <h5>Red</h5>
+                            <h5 t-translation="off">Red</h5>
                             <a href="#" class="small" t-on-click.prevent="() => this.open('routers_total')">Ver routers →</a>
                         </div>
                         <div class="o_mn_stats">
