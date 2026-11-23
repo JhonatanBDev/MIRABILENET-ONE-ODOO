@@ -1,0 +1,12 @@
+[options]
+; Copiar como odoo.conf en la carpeta odoo y completar las dos contraseñas.
+; odoo.conf no se sube a GitHub.
+admin_passwd = CAMBIAR_contraseña_maestra_de_odoo
+db_host = localhost
+db_port = 5432
+db_user = admin
+db_password = CAMBIAR_contraseña_de_postgresql
+db_name = odoo
+addons_path = addons,custom_addons,oca/contract,oca/event,oca/mis-builder,oca/reporting-engine,oca/server-ux,oca/geospatial,oca/web
+; Donde quedó instalado wkhtmltopdf 0.12.6 (para los PDF).
+bin_path = C:/Program Files/wkhtmltopdf/bin

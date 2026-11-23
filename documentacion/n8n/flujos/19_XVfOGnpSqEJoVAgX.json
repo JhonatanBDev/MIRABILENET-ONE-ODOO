@@ -1,0 +1,80 @@
+{
+  "updatedAt": "2026-11-18T06:32:13.514Z",
+  "createdAt": "2026-10-28T22:47:40.940Z",
+  "id": "XVfOGnpSqEJoVAgX",
+  "name": "MIRABILENET · 19 Alertas de errores",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "c1900000-0000-4000-8000-000000000001",
+      "name": "Cuando falla un workflow",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "c1900000-0000-4000-8000-000000000002",
+      "name": "Registrar alerta en el panel",
+      "notesInFlow": true,
+      "notes": "Why HTTP: la API de MIRABILENET no tiene nodo propio. Las alertas quedan en el panel (Mensajería → Alertas n8n); la misma falla suma repeticiones en vez de duplicarse.",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 3000,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8069/api/v1/messaging/n8n/alerts",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { workflow: $json.workflow?.name || 'desconocido', nodo: $json.execution?.lastNodeExecuted || $json.trigger?.error?.node?.name || '', mensaje: ($json.execution?.error?.message || $json.trigger?.error?.message || 'Error sin mensaje').slice(0, 1000), ejecucion_id: String($json.execution?.id || '') } }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Kv5LPHIDptIliTMh",
+          "name": "MIRABILENET API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cuando falla un workflow": {
+      "main": [
+        [
+          {
+            "node": "Registrar alerta en el panel",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "4b3de968-21e9-49a9-8be1-7690d461d3d4",
+  "activeVersionId": "4b3de968-21e9-49a9-8be1-7690d461d3d4",
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": []
+}

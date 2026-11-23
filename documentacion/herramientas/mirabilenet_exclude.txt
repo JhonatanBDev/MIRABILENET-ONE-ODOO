@@ -26,3 +26,7 @@ __pycache__/
 /documentacion/proyecto_de_grado/
 # Archivos temporales de Office (aparecen mientras el documento esta abierto).
 ~$*
+# Portada del repositorio en GitHub (lo demás de .github es de Odoo).
+!/.github/
+/.github/*
+!/.github/README.md

@@ -1,0 +1,239 @@
+{
+  "updatedAt": "2026-11-18T06:32:01.123Z",
+  "createdAt": "2026-10-28T22:48:01.993Z",
+  "id": "h752DjPN6Ra90U6a",
+  "name": "MIRABILENET · 11 Enviar mensaje",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "c1100000-0000-4000-8000-000000000001",
+      "name": "Al ser llamado",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "conversacion_id",
+              "type": "number"
+            },
+            {
+              "name": "tipo",
+              "type": "string"
+            },
+            {
+              "name": "contenido",
+              "type": "object"
+            },
+            {
+              "name": "clave",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c1100000-0000-4000-8000-000000000002",
+      "name": "Pedir el envío a Django",
+      "notesInFlow": true,
+      "notes": "Why HTTP: la API de MIRABILENET no tiene nodo propio. Django aplica las reglas (ventana de 24 h, persona atendiendo, baja, tope por hora, idempotencia por clave) y envía por el canal de la conversación.",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8069/api/v1/messaging/n8n/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { conversacion_id: $json.conversacion_id, tipo: $json.tipo, contenido: $json.contenido, clave: $json.clave } }}",
+        "options": {
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Kv5LPHIDptIliTMh",
+          "name": "MIRABILENET API"
+        }
+      }
+    },
+    {
+      "id": "c1100000-0000-4000-8000-000000000003",
+      "name": "¿Falló el servidor?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c11-if-1",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 500,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c1100000-0000-4000-8000-000000000004",
+      "name": "Error inesperado",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        720,
+        -120
+      ],
+      "parameters": {
+        "errorMessage": "={{ 'Django respondió HTTP ' + $json.statusCode + ' al pedir un envío' }}"
+      }
+    },
+    {
+      "id": "c1100000-0000-4000-8000-000000000005",
+      "name": "Return resultado del envío",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        720,
+        120
+      ],
+      "parameters": {
+        "mode": "manual",
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c11-r-1",
+              "name": "ok",
+              "value": "={{ $json.statusCode < 300 }}",
+              "type": "boolean"
+            },
+            {
+              "id": "c11-r-2",
+              "name": "mensaje_id",
+              "value": "={{ $json.body?.id ?? null }}",
+              "type": "number"
+            },
+            {
+              "id": "c11-r-3",
+              "name": "estado",
+              "value": "={{ $json.body?.estado ?? '' }}",
+              "type": "string"
+            },
+            {
+              "id": "c11-r-4",
+              "name": "duplicado",
+              "value": "={{ $json.body?.duplicado ?? false }}",
+              "type": "boolean"
+            },
+            {
+              "id": "c11-r-5",
+              "name": "codigo",
+              "value": "={{ $json.body?.codigo ?? ($json.statusCode < 300 ? '' : 'http_' + $json.statusCode) }}",
+              "type": "string"
+            },
+            {
+              "id": "c11-r-6",
+              "name": "detalle",
+              "value": "={{ $json.body?.detail ?? '' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Al ser llamado": {
+      "main": [
+        [
+          {
+            "node": "Pedir el envío a Django",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pedir el envío a Django": {
+      "main": [
+        [
+          {
+            "node": "¿Falló el servidor?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Falló el servidor?": {
+      "main": [
+        [
+          {
+            "node": "Error inesperado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Return resultado del envío",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "errorWorkflow": "XVfOGnpSqEJoVAgX",
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "f066770a-1c44-4ecc-9018-43dfd970ba54",
+  "activeVersionId": "f066770a-1c44-4ecc-9018-43dfd970ba54",
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": []
+}

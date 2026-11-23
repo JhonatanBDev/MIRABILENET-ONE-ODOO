@@ -1,0 +1,258 @@
+{
+  "updatedAt": "2026-11-18T06:32:04.498Z",
+  "createdAt": "2026-10-28T23:42:37.994Z",
+  "id": "5T15dqzYXW14WIwv",
+  "name": "MIRABILENET · 14 Cobro: asociar comprobante al aviso",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "c1400000-0000-4000-8000-000000000001",
+      "name": "Al ser llamado",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "conversacion_id",
+              "type": "number"
+            },
+            {
+              "name": "mensaje_id",
+              "type": "number"
+            },
+            {
+              "name": "opcion_id",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c1400000-0000-4000-8000-000000000002",
+      "name": "Asociar en Django",
+      "notesInFlow": true,
+      "notes": "Why HTTP: la API de MIRABILENET no tiene nodo propio. Django comprueba que el comprobante y el aviso sean del cliente de esta conversación y que nadie lo haya revisado.",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "=http://host.docker.internal:8069/api/v1/messaging/n8n/conversations/{{ $json.conversacion_id }}/proofs/{{ $json.opcion_id.split(':')[1] }}/charge",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { aviso_id: Number($json.opcion_id.split(':')[3]) } }}",
+        "options": {
+          "timeout": 10000,
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Kv5LPHIDptIliTMh",
+          "name": "MIRABILENET API"
+        }
+      }
+    },
+    {
+      "id": "c1400000-0000-4000-8000-000000000003",
+      "name": "¿Falló el servidor?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c14-if-1",
+              "leftValue": "={{ $json.statusCode }}",
+              "rightValue": 500,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c1400000-0000-4000-8000-000000000004",
+      "name": "Error inesperado",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        720,
+        -120
+      ],
+      "parameters": {
+        "errorMessage": "={{ 'Django respondió HTTP ' + $json.statusCode + ' al asociar un comprobante' }}"
+      }
+    },
+    {
+      "id": "c1400000-0000-4000-8000-000000000005",
+      "name": "Confirmar al cliente",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        120
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "h752DjPN6Ra90U6a",
+          "mode": "list",
+          "cachedResultName": "MIRABILENET · 11 Enviar mensaje"
+        },
+        "mode": "each",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "conversacion_id": "={{ $('Al ser llamado').item.json.conversacion_id }}",
+            "tipo": "texto",
+            "contenido": "={{ { texto: $json.statusCode === 200 ? 'Listo: tu comprobante quedó asociado al aviso ' + $json.body.aviso_numero + ' (saldo ' + $json.body.saldo + ' ' + $json.body.moneda + '). Nuestro equipo lo va a revisar y te avisaremos por aquí.' : 'No pude asociar el comprobante: ya fue revisado o ese aviso ya no está pendiente. Si necesitas ayuda, escribe AYUDA.' } }}",
+            "clave": "={{ 'asociar:' + $('Al ser llamado').item.json.mensaje_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "conversacion_id",
+              "displayName": "conversacion_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "tipo",
+              "displayName": "tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "contenido",
+              "displayName": "contenido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            },
+            {
+              "id": "clave",
+              "displayName": "clave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Al ser llamado": {
+      "main": [
+        [
+          {
+            "node": "Asociar en Django",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Asociar en Django": {
+      "main": [
+        [
+          {
+            "node": "¿Falló el servidor?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Falló el servidor?": {
+      "main": [
+        [
+          {
+            "node": "Error inesperado",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Confirmar al cliente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "errorWorkflow": "XVfOGnpSqEJoVAgX",
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "f92a5d31-71b1-42b9-87f7-78fcfb760aed",
+  "activeVersionId": "f92a5d31-71b1-42b9-87f7-78fcfb760aed",
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": []
+}

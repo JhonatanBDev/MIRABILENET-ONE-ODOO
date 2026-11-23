@@ -1,0 +1,152 @@
+{
+  "updatedAt": "2026-11-18T06:32:02.182Z",
+  "createdAt": "2026-10-28T22:48:23.956Z",
+  "id": "QFTqkvLp9zBGWuxM",
+  "name": "MIRABILENET · 12 Eco de prueba",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "c1200000-0000-4000-8000-000000000001",
+      "name": "Al ser llamado",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "conversacion_id",
+              "type": "number"
+            },
+            {
+              "name": "mensaje_id",
+              "type": "number"
+            },
+            {
+              "name": "tipo",
+              "type": "string"
+            },
+            {
+              "name": "texto",
+              "type": "string"
+            },
+            {
+              "name": "opcion_id",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c1200000-0000-4000-8000-000000000002",
+      "name": "Responder el eco",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        260,
+        0
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "h752DjPN6Ra90U6a",
+          "mode": "list",
+          "cachedResultName": "MIRABILENET · 11 Enviar mensaje"
+        },
+        "mode": "each",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "conversacion_id": "={{ $json.conversacion_id }}",
+            "tipo": "={{ $json.opcion_id ? 'texto' : 'botones' }}",
+            "contenido": "={{ $json.opcion_id ? { texto: 'Elegiste «' + $json.texto + '». El circuito funciona en los dos sentidos.' } : { texto: $json.tipo === 'ubicacion' ? 'Recibí tu ubicación. ¿Llegó bien la prueba?' : 'Recibí: «' + $json.texto + '». ¿Llegó bien la prueba?', botones: [{ id: 'eco_si', titulo: 'Sí, funciona' }, { id: 'eco_no', titulo: 'No funciona' }] } }}",
+            "clave": "={{ 'eco:' + $json.mensaje_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "conversacion_id",
+              "displayName": "conversacion_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "tipo",
+              "displayName": "tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "contenido",
+              "displayName": "contenido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            },
+            {
+              "id": "clave",
+              "displayName": "clave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Al ser llamado": {
+      "main": [
+        [
+          {
+            "node": "Responder el eco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "errorWorkflow": "XVfOGnpSqEJoVAgX",
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "85d6f6ef-1620-416f-a73b-f1c468adeb9f",
+  "activeVersionId": "85d6f6ef-1620-416f-a73b-f1c468adeb9f",
+  "versionCounter": 4,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": []
+}

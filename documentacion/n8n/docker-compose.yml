@@ -1,0 +1,23 @@
+# n8n de MIRABILENET en esta PC, conectado a Odoo (ver documentacion/n8n_local.md del proyecto).
+# Los datos (flujos, credenciales y su clave) viven en el volumen n8n_local.
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:2.43.7
+    container_name: n8n_local
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5679:5678"
+    environment:
+      - TZ=America/La_Paz
+      - GENERIC_TIMEZONE=America/La_Paz
+      - N8N_SECURE_COOKIE=false
+      - WEBHOOK_URL=http://127.0.0.1:5679/
+      - N8N_DIAGNOSTICS_ENABLED=false
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - n8n_local:/home/node/.n8n
+
+volumes:
+  n8n_local:
+    name: n8n_local

@@ -1,0 +1,873 @@
+{
+  "updatedAt": "2026-11-18T16:41:57.934Z",
+  "createdAt": "2026-10-28T22:48:50.465Z",
+  "id": "e4NcNjnvbsgbNNah",
+  "name": "MIRABILENET · 10 Entrada de mensajes",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "c1000000-0000-4000-8000-000000000001",
+      "name": "Recibir evento de Django",
+      "webhookId": "5b1d1f0e-8c41-4f43-9a0e-3f2a9c7d1e10",
+      "notesInFlow": true,
+      "notes": "Credencial «MIRABILENET Webhook (JWT)»: passphrase = N8N_WEBHOOK_SECRET, HS256. Django firma un JWT de 2 minutos con el hash del cuerpo.",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mirabilenet-entrante",
+        "authentication": "jwtAuth",
+        "responseMode": "responseNode",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "credentials": {
+        "jwtAuth": {
+          "id": "bpl2iAqOcUwRkfq3",
+          "name": "MIRABILENET Webhook (JWT)"
+        }
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000002",
+      "name": "Hash del cuerpo recibido",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "parameters": {
+        "binaryData": true,
+        "dataPropertyName": "hash_cuerpo"
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000003",
+      "name": "¿El cuerpo coincide con la firma?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        448,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c10-if-1",
+              "leftValue": "={{ $json.hash_cuerpo }}",
+              "rightValue": "={{ $json.jwtPayload?.sha256 ?? '' }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000004",
+      "name": "Aceptar evento",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        688,
+        -96
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true } }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000005",
+      "name": "Rechazar cuerpo alterado",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        688,
+        144
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: false, detalle: 'El cuerpo no coincide con la firma.' } }}",
+        "options": {
+          "responseCode": 401
+        }
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000006",
+      "name": "Alertar cuerpo alterado",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        912,
+        144
+      ],
+      "parameters": {
+        "errorMessage": "Llegó un evento con JWT válido pero con un cuerpo que no coincide con su hash. Posible reenvío manipulado."
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000007",
+      "name": "¿Le toca responder al bot?",
+      "notesInFlow": true,
+      "notes": "No responde si el contacto pidió la baja, si Django ya abrió un caso humano o si atiende una persona. Los comprobantes sí pasan: el bot da el acuse.",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        912,
+        -96
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c10-bot-1",
+              "leftValue": "={{ $json.body.evento }}",
+              "rightValue": "mensaje_entrante",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "c10-bot-2",
+              "leftValue": "={{ $json.body.conversacion?.estado }}",
+              "rightValue": "bot",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "c10-bot-3",
+              "leftValue": "={{ $json.body.manejado_por_sistema ?? '' }}",
+              "rightValue": "baja",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "c10-bot-4",
+              "leftValue": "={{ $json.body.manejado_por_sistema ?? '' }}",
+              "rightValue": "caso_humano",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000008",
+      "name": "Derivar al agente de ventas",
+      "notesInFlow": true,
+      "notes": "Fase 5: quien no es cliente va al agente de ventas (17). El 12 (eco) queda solo para pruebas manuales.",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1400,
+        440
+      ],
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Vnt17PrspctMrblN",
+          "mode": "list",
+          "cachedResultName": "MIRABILENET · 17 Ventas: agente para prospectos"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "conversacion_id": "={{ $json.body.conversacion.id }}",
+            "mensaje_id": "={{ $json.body.mensaje_id }}",
+            "texto": "={{ $json.body.mensaje.texto || ($json.body.mensaje.tipo === 'ubicacion' ? 'Compartió su ubicación.' : 'Envió un mensaje que no pude leer.') }}",
+            "modelo": "={{ $json.body.ia?.modelo ?? '' }}",
+            "ia_disponible": "={{ $json.body.ia?.disponible ?? true }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "conversacion_id",
+              "displayName": "conversacion_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "mensaje_id",
+              "displayName": "mensaje_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "texto",
+              "displayName": "texto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "modelo",
+              "displayName": "modelo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "ia_disponible",
+              "displayName": "ia_disponible",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000009",
+      "name": "¿Qué atiende el bot?",
+      "notesInFlow": true,
+      "notes": "Fase 3: comprobantes. Fase 4: soporte IA para clientes. Fase 5: ventas IA para quien no es cliente. Los interruptores del panel (Mensajería → Bot con IA) apagan soporte o ventas: esos chats quedan para el equipo.",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1140,
+        -100
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "loose"
+                },
+                "conditions": [
+                  {
+                    "id": "c10-sw-1",
+                    "leftValue": "={{ $json.body.manejado_por_sistema ?? '' }}",
+                    "rightValue": "comprobante",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Comprobante"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "loose"
+                },
+                "conditions": [
+                  {
+                    "id": "c10-sw-2",
+                    "leftValue": "={{ $json.body.mensaje.opcion_id ?? '' }}",
+                    "rightValue": "comp:",
+                    "operator": {
+                      "type": "string",
+                      "operation": "startsWith"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Eligió aviso"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "loose"
+                },
+                "conditions": [
+                  {
+                    "id": "c10-sw-3",
+                    "leftValue": "={{ $json.body.mensaje.opcion_id ?? '' }}",
+                    "rightValue": "soporte:humano",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  },
+                  {
+                    "id": "c10-sw-3b",
+                    "leftValue": "={{ $json.body.contacto.es_cliente }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Necesito ayuda"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "loose"
+                },
+                "conditions": [
+                  {
+                    "id": "c10-sw-client-support",
+                    "leftValue": "={{ $json.body.contacto.es_cliente }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  },
+                  {
+                    "id": "c10-sw-4-ia",
+                    "leftValue": "={{ $json.body.ia?.soporte ?? true }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Soporte IA"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c10-sw-5",
+                    "leftValue": "={{ $json.body.contacto.es_cliente }}",
+                    "rightValue": false,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false",
+                      "singleValue": true
+                    }
+                  },
+                  {
+                    "id": "c10-sw-5-ia",
+                    "leftValue": "={{ $json.body.ia?.ventas ?? true }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Ventas IA"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Bot pausado: lo atiende el equipo"
+        }
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000010",
+      "name": "Atender comprobante",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1400,
+        -280
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "lsfw2ROgWysNzUaS",
+          "mode": "list",
+          "cachedResultName": "MIRABILENET · 13 Cobro: atender comprobante"
+        },
+        "mode": "each",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "conversacion_id": "={{ $json.body.conversacion.id }}",
+            "mensaje_id": "={{ $json.body.mensaje_id }}",
+            "comprobante": "={{ $json.body.comprobante }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "conversacion_id",
+              "displayName": "conversacion_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "mensaje_id",
+              "displayName": "mensaje_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "comprobante",
+              "displayName": "comprobante",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000011",
+      "name": "Asociar comprobante al aviso",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1400,
+        -100
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "5T15dqzYXW14WIwv",
+          "mode": "list",
+          "cachedResultName": "MIRABILENET · 14 Cobro: asociar comprobante al aviso"
+        },
+        "mode": "each",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "conversacion_id": "={{ $json.body.conversacion.id }}",
+            "mensaje_id": "={{ $json.body.mensaje_id }}",
+            "opcion_id": "={{ $json.body.mensaje.opcion_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "conversacion_id",
+              "displayName": "conversacion_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "mensaje_id",
+              "displayName": "mensaje_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "opcion_id",
+              "displayName": "opcion_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000012",
+      "name": "Derivar a una persona",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1400,
+        260
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "tNj2C7uGYGMwJuye",
+          "mode": "list",
+          "cachedResultName": "MIRABILENET · 16 Soporte: derivar a una persona"
+        },
+        "mode": "each",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "conversacion_id": "={{ $json.body.conversacion.id }}",
+            "mensaje_id": "={{ $json.body.mensaje_id }}",
+            "motivo": "El cliente pulsó «Necesito ayuda»."
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "conversacion_id",
+              "displayName": "conversacion_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "mensaje_id",
+              "displayName": "mensaje_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "motivo",
+              "displayName": "motivo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    },
+    {
+      "id": "c1000000-0000-4000-8000-000000000013",
+      "name": "Derivar al agente de soporte",
+      "notesInFlow": true,
+      "notes": "Fase 4: los mensajes no resueltos por Django de clientes identificados llegan al agente. Los prospectos siguen en el eco hasta la fase 5.",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        1400,
+        80
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "Kge2vCbS05k6Tpd5",
+          "mode": "list",
+          "cachedResultName": "MIRABILENET · 15 Soporte: agente IA"
+        },
+        "mode": "each",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "conversacion_id": "={{ $json.body.conversacion.id }}",
+            "mensaje_id": "={{ $json.body.mensaje_id }}",
+            "texto": "={{ $json.body.mensaje.texto || ($json.body.mensaje.tipo === 'ubicacion' ? 'Compartió su ubicación.' : 'Envió un mensaje que no pude leer.') }}",
+            "modelo": "={{ $json.body.ia?.modelo ?? '' }}",
+            "ia_disponible": "={{ $json.body.ia?.disponible ?? true }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "conversacion_id",
+              "displayName": "conversacion_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "mensaje_id",
+              "displayName": "mensaje_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "texto",
+              "displayName": "texto",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "modelo",
+              "displayName": "modelo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "ia_disponible",
+              "displayName": "ia_disponible",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "boolean",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Recibir evento de Django": {
+      "main": [
+        [
+          {
+            "node": "Hash del cuerpo recibido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hash del cuerpo recibido": {
+      "main": [
+        [
+          {
+            "node": "¿El cuerpo coincide con la firma?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿El cuerpo coincide con la firma?": {
+      "main": [
+        [
+          {
+            "node": "Aceptar evento",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Rechazar cuerpo alterado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aceptar evento": {
+      "main": [
+        [
+          {
+            "node": "¿Le toca responder al bot?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rechazar cuerpo alterado": {
+      "main": [
+        [
+          {
+            "node": "Alertar cuerpo alterado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Le toca responder al bot?": {
+      "main": [
+        [
+          {
+            "node": "¿Qué atiende el bot?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Qué atiende el bot?": {
+      "main": [
+        [
+          {
+            "node": "Atender comprobante",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Asociar comprobante al aviso",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Derivar a una persona",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Derivar al agente de soporte",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Derivar al agente de ventas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "settings": {
+    "errorWorkflow": "XVfOGnpSqEJoVAgX",
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "86d49479-ee8c-471a-a2a0-1e2dd760c2b4",
+  "activeVersionId": "86d49479-ee8c-471a-a2a0-1e2dd760c2b4",
+  "versionCounter": 15,
+  "triggerCount": 1,
+  "sourceWorkflowId": null,
+  "tags": []
+}

@@ -1,0 +1,373 @@
+{
+  "updatedAt": "2026-11-18T06:32:03.298Z",
+  "createdAt": "2026-10-28T23:42:17.941Z",
+  "id": "lsfw2ROgWysNzUaS",
+  "name": "MIRABILENET · 13 Cobro: atender comprobante",
+  "description": null,
+  "active": true,
+  "isArchived": false,
+  "nodes": [
+    {
+      "id": "c1300000-0000-4000-8000-000000000001",
+      "name": "Al ser llamado",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "inputSource": "workflowInputs",
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "conversacion_id",
+              "type": "number"
+            },
+            {
+              "name": "mensaje_id",
+              "type": "number"
+            },
+            {
+              "name": "comprobante",
+              "type": "object"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c1300000-0000-4000-8000-000000000002",
+      "name": "¿Qué pasó con el archivo?",
+      "notesInFlow": true,
+      "notes": "Repetido: Meta reentregó el mismo archivo y ya se contestó. No se responde de nuevo.",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c13-s1-1",
+                    "leftValue": "={{ $json.comprobante.resultado }}",
+                    "rightValue": "guardado",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  },
+                  {
+                    "id": "c13-s1-2",
+                    "leftValue": "={{ $json.comprobante.aviso_numero ?? '' }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "empty",
+                      "singleValue": true
+                    }
+                  },
+                  {
+                    "id": "c13-s1-3",
+                    "leftValue": "={{ $json.comprobante.avisos_pendientes }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "gt"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Elegir aviso"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "c13-s2-1",
+                    "leftValue": "={{ $json.comprobante.resultado }}",
+                    "rightValue": "duplicado",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Repetido"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "renameFallbackOutput": "Contestar"
+        }
+      }
+    },
+    {
+      "id": "c1300000-0000-4000-8000-000000000003",
+      "name": "Leer avisos pendientes",
+      "notesInFlow": true,
+      "notes": "Why HTTP: la API de MIRABILENET no tiene nodo propio. Solo devuelve los avisos del cliente de esta conversación.",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "position": [
+        500,
+        -160
+      ],
+      "parameters": {
+        "url": "=http://host.docker.internal:8069/api/v1/messaging/n8n/conversations/{{ $json.conversacion_id }}/charges",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Kv5LPHIDptIliTMh",
+          "name": "MIRABILENET API"
+        }
+      }
+    },
+    {
+      "id": "c1300000-0000-4000-8000-000000000004",
+      "name": "Preguntar a qué aviso corresponde",
+      "notesInFlow": true,
+      "notes": "Cada fila lleva comp:<comprobante>:aviso:<aviso>. Al elegirla, el 10 la deriva al 14. Django ya limitó a 10 avisos.",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        760,
+        -160
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "h752DjPN6Ra90U6a",
+          "mode": "list",
+          "cachedResultName": "MIRABILENET · 11 Enviar mensaje"
+        },
+        "mode": "each",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "conversacion_id": "={{ $('Al ser llamado').item.json.conversacion_id }}",
+            "tipo": "lista",
+            "contenido": "={{ { texto: 'Recibimos tu comprobante. ¿A qué aviso de cobro corresponde?', lista: { boton: 'Elegir aviso', secciones: [{ titulo: 'Avisos pendientes', filas: $json.avisos.map(a => ({ id: 'comp:' + $('Al ser llamado').item.json.comprobante.comprobante_id + ':aviso:' + a.id, titulo: a.numero.slice(0, 24), descripcion: (a.saldo + ' ' + a.moneda + ' · vence ' + a.fecha_vencimiento.split('-').reverse().join('/')).slice(0, 72) })) }] } } }}",
+            "clave": "={{ 'comprobante:' + $('Al ser llamado').item.json.mensaje_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "conversacion_id",
+              "displayName": "conversacion_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "tipo",
+              "displayName": "tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "contenido",
+              "displayName": "contenido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            },
+            {
+              "id": "clave",
+              "displayName": "clave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    },
+    {
+      "id": "c1300000-0000-4000-8000-000000000005",
+      "name": "Contestar según el resultado",
+      "notesInFlow": true,
+      "notes": "Recibir el archivo no registra el pago: lo verifica una persona en Mensajería → Comprobantes.",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        160
+      ],
+      "parameters": {
+        "source": "database",
+        "workflowId": {
+          "__rl": true,
+          "value": "h752DjPN6Ra90U6a",
+          "mode": "list",
+          "cachedResultName": "MIRABILENET · 11 Enviar mensaje"
+        },
+        "mode": "each",
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "conversacion_id": "={{ $json.conversacion_id }}",
+            "tipo": "texto",
+            "contenido": "={{ { texto: ({ guardado: $json.comprobante.aviso_numero ? 'Recibimos tu comprobante del aviso ' + $json.comprobante.aviso_numero + '. Nuestro equipo lo va a revisar y te avisaremos por aquí cuando el pago quede registrado.' : 'Recibimos tu comprobante. No vemos avisos pendientes a tu nombre; nuestro equipo lo va a revisar.', formato_no_valido: 'No pudimos leer el archivo. Envía el comprobante como foto (JPG o PNG) o en PDF, de hasta 5 MB.', no_recibido: 'No logramos recibir tu archivo. ¿Puedes volver a enviarlo?' })[$json.comprobante.resultado] ?? 'Recibimos tu mensaje. Nuestro equipo lo va a revisar.' } }}",
+            "clave": "={{ 'comprobante:' + $json.mensaje_id }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "conversacion_id",
+              "displayName": "conversacion_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number",
+              "removed": false
+            },
+            {
+              "id": "tipo",
+              "displayName": "tipo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "contenido",
+              "displayName": "contenido",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            },
+            {
+              "id": "clave",
+              "displayName": "clave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Al ser llamado": {
+      "main": [
+        [
+          {
+            "node": "¿Qué pasó con el archivo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Qué pasó con el archivo?": {
+      "main": [
+        [
+          {
+            "node": "Leer avisos pendientes",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [],
+        [
+          {
+            "node": "Contestar según el resultado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leer avisos pendientes": {
+      "main": [
+        [
+          {
+            "node": "Preguntar a qué aviso corresponde",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "errorWorkflow": "XVfOGnpSqEJoVAgX",
+    "timezone": "America/La_Paz",
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "nodeGroups": [],
+  "pinData": null,
+  "versionId": "4e190e8c-d6db-449b-8739-9b69e6fa3a61",
+  "activeVersionId": "4e190e8c-d6db-449b-8739-9b69e6fa3a61",
+  "versionCounter": 1,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": []
+}

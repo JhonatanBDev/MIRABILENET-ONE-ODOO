@@ -1,0 +1,85 @@
+{
+  "updatedAt": "2026-10-28T05:47:20.718Z",
+  "createdAt": "2026-10-28T04:59:51.811Z",
+  "id": "JnHnWembAhzVI8cN",
+  "name": "MIRABILENET · 00 Prueba de conexión con la API",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "2f9a51c4-6f0e-4d63-9b1a-0d7d4b3c0a01",
+      "name": "Ejecutar a mano",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:8069/api/v1/messaging/n8n/charges",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "dias",
+              "value": "3"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "2f9a51c4-6f0e-4d63-9b1a-0d7d4b3c0a02",
+      "name": "Consultar avisos que vencen en 3 días",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        240,
+        0
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "notesInFlow": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "Kv5LPHIDptIliTMh",
+          "name": "MIRABILENET API"
+        }
+      },
+      "notes": "Why HTTP: la API de MIRABILENET no tiene nodo propio en n8n. Usa la credencial «MIRABILENET API» (Header Auth: Authorization = Bearer <N8N_API_TOKEN>). Solo lee; no envía mensajes."
+    }
+  ],
+  "connections": {
+    "Ejecutar a mano": {
+      "main": [
+        [
+          {
+            "node": "Consultar avisos que vencen en 3 días",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "nodeGroups": [],
+  "pinData": {},
+  "versionId": "1e8418a4-8523-405f-9b44-061e4c13504d",
+  "activeVersionId": null,
+  "versionCounter": 2,
+  "triggerCount": 0,
+  "sourceWorkflowId": null,
+  "tags": []
+}

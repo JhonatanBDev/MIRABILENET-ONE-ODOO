@@ -1,0 +1,10 @@
+# Librerías de Python que piden los módulos propios y los de la comunidad, además de las de
+# requirements.txt de Odoo. Instalar con:
+#   env\Scripts\python.exe -m pip install -r documentacion\requisitos_extra.txt
+cryptography
+lxml
+requests
+zeep
+qrcode
+openupgradelib
+PyYAML
