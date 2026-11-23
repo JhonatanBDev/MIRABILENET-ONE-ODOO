@@ -7,6 +7,21 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
 
 ## Para retomar (22/11/2026)
 
+- **n8n traído de la otra PC y conectado a Odoo (23/11/2026):**
+  - n8n 2.43.7 en Docker, en `C:\ING.SISTEMAS\n8n_local` (volumen `n8n_local`, puerto 5679),
+    con los 10 flujos (9 activos) y las 5 credenciales.
+  - Los flujos llaman a Odoo (`host.docker.internal:8069`) en vez de a `api:8000`. Las rutas
+    `/api/v1/messaging/n8n/...` de `mirabilenet_whatsapp` son las mismas.
+  - Los tokens están en las variables de entorno `MIRABILENET_N8N_API_TOKEN` y
+    `MIRABILENET_N8N_WEBHOOK_SECRET`.
+  - Parámetro `mirabilenet.n8n_inbound_webhook_url` = `http://127.0.0.1:5679/webhook/mirabilenet-entrante`.
+  - Probado:
+    - n8n → Odoo: 403 sin token y 200 con token; el flujo 00 ejecutado con éxito;
+    - Odoo → n8n: el evento firmado se entrega y una firma falsa se rechaza.
+  - Odoo tiene que arrancar con `--max-cron-threads 1` o más, porque los eventos salen por cron.
+    Guía: `documentacion/n8n_local.md`.
+  - **Seguridad:** la carpeta llegó por Google Drive sin cifrar. Borrarla de Drive y, si se
+    compartió, rotar los tokens N8N y las claves de OpenAI y Gemini.
 - **Dashboard 19.0.2.0.0 (23/11/2026, plan aprobado: limpiar + filtros + negocio + vistas por
   rol):**
   - Limpieza: quitados «Saldo vencido» y «Recibos de hoy» (repetidos), la segunda tarjeta de
