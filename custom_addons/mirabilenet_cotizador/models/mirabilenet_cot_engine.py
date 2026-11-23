@@ -79,6 +79,11 @@ class MirabilenetCotEngine(models.AbstractModel):
         return precios.D(self._param(key))
 
     @api.model
+    def _taxes_enabled(self):
+        """Interruptor general de IVA + IT (Ajustes del cotizador)."""
+        return self._param("impuestos_activos") in ("1", "True", "true")
+
+    @api.model
     def _config(self):
         return config_from_env(self.env)
 
@@ -199,7 +204,7 @@ class MirabilenetCotEngine(models.AbstractModel):
             "mirabilenet_cot_title": quote.titulo or False,
             "mirabilenet_cot_origin": origin,
             "mirabilenet_cot_city_id": city.id,
-            "mirabilenet_cot_invoice": quote.facturar,
+            "mirabilenet_cot_invoice": bool(quote.facturar) and self._taxes_enabled(),
             "mirabilenet_cot_rate": float(quote.tipo_cambio.valor),
             "mirabilenet_cot_tax_mode": cfg.modo_impuestos,
             "mirabilenet_cot_iva_rate": float(cfg.iva),

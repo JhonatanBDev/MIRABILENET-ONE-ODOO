@@ -11,6 +11,8 @@
               action="action_mirabilenet_cot_catalog" sequence="30"/>
     <menuitem id="menu_mirabilenet_cot_config" name="Configuración" parent="menu_mirabilenet_cot_root"
               sequence="90" groups="group_mirabilenet_cot_manager"/>
+    <menuitem id="menu_mirabilenet_cot_settings" name="Ajustes (impuestos y DigiCorp)"
+              parent="menu_mirabilenet_cot_config" action="action_mirabilenet_cot_settings" sequence="5"/>
     <menuitem id="menu_mirabilenet_cot_markup" name="Recargos (márgenes)"
               parent="menu_mirabilenet_cot_config" action="action_mirabilenet_cot_markup" sequence="10"/>
     <menuitem id="menu_mirabilenet_cot_kit" name="Kits" parent="menu_mirabilenet_cot_config"

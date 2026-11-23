@@ -28,8 +28,8 @@
                     <tr>
                         <td><b>Cliente:</b> <span t-field="o.partner_id.name"/><br/>
                             <t t-if="o.partner_id.vat"><b>NIT/CI:</b> <span t-esc="o.partner_id.vat"/><br/></t>
-                            <t t-if="o.partner_id.phone or o.partner_id.mobile"><b>Teléfono:</b>
-                                <span t-esc="o.partner_id.phone or o.partner_id.mobile"/></t>
+                            <t t-if="o.partner_id.phone"><b>Teléfono:</b>
+                                <span t-esc="o.partner_id.phone"/></t>
                         </td>
                         <td class="text-end"><b>Fecha:</b> <span t-esc="o.date_order.strftime('%d/%m/%Y')"/><br/>
                             <t t-if="o.validity_date"><b>Válida hasta:</b> <span t-esc="o.validity_date.strftime('%d/%m/%Y')"/><br/></t>

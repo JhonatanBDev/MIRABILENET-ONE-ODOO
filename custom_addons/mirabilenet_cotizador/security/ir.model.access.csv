@@ -10,3 +10,4 @@ access_cot_city_manager,ciudades: configuración,model_mirabilenet_cot_city,grou
 access_cot_kit_user,kits: lectura,model_mirabilenet_cot_kit,group_mirabilenet_cot_user,1,0,0,0
 access_cot_kit_manager,kits: configuración,model_mirabilenet_cot_kit,group_mirabilenet_cot_manager,1,1,1,1
 access_cot_wizard,nueva cotización,model_mirabilenet_cot_wizard,group_mirabilenet_cot_user,1,1,1,1
+access_cot_settings,ajustes del cotizador,model_mirabilenet_cot_settings,group_mirabilenet_cot_manager,1,1,1,1

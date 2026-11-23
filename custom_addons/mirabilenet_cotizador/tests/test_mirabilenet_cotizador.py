@@ -1,3 +1,4 @@
+import os
 from decimal import Decimal
 
 from odoo import fields
@@ -190,3 +191,38 @@ class TestCotizacion(TransactionCase):
     def test_catalog_price(self):
         self.assertEqual(self.dome.mirabilenet_cot_price, 340)
         self.assertEqual(self.dome.mirabilenet_cot_price_invoiced, 394.4)
+
+    def test_settings_taxes_switch_and_digicorp(self):
+        from unittest.mock import patch
+
+        from ..wizards.mirabilenet_cot_settings import PARAM, digicorp_credentials
+        Settings = self.env["mirabilenet.cot.settings"]
+        Param = self.env["ir.config_parameter"].sudo()
+        with patch.dict("os.environ", {"MIRABILENET_MASTER_KEY": "clave-de-prueba"}):
+            for k in ("DIGICORP_USER", "DIGICORP_PASS"):
+                os.environ.pop(k, None)
+            wiz = Settings.create({})
+            self.assertTrue(wiz.taxes_enabled)
+            wiz.write({"taxes_enabled": False, "digicorp_user": "usuario.prueba",
+                       "digicorp_password": "contraseña-de-prueba"})
+            wiz.action_save()
+            stored = Param.get_param(PARAM + "digicorp_pass_enc")
+            self.assertTrue(stored)
+            self.assertNotIn("contraseña-de-prueba", stored)
+            self.assertFalse(wiz.digicorp_password)
+            self.assertEqual(digicorp_credentials(self.env),
+                             ("usuario.prueba", "contraseña-de-prueba"))
+            # Vacía = conservar la guardada.
+            Settings.create({"digicorp_password": False}).action_save()
+            self.assertEqual(Param.get_param(PARAM + "digicorp_pass_enc"), stored)
+            with patch.dict("os.environ", {"DIGICORP_USER": "u-env", "DIGICORP_PASS": "p-env"}):
+                self.assertEqual(digicorp_credentials(self.env), ("u-env", "p-env"))
+            Settings.create({}).action_clear_digicorp()
+            self.assertEqual(digicorp_credentials(self.env), (None, None))
+        # Impuestos apagados: sin factura ni IVA/IT, aunque se pida con factura.
+        order = self._quote(invoice=True)
+        self.assertFalse(order.mirabilenet_cot_invoice)
+        self.assertEqual(order.mirabilenet_cot_total, order.mirabilenet_cot_subtotal)
+        self.assertFalse(self.env["mirabilenet.cot.wizard"].new({}).invoice)
+        Settings.create({"taxes_enabled": True, "invoice_default": True}).action_save()
+        self.assertTrue(self._quote().mirabilenet_cot_invoice)

@@ -1,6 +1,6 @@
 {
     "name": "MIRABILENET: Cotizador de CCTV y redes",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.1.0",
     "summary": "Cotizaciones de CCTV y redes desde kits o texto libre, con el motor de precios del "
                "Cotizador DigiCorp",
     "description": "Motor del Cotizador DigiCorp (referencia/) en Odoo: catálogo del proveedor, "
@@ -9,7 +9,7 @@
     "category": "MIRABILENET",
     "author": "MIRABILENET",
     "license": "AGPL-3",
-    "depends": ["mirabilenet_base", "sale_management"],
+    "depends": ["mirabilenet_base", "mirabilenet_isp", "sale_management"],
     "data": [
         "security/mirabilenet_cotizador_security.xml",
         "security/ir.model.access.csv",

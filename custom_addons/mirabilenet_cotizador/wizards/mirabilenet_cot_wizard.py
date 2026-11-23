@@ -17,9 +17,11 @@ class MirabilenetCotWizard(models.TransientModel):
     city_id = fields.Many2one("mirabilenet.cot.city", string="Ciudad", required=True,
                               default=lambda self: self.env["mirabilenet.cot.city"].search(
                                   [("is_base", "=", True)], limit=1))
+    taxes_enabled = fields.Boolean(
+        default=lambda self: self.env["mirabilenet.cot.engine"]._taxes_enabled())
     invoice = fields.Boolean(string="Con factura (IVA + IT)",
-                             default=lambda self: self.env["mirabilenet.cot.engine"]._param(
-                                 "facturar_por_defecto") in ("1", "True", "true"))
+                             default=lambda self: self.env["mirabilenet.cot.engine"]._config(
+                             ).facturar_por_defecto)
     meters = fields.Float(string="Metros de cable (total)",
                           help="Vacío: los metros por cámara del kit.")
     km = fields.Float(string="Km adicionales", help="Fuera del radio urbano, ida y vuelta.")

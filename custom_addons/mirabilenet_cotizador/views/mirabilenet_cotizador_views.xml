@@ -167,7 +167,8 @@
                     </group>
                     <group>
                         <field name="city_id"/>
-                        <field name="invoice"/>
+                        <field name="taxes_enabled" invisible="1"/>
+                        <field name="invoice" invisible="not taxes_enabled"/>
                         <field name="meters" invisible="mode != 'kit'"/>
                         <field name="km" invisible="mode != 'kit'"/>
                     </group>
@@ -265,6 +266,67 @@
                 </page>
             </xpath>
         </field>
+    </record>
+
+    <!-- ============ Ajustes ============ -->
+    <record id="view_mirabilenet_cot_settings_form" model="ir.ui.view">
+        <field name="name">mirabilenet.cot.settings.form</field>
+        <field name="model">mirabilenet.cot.settings</field>
+        <field name="arch" type="xml">
+            <form string="Ajustes del cotizador">
+                <group string="Impuestos (IVA + IT)">
+                    <group>
+                        <field name="taxes_enabled" widget="boolean_toggle"/>
+                        <field name="tax_mode" widget="radio" invisible="not taxes_enabled"/>
+                        <field name="invoice_default" invisible="not taxes_enabled"/>
+                    </group>
+                    <group invisible="not taxes_enabled">
+                        <field name="iva_pct"/>
+                        <field name="it_pct"/>
+                    </group>
+                </group>
+                <div class="text-muted" invisible="taxes_enabled">
+                    Con los impuestos apagados, las cotizaciones nuevas salen sin factura, sin IVA
+                    ni IT. Las ya armadas no cambian.
+                </div>
+                <group string="Cotizaciones">
+                    <group>
+                        <field name="validity_days"/>
+                    </group>
+                    <group>
+                        <field name="exchange_rate"/>
+                    </group>
+                </group>
+                <group string="Acceso a DigiCorp (para el conector)">
+                    <group>
+                        <field name="digicorp_user" autocomplete="off"/>
+                        <field name="digicorp_password" password="True" autocomplete="new-password"
+                               placeholder="Vacía = conservar la guardada"/>
+                    </group>
+                    <group>
+                        <field name="digicorp_status" nolabel="1" colspan="2"/>
+                    </group>
+                </group>
+                <div class="text-muted">
+                    La contraseña se guarda cifrada con la clave maestra del servidor y no se vuelve
+                    a mostrar. Si el servidor tiene las variables DIGICORP_USER y DIGICORP_PASS,
+                    mandan esas.
+                </div>
+                <footer>
+                    <button name="action_save" type="object" string="Guardar" class="btn-primary"/>
+                    <button name="action_clear_digicorp" type="object" string="Borrar credenciales"
+                            class="btn-secondary"
+                            confirm="¿Borrar el usuario y la contraseña de DigiCorp guardados?"/>
+                    <button special="cancel" string="Cancelar"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_mirabilenet_cot_settings" model="ir.actions.act_window">
+        <field name="name">Ajustes del cotizador</field>
+        <field name="res_model">mirabilenet.cot.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
     </record>
 
     <!-- ============ Configuración ============ -->

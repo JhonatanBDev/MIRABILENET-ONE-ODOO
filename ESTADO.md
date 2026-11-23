@@ -30,13 +30,15 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
     - configuración de recargos, kits (los 10 del original), materiales, mano de obra y
       ciudades;
     - PDF sin datos internos.
-    - 12 pruebas. Instalado en `mira_nativo_test` con los márgenes reales (15 recargos).
+    - wkhtmltopdf 0.12.6 instalado (23/11/2026), con `bin_path` en `odoo.conf`; PDF real
+      verificado.
+    - 13 pruebas. Instalado en `mira_nativo_test` con los márgenes reales (15 recargos).
       Respaldo previo en `traslado_odoo/respaldo_antes_cotizador`.
   - **Falta:**
-    - fase 3: conector DigiCorp (necesita las credenciales);
+    - fase 3: conector DigiCorp (las credenciales se ponen en Cotizaciones > Configuración >
+      Ajustes, con la contraseña cifrada; también hay ahí un interruptor de IVA + IT);
     - fases 4 a 6: WhatsApp al trabajador y al cliente, herramientas del bot (flujos 17 y
       15) y «cotizar» en el flujo 20;
-    - wkhtmltopdf en esta PC para el PDF real;
     - productos reales del catálogo (los traerá el conector);
     - las tarifas reales de mano de obra y viáticos.
 - **Personal y avisos de trabajo por WhatsApp (23/11/2026, módulo nuevo `mirabilenet_personal`):**

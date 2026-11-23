@@ -11,6 +11,7 @@ DEFAULTS = {
     "recargo_defecto": "0.30",
     "recargo_maximo": "0.75",
     "recargo_maximo_bajo": "1.50",
+    "impuestos_activos": "1",
     "iva": "0.13",
     "it": "0.03",
     "modo_impuestos": "agregar",
@@ -176,7 +177,8 @@ def config_from_env(env):
                    for r in markups if r.kind == "costo"],
         iva=dec("iva"), it=dec("it"),
         modo_impuestos=Engine._param("modo_impuestos"),
-        facturar_por_defecto=Engine._param("facturar_por_defecto") in ("1", "True", "true"),
+        facturar_por_defecto=Engine._taxes_enabled() and Engine._param(
+            "facturar_por_defecto") in ("1", "True", "true"),
         vigencia_dias=int(dec("vigencia_dias")),
         redondeo_multiplo=dec("redondeo_multiplo"),
         redondeo_umbral_bajo=dec("redondeo_umbral_bajo"),
