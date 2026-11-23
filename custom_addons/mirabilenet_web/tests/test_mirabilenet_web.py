@@ -349,6 +349,12 @@ class TestWebPages(WebCommon, HttpCase):
             block = self.env.ref("mirabilenet_web.%s" % snippet)
             self.assertIn("s_mn_dynamic", block.arch_db)
 
+    def test_footer_keeps_the_company_without_odoo_promotion(self):
+        page = self._get("/").text
+        self.assertIn("o_footer_copyright_name", page)
+        self.assertNotIn("o_brand_promotion", page)
+        self.assertNotIn("Open Source eCommerce", page)
+
     def test_plans_follow_the_publication_rule(self):
         plans = self._dynamic("planes")
         self.assertIn("W-PUBLICADO", plans)

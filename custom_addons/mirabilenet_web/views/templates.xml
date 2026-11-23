@@ -772,4 +772,10 @@
             </div>
         </t>
     </template>
+
+    <!-- Pie: sin la promoción «Con la tecnología de Odoo». El nombre de la empresa queda y se
+         edita con el botón Editar; Odoo esconde esa promoción en el editor, por eso va aquí. -->
+    <template id="footer_sin_promocion" inherit_id="website.layout" name="MIRABILENET: pie sin promoción de Odoo">
+        <xpath expr="//t[@t-call='web.brand_promotion']/.." position="replace"/>
+    </template>
 </odoo>
