@@ -43,3 +43,6 @@ WhatsApp, con los botones «Recibido» y «Terminada».
 - **Lo que escriben con sus palabras** se le pasa a n8n (flujo «20 Personal»), si está
   configurado. n8n lo interpreta con IA y contesta con `POST /api/v1/messaging/n8n/personal/resultado`.
 - **Sin n8n,** Odoo entiende «arreglado», «no se pudo» y «voy en camino».
+- **Pasantes:** una tarea de pasantía se avisa cuando se publica (no al asignarla), con la
+  plantilla `tarea_pasante`: «tienes una tarea nueva, revisa la plataforma», con el enlace y
+  solo el botón «Recibido». «Terminada» no aplica: la pasantía se entrega en la plataforma.

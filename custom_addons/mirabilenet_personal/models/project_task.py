@@ -15,10 +15,21 @@ class ProjectTask(models.Model):
 
     def write(self, vals):
         before = {t.id: t.user_ids for t in self} if "user_ids" in vals else {}
+        # Una tarea de pasantía se avisa al publicarla: antes el pasante no la ve.
+        unpublished = self.filtered(
+            lambda t: t._mirabilenet_is_internship() and not t.mirabilenet_published)             if vals.get("mirabilenet_published") else self.browse()
         result = super().write(vals)
-        for task in self.filtered(lambda t: t.id in before):
-            task._mirabilenet_notify_assignees(task.user_ids - before[task.id])
+        for task in self:
+            if task in unpublished:
+                task._mirabilenet_notify_assignees(task.user_ids)
+            elif task.id in before:
+                task._mirabilenet_notify_assignees(task.user_ids - before[task.id])
         return result
+
+    def _mirabilenet_is_internship(self):
+        """Tarea de una pasantía (el campo solo existe con el módulo de pasantías)."""
+        self.ensure_one()
+        return "mirabilenet_internship" in self._fields and self.mirabilenet_internship
 
     def _mirabilenet_notify_assignees(self, users):
         self.ensure_one()
@@ -30,9 +41,18 @@ class ProjectTask(models.Model):
         if not users:
             return
         deadline = self.date_deadline.strftime("%d/%m/%Y") if self.date_deadline else _("sin fecha")
+        Notice = self.env["mirabilenet.staff.notice"]
+        if self._mirabilenet_is_internship():
+            # Solo la tarea principal y ya publicada; los puntos se ven dentro de ella.
+            if self.parent_id or not self.mirabilenet_published:
+                return
+            Notice._notify(users, "tarea_pasante", {
+                "tarea": self.name, "fecha_limite": deadline,
+                "enlace": "%s/odoo/project.task/%d" % (self.get_base_url(), self.id)}, task=self)
+            return
         values = {"tarea": self.name, "proyecto": self.project_id.name or "-",
                   "fecha_limite": deadline, "asignado_por": self.env.user.name}
-        self.env["mirabilenet.staff.notice"]._notify(users, "tarea_asignada", values, task=self)
+        Notice._notify(users, "tarea_asignada", values, task=self)
 
     def _mirabilenet_apply_action(self, action, user):
         self.ensure_one()
@@ -42,6 +62,9 @@ class ProjectTask(models.Model):
             task.message_post(body=_("%s recibió la tarea (WhatsApp).", user.name))
             Notice._reply(user, _("Anotado: recibió «%s».", task.name))
             return "recibido"
+        if action == "terminada" and task._mirabilenet_is_internship():
+            Notice._reply(user, _("«%s» se entrega en la plataforma, con su informe.", task.name))
+            return "en_plataforma"
         if action == "terminada":
             task.state = "1_done"
             task.message_post(body=_("%s marcó la tarea como terminada (WhatsApp).", user.name))

@@ -52,18 +52,30 @@ def main(folder, out, odoo="http://host.docker.internal:8069"):
 
     prompt = (
         "=Eres el asistente de operaciones de MIRABILENET (internet por fibra). Un técnico o "
-        "alguien del personal escribió por WhatsApp. Decide qué quiso decir sobre sus averías.\n\n"
+        "alguien del personal escribió por WhatsApp. Decide qué quiso decir: algo sobre sus "
+        "averías, o que le cotices equipos de cámaras o redes para un cliente.\n\n"
         "Persona: {{ $('Recibir mensaje del personal').item.json.body.persona.nombre }} "
         "(rol {{ $('Recibir mensaje del personal').item.json.body.persona.rol }})\n"
         "Mensaje: {{ $('Recibir mensaje del personal').item.json.body.texto }}\n"
         "Averías abiertas (la primera es la más reciente): "
         "{{ JSON.stringify($('Recibir mensaje del personal').item.json.body.averias_abiertas) }}\n\n"
+        "Kits que se pueden cotizar (usa su código): "
+        "{{ JSON.stringify($('Recibir mensaje del personal').item.json.body.kits || []) }}\n"
+        "Ciudades: "
+        "{{ JSON.stringify($('Recibir mensaje del personal').item.json.body.ciudades || []) }}\n\n"
         "Responde SOLO un JSON, sin texto alrededor, con estas claves:\n"
-        "{\"accion\": \"arreglado\" | \"no_resuelto\" | \"en_camino\" | \"nota\" | \"ninguna\", "
-        "\"averia_id\": número o null, \"nota\": texto corto o \"\", "
-        "\"respuesta\": texto breve y amable en español para la persona}\n"
+        "{\"accion\": \"arreglado\" | \"no_resuelto\" | \"en_camino\" | \"nota\" | \"cotizar\" | "
+        "\"ninguna\", \"averia_id\": número o null, \"nota\": texto corto o \"\", "
+        "\"kit\": código de un kit de la lista o \"\", \"pedido\": lo que pidió cotizar con sus "
+        "palabras o \"\", \"ciudad\": una ciudad de la lista o \"\", \"cliente_nombre\": nombre "
+        "del cliente o \"\", \"cliente_telefono\": teléfono del cliente o \"\", \"con_factura\": "
+        "true, false o null, \"respuesta\": texto breve y amable en español para la persona}\n"
         "Reglas: «no_resuelto» necesita la nota del motivo. Si no menciona cuál avería, usa la "
-        "primera. Si no habla de una avería, accion=\"ninguna\" y responde qué puede hacer.")
+        "primera. Si pide cotizar (cotiza, cotización, presupuesto, precio de cámaras o de un "
+        "kit), accion=\"cotizar\": elige el kit de la lista que mejor calce o, si ninguno "
+        "calza, deja kit vacío y copia el pedido en «pedido»; no inventes precios ni productos, "
+        "y deja «respuesta» vacía porque el sistema contesta con la cotización. Si no habla de "
+        "una avería ni de cotizar, accion=\"ninguna\" y responde qué puede hacer.")
     chain = {
         "parameters": {"promptType": "define", "text": prompt, "batching": {}},
         "type": "@n8n/n8n-nodes-langchain.chainLlm", "typeVersion": 1.7,
@@ -75,14 +87,19 @@ def main(folder, out, odoo="http://host.docker.internal:8069"):
             "const m = raw.match(/\\{[\\s\\S]*\\}/);\n"
             "let d = {};\n"
             "try { d = m ? JSON.parse(m[0]) : {}; } catch (e) { d = {}; }\n"
-            "const ok = ['arreglado', 'no_resuelto', 'en_camino', 'nota', 'ninguna'];\n"
+            "const ok = ['arreglado', 'no_resuelto', 'en_camino', 'nota', 'cotizar', 'ninguna'];\n"
+            "const txt = (v, n) => (typeof v === 'string' ? v.slice(0, n) : '');\n"
             "const body = $('Recibir mensaje del personal').first().json.body;\n"
             "return [{ json: {\n"
             "  mensaje_id: body.mensaje_id,\n"
             "  accion: ok.includes(d.accion) ? d.accion : 'ninguna',\n"
             "  averia_id: Number.isInteger(d.averia_id) ? d.averia_id : null,\n"
             "  nota: typeof d.nota === 'string' ? d.nota.slice(0, 1000) : '',\n"
-            "  respuesta: typeof d.respuesta === 'string' ? d.respuesta.slice(0, 900) : ''\n"
+            "  kit: txt(d.kit, 60), pedido: txt(d.pedido, 600), ciudad: txt(d.ciudad, 60),\n"
+            "  cliente_nombre: txt(d.cliente_nombre, 120),\n"
+            "  cliente_telefono: txt(String(d.cliente_telefono || ''), 30),\n"
+            "  con_factura: typeof d.con_factura === 'boolean' ? d.con_factura : null,\n"
+            "  respuesta: d.accion === 'cotizar' ? '' : txt(d.respuesta, 900)\n"
             "} }];")},
         "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [1100, -120],
         "id": "p20-parse", "name": "Ordenar la decisión",

@@ -295,3 +295,29 @@ class TestPersonal(TransactionCase):
         review = base64.b64decode(wizard.review_file).decode("utf-8-sig")
         self.assertIn("astronauta", review)
         self.assertIn("NO-EXISTE", review)
+
+    def test_intern_task_says_check_the_platform(self):
+        Task = self.env["project.task"]
+        if "mirabilenet_internship" not in Task._fields:
+            self.skipTest("Sin el módulo de pasantías.")
+        Notice = self.env["mirabilenet.staff.notice"]
+        project = self.env["project.project"].create(
+            {"name": "Pasantía de prueba", "mirabilenet_internship": True})
+        task = Task.create({"name": "Soporte del motor", "project_id": project.id,
+                            "user_ids": [(6, 0, self.pasante.ids)],
+                            "child_ids": [(0, 0, {"name": "Medir el eje",
+                                                  "project_id": project.id})]})
+        # Asignada pero sin publicar: el pasante todavía no la ve, no se le avisa.
+        self.assertFalse(Notice.search([("user_id", "=", self.pasante.id)]))
+        task.mirabilenet_published = True
+        notice = Notice.search([("user_id", "=", self.pasante.id)])
+        self.assertEqual(len(notice), 1)
+        self.assertEqual(notice.kind, "tarea_pasante")
+        self.assertIn("/odoo/project.task/%d" % task.id, notice.parameters["enlace"])
+        task.mirabilenet_published = True  # volver a guardar no repite el aviso
+        self.assertEqual(Notice.search_count([("user_id", "=", self.pasante.id)]), 1)
+        sent = self._send()
+        self.assertEqual(sent[-1]["plantilla"], "tarea_pasante")
+        self.assertEqual(len(sent[-1]["botones"]), 1)
+        self._press(self.pasante, notice, "recibido")
+        self.assertNotEqual(task.state, "1_done")

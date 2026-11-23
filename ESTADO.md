@@ -7,6 +7,22 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
 
 ## Para retomar (22/11/2026)
 
+- **Cotizaciones por WhatsApp y en n8n (23/11/2026, módulo nuevo `mirabilenet_cotizador_whatsapp`):**
+  - Herramientas del bot en la API de n8n: `/kits`, `/products` y `/quotation`. El bot manda el
+    PDF directo; con alertas (stock, precio antiguo) queda en borrador y avisa al vendedor.
+  - El personal cotiza escribiendo «cotiza…» (flujo 20) y recibe el PDF con «Enviar al
+    cliente»; también hay botones en la cotización de Odoo.
+  - Flujos 17, 15 y 20 regenerados e importados en el n8n local; respaldo en
+    `n8n_local\respaldo_flujos_20261123_1452`. Detalle en `documentacion/n8n_local.md`.
+  - `enviar_plantilla` admite un documento en el encabezado (`header_document`).
+  - 8 pruebas del módulo; 138 con WhatsApp, personal, pasantías y cotizador, 0 fallos.
+    Instalado en `mira_nativo_test`; respaldo previo en `traslado_odoo/respaldo_antes_cotizador`.
+  - **Falta:** crear en Meta las plantillas `cotizacion` (encabezado documento),
+    `cotizacion_revisar` y `tarea_pasante`; el conector de DigiCorp (el catálogo está vacío);
+    configurar WhatsApp real (los envíos quedan «por enviar»).
+- **Aviso al pasante (23/11/2026, `mirabilenet_personal`):** una tarea de pasantía se avisa al
+  publicarla, con la plantilla `tarea_pasante` («revisa la plataforma», enlace y botón
+  «Recibido»). Antes se avisaba al asignarla, aunque el pasante no la viera.
 - **Cotizador de CCTV y redes, fase 2 del plan (23/11/2026, módulo nuevo `mirabilenet_cotizador`):**
   - `documentacion/MIGRACION_ODOO19.md` es la especificación del Cotizador DigiCorp
     (`referencia/`), no la migración de MIRABILENET ONE. **No va a GitHub** (márgenes del
@@ -621,7 +637,7 @@ env\Scripts\python.exe odoo-bin -c odoo.conf
 
 # Base de pruebas desde cero e instalación de todo, con sus pruebas (unos 6 minutos)
 env\Scripts\python.exe documentacion\herramientas\crear_base_nativo.py odoo.conf
-env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -i mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion,mirabilenet_fibra,mirabilenet_cartera,mirabilenet_modo_oscuro,mirabilenet_dashboard,mirabilenet_personal,mirabilenet_cotizador,hr_attendance,sale_management,purchase,point_of_sale,project,mrp,maintenance --without-demo=all --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079
+env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -i mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion,mirabilenet_fibra,mirabilenet_cartera,mirabilenet_modo_oscuro,mirabilenet_dashboard,mirabilenet_personal,mirabilenet_cotizador,mirabilenet_cotizador_whatsapp,hr_attendance,sale_management,purchase,point_of_sale,project,mrp,maintenance --without-demo=all --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079
 
 # Todas las pruebas sobre esa base ya creada (SIAT + MIRABILENET)
 env\Scripts\python.exe odoo-bin -c odoo.conf -d mira_nativo_test -u mira_sale_siat,mirabilenet_base,mirabilenet_isp,mirabilenet_contratos,mirabilenet_contratos_siat,mirabilenet_inventario,mirabilenet_whatsapp,mirabilenet_web,mirabilenet_aerolab,mirabilenet_pasantias,mirabilenet_pos,mirabilenet_indicadores,mirabilenet_migracion --test-tags mirabilenet,mira_siat --stop-after-init --http-port 8079

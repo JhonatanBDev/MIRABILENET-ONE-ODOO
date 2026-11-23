@@ -21,3 +21,6 @@ __pycache__/
 /deploy/odoo.conf
 # Información del negocio (márgenes de ganancia): no va a GitHub.
 /documentacion/MIGRACION_ODOO19.md
+# Proyecto de grado (documento personal): no va a GitHub.
+/documentacion/PROYECTO-DE-GRADO-*
+/documentacion/proyecto_de_grado/

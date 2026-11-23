@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cron_dispatch_cot_deliveries" model="ir.cron">
+        <field name="name">MIRABILENET: enviar cotizaciones por WhatsApp</field>
+        <field name="model_id" ref="model_mirabilenet_cot_delivery"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_dispatch()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+    </record>
+    <!-- Aviso al vendedor: una cotización del bot quedó en borrador por tener alertas. -->
+    <record id="tpl_cotizacion_revisar" model="mirabilenet.staff.template">
+        <field name="kind">cotizacion_revisar</field>
+        <field name="meta_name">cotizacion_revisar</field>
+        <field name="variables">persona, referencia, cliente</field>
+    </record>
+    <data noupdate="1">
+        <!-- Plantilla de Meta con encabezado de documento, para enviar la cotización a un
+             cliente que no escribió en las últimas 24 horas. Cuerpo: {{1}} cliente,
+             {{2}} número, {{3}} total. -->
+        <record id="param_plantilla_cotizacion" model="ir.config_parameter">
+            <field name="key">mirabilenet_cotizador.plantilla_cotizacion</field>
+            <field name="value">cotizacion</field>
+        </record>
+        <record id="param_plantilla_cotizacion_idioma" model="ir.config_parameter">
+            <field name="key">mirabilenet_cotizador.plantilla_cotizacion_idioma</field>
+            <field name="value">es</field>
+        </record>
+    </data>
+</odoo>

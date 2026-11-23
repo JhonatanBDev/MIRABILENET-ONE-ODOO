@@ -45,6 +45,20 @@ llega a n8n en `/webhook/mirabilenet-personal`, firmado igual que los mensajes d
 - Probado de punta a punta el 23/11/2026: el técnico escribió con sus palabras, Gemini lo
   entendió como «arreglado» y Odoo cerró la avería con la nota.
 
+## Cotizaciones en los flujos 17, 15 y 20 (23/11/2026)
+
+- **17 Ventas y 15 Soporte** tienen tres herramientas nuevas: «Consultar kits de cámaras»,
+  «Buscar equipos» y «Enviar cotización», y una regla nueva en las instrucciones del agente.
+  Se generan con `documentacion/herramientas/generar_flujos_cotizacion.py <flujos exportados>
+  <salida>`; es idempotente.
+- **20 Personal** entiende «cotiza…» (acción `cotizar`). Odoo le pasa en el mensaje la lista
+  de kits y de ciudades.
+- En Odoo lo atiende el módulo `mirabilenet_cotizador_whatsapp`.
+- Respaldo de los flujos anteriores: `C:\ING.SISTEMAS\n8n_local\respaldo_flujos_20261123_1452`.
+- Probado de punta a punta el 23/11/2026 con datos ficticios, que se borraron después: un
+  interesado pidió 4 cámaras, el bot consultó los kits, armó la cotización y dejó el PDF en la
+  conversación; un técnico escribió «cotiza un kit de 4 cámaras para…» y Odoo armó la suya.
+
 ## Arrancar
 
 1. Abrir Docker Desktop. n8n arranca solo (`restart: unless-stopped`). Si no:

@@ -92,7 +92,8 @@ def _peticion(metodo, url, token, cuerpo=None):
 def enviar_plantilla(
     *, phone_number_id, token, destino, plantilla, idioma, parametros,
     header_image_url="", requiere_imagen_encabezado=False,
-    parameter_format="POSITIONAL", parameter_names=None, api_version="v21.0", botones=None
+    parameter_format="POSITIONAL", parameter_names=None, api_version="v21.0", botones=None,
+    header_document=None
 ):
     """Envia un mensaje de plantilla. Devuelve el `wa_message_id`.
 
@@ -144,6 +145,14 @@ def enviar_plantilla(
         componentes.append({
             "type": "header",
             "parameters": [{"type": "image", "image": {"link": header_image_url}}],
+        })
+    if header_document:
+        # Encabezado con un documento ya subido a Meta: {"id": media_id, "filename": nombre}.
+        componentes.append({
+            "type": "header",
+            "parameters": [{"type": "document", "document": {
+                "id": str(header_document["id"]),
+                "filename": str(header_document.get("filename") or "documento.pdf")}}],
         })
     if parametros:
         componentes.append({

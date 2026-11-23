@@ -35,4 +35,11 @@
         <field name="variables">persona, tarea, proyecto, fecha_limite, asignado_por</field>
         <field name="buttons">recibido, terminada</field>
     </record>
+    <!-- Al pasante no se le pide «Terminada» por WhatsApp: entrega en la plataforma. -->
+    <record id="tpl_tarea_pasante" model="mirabilenet.staff.template">
+        <field name="kind">tarea_pasante</field>
+        <field name="meta_name">tarea_pasante</field>
+        <field name="variables">persona, tarea, fecha_limite, enlace</field>
+        <field name="buttons">recibido</field>
+    </record>
 </odoo>

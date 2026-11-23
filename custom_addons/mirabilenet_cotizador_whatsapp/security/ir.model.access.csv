@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cot_delivery_user,envíos de cotizaciones: lectura,model_mirabilenet_cot_delivery,mirabilenet_cotizador.group_mirabilenet_cot_user,1,0,0,0
+access_cot_delivery_manager,envíos de cotizaciones: configuración,model_mirabilenet_cot_delivery,mirabilenet_cotizador.group_mirabilenet_cot_manager,1,0,0,1

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_mirabilenet_cot_whatsapp" model="ir.ui.view">
+        <field name="name">sale.order.form.mirabilenet.cot.whatsapp</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="mirabilenet_cotizador.view_order_form_mirabilenet_cot"/>
+        <field name="arch" type="xml">
+            <button name="action_mirabilenet_cot_pdf" position="after">
+                <button name="action_mirabilenet_cot_whatsapp_me" type="object"
+                        string="Enviarme por WhatsApp"
+                        invisible="not mirabilenet_cot_is_quote"
+                        groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+                <button name="action_mirabilenet_cot_whatsapp_customer" type="object"
+                        string="Enviar al cliente por WhatsApp"
+                        invisible="not mirabilenet_cot_is_quote or mirabilenet_cot_stage in ('ganada', 'perdida')"
+                        confirm="Se aprueba (si está en borrador) y sale al WhatsApp del cliente. ¿Continuar?"
+                        groups="mirabilenet_cotizador.group_mirabilenet_cot_user"/>
+            </button>
+            <field name="mirabilenet_cot_requester_id" position="after">
+                <field name="mirabilenet_cot_customer_whatsapp"/>
+            </field>
+            <xpath expr="//page[@name='mirabilenet_cot']" position="inside">
+                <group string="Envíos por WhatsApp" invisible="not mirabilenet_cot_delivery_ids">
+                    <field name="mirabilenet_cot_delivery_ids" nolabel="1" colspan="2" readonly="1">
+                        <list>
+                            <field name="create_date" string="Pedido"/>
+                            <field name="target"/>
+                            <field name="destination"/>
+                            <field name="state" widget="badge"
+                                   decoration-success="state == 'enviado'"
+                                   decoration-danger="state == 'fallido'"/>
+                            <field name="channel"/>
+                            <field name="error_detail"/>
+                        </list>
+                    </field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_mirabilenet_cot_delivery_list" model="ir.ui.view">
+        <field name="name">mirabilenet.cot.delivery.list</field>
+        <field name="model">mirabilenet.cot.delivery</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0">
+                <field name="create_date" string="Pedido"/>
+                <field name="order_id"/>
+                <field name="target"/>
+                <field name="user_id"/>
+                <field name="destination"/>
+                <field name="state" widget="badge" decoration-success="state == 'enviado'"
+                       decoration-danger="state == 'fallido'"/>
+                <field name="channel"/>
+                <field name="sent_at"/>
+                <field name="error_detail"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_mirabilenet_cot_delivery" model="ir.actions.act_window">
+        <field name="name">Envíos por WhatsApp</field>
+        <field name="res_model">mirabilenet.cot.delivery</field>
+        <field name="view_mode">list</field>
+    </record>
+    <menuitem id="menu_mirabilenet_cot_delivery" name="Envíos por WhatsApp"
+              parent="mirabilenet_cotizador.menu_mirabilenet_cot_root"
+              action="action_mirabilenet_cot_delivery" sequence="40"/>
+</odoo>

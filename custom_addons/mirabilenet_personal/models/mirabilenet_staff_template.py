@@ -10,6 +10,7 @@ KINDS = [
     ("averia_no_resuelta", "Avería no resuelta (aviso al jefe)"),
     ("averia_sin_atender", "Avería sin atender (aviso al jefe)"),
     ("tarea_asignada", "Tarea asignada"),
+    ("tarea_pasante", "Tarea nueva de un pasante (revisar la plataforma)"),
 ]
 #: Lo que cada aviso puede poner en su plantilla, por nombre. El texto vive en Meta.
 VARIABLES = {
@@ -31,6 +32,7 @@ VARIABLES = {
     "proyecto": "Proyecto de la tarea",
     "fecha_limite": "Fecha límite de la tarea",
     "asignado_por": "Quién asignó la tarea",
+    "enlace": "Dirección de la tarea en la plataforma",
 }
 #: Botones de respuesta rápida: lo que hace cada uno.
 ACTIONS = {
