@@ -1,0 +1,363 @@
+// Estilo del sitio público: limpio, con mucho aire, titulares grandes, mosaicos de esquinas
+// redondeadas y tarjetas de producto. Solo da forma a clases que los bloques ya llevan
+// (mn_*): los textos, las imágenes, los colores de fondo y el orden se siguen cambiando con
+// el botón «Editar». Nada de esto toca la interfaz del editor.
+
+$mn-ink: #1d1d1f;
+$mn-ink-soft: #6e6e73;
+$mn-paper: #f5f5f7;
+$mn-night: #0b1220;
+$mn-blue: #006db7;
+$mn-sky: #00abda;
+$mn-radius: 28px;
+$mn-font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI Variable Display",
+    "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+
+#wrapwrap {
+    font-family: $mn-font;
+    color: $mn-ink;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+
+    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6, .display-1, .display-2, .display-3,
+    .display-4, .display-5, .display-6 {
+        font-family: $mn-font;
+        font-weight: 600;
+        letter-spacing: -0.022em;
+        line-height: 1.08;
+    }
+    .lead {
+        font-weight: 400;
+        letter-spacing: -0.012em;
+        line-height: 1.38;
+    }
+
+    // ---------------------------------------------------------------- Menú y pie
+    > header {
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.8) !important;
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: none !important;
+            min-height: 48px;
+        }
+        .nav-link {
+            font-size: 0.8125rem;
+            font-weight: 400;
+            color: rgba(0, 0, 0, 0.8) !important;
+            padding: 0.4rem 0.7rem !important;
+            &:hover, &.active { color: #000 !important; }
+        }
+        .btn { font-size: 0.8125rem; padding: 0.3rem 0.95rem; }
+    }
+    > footer {
+        font-size: 0.8125rem;
+        h5, .h5, h4, .h4 { font-size: 0.8125rem; font-weight: 600; letter-spacing: 0; }
+        a { text-decoration: none; &:hover { text-decoration: underline; } }
+    }
+
+    // ---------------------------------------------------------------- Botones y enlaces
+    main .btn {
+        border-radius: 980px;
+        font-weight: 400;
+        padding: 0.56rem 1.35rem;
+        letter-spacing: -0.01em;
+        box-shadow: none;
+    }
+    main .btn-lg { font-size: 1.0625rem; padding: 0.7rem 1.6rem; }
+    // Enlace con flecha: «Ver planes ›»
+    .mn_link {
+        color: $mn-blue;
+        text-decoration: none;
+        font-size: 1.0625rem;
+        white-space: nowrap;
+        &::after { content: " \203A"; font-size: 1.15em; line-height: 1; }
+        &:hover { text-decoration: underline; }
+    }
+    .o_cc5 .mn_link, .o_cc4 .mn_link, .mn_tile_dark .mn_link { color: #2997ff; }
+
+    // ---------------------------------------------------------------- Portadas
+    .mn_hero {
+        text-align: center;
+        overflow: hidden;
+        .mn_eyebrow, small.text-uppercase {
+            display: block;
+            font-size: 1.0625rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            text-transform: none !important;
+            margin-bottom: 0.35rem;
+        }
+        h1, .display-4 {
+            font-size: clamp(2.5rem, 6.2vw, 5rem);
+            font-weight: 700;
+            letter-spacing: -0.035em;
+            line-height: 1.04;
+            margin-bottom: 0.35rem;
+        }
+        h2 {
+            font-size: clamp(2.25rem, 5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+        .lead {
+            font-size: clamp(1.2rem, 2.2vw, 1.75rem);
+            max-width: 46rem;
+            margin: 0 auto 1.1rem;
+            color: inherit;
+            opacity: 0.86;
+        }
+        .mn_actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.9rem 1.6rem;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 0;
+        }
+        .mn_art {
+            display: block;
+            width: 100%;
+            max-width: 980px;
+            height: auto;
+            margin: 2.2rem auto 0;
+        }
+    }
+
+    // Título de las páginas interiores (bloque «Título»).
+    main .s_title {
+        text-align: center;
+        h1 { font-size: clamp(2.25rem, 5vw, 3.5rem); font-weight: 700; letter-spacing: -0.03em; }
+        small.text-uppercase {
+            text-transform: none !important;
+            font-size: 1.0625rem;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        .lead { max-width: 44rem; margin-left: auto; margin-right: auto; }
+    }
+
+    // ---------------------------------------------------------------- Mosaicos
+    .mn_tiles {
+        > .container, > .container-fluid { max-width: 1440px; }
+        .row { --gutter-x: 12px; --gutter-y: 12px; row-gap: 12px; }
+        .row > [class*="col-"] { padding-left: 6px; padding-right: 6px; }
+    }
+    .mn_tile {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 520px;
+        padding: 3.2rem 1.5rem 0;
+        border-radius: $mn-radius;
+        background-color: $mn-paper;
+        text-align: center;
+        overflow: hidden;
+        transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        h2, h3 {
+            font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.028em;
+            margin-bottom: 0.3rem;
+        }
+        p { font-size: 1.1875rem; line-height: 1.32; margin-bottom: 0.7rem; }
+        .mn_actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem 1.4rem;
+            justify-content: center;
+            align-items: center;
+        }
+        .mn_art {
+            display: block;
+            width: calc(100% + 3rem);
+            max-width: none;
+            margin: auto -1.5rem 0;
+            padding-top: 1.4rem;
+            height: auto;
+        }
+    }
+    .mn_tile_dark {
+        background-color: $mn-night;
+        color: #f5f5f7;
+        h2, h3, p { color: #f5f5f7; }
+        .btn-outline-primary { color: #2997ff; border-color: #2997ff; }
+    }
+    @media (min-width: 992px) {
+        .mn_tile:hover { transform: scale(1.008); }
+    }
+    @media (max-width: 767.98px) {
+        .mn_tile { min-height: 420px; padding-top: 2.4rem; }
+    }
+
+    // ---------------------------------------------------------------- Bloques dinámicos
+    .s_mn_dynamic {
+        .s_dynamic_snippet_title {
+            @media (min-width: 768px) { align-items: flex-end; }
+            margin-bottom: 1.6rem !important;
+            h2 {
+                font-size: clamp(1.9rem, 4vw, 3rem);
+                font-weight: 700;
+                letter-spacing: -0.03em;
+                margin-bottom: 0.2rem;
+            }
+            .lead { color: $mn-ink-soft; font-size: 1.3rem; margin-bottom: 0; }
+            a {
+                color: $mn-blue;
+                text-decoration: none;
+                font-size: 1.0625rem;
+                white-space: nowrap;
+                .fa { display: none; }
+                &::after { content: " \203A"; font-size: 1.15em; }
+                &:hover { text-decoration: underline; }
+            }
+        }
+        .card {
+            border: 0;
+            border-radius: 22px;
+            background-color: $mn-paper;
+            box-shadow: none !important;
+            transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s;
+            .card-body { padding: 1.9rem 1.7rem; }
+            .card-img-top { border-radius: 22px 22px 0 0; aspect-ratio: 16 / 10; object-fit: cover; }
+            h3 { font-size: 1.3rem; font-weight: 600; letter-spacing: -0.02em; }
+            a { text-decoration: none; }
+            &:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.09) !important; }
+        }
+        details { border: 0 !important; border-radius: 18px !important; background-color: $mn-paper; padding: 1.2rem 1.4rem !important; }
+        .badge { border-radius: 980px; font-weight: 500; }
+    }
+    // Sobre un fondo gris, las tarjetas van blancas.
+    .s_mn_dynamic.bg-100 .card, .s_mn_dynamic.o_cc2 .card, .s_mn_dynamic.bg-100 details,
+    .s_mn_dynamic.o_cc2 details { background-color: #fff; }
+    .bg-100 { background-color: $mn-paper !important; }
+
+    // Cifras: números grandes.
+    .s_mn_figures .dynamic_snippet_template .h2 {
+        font-size: clamp(2.5rem, 5vw, 3.75rem);
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        background: linear-gradient(90deg, $mn-blue, $mn-sky);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent !important;
+    }
+    // Ventajas: tarjetas pequeñas con ícono arriba.
+    .s_mn_advantages .dynamic_snippet_template .d-flex {
+        flex-direction: column;
+        height: 100%;
+        padding: 1.8rem 1.6rem;
+        border-radius: 22px;
+        background-color: $mn-paper;
+        .fa { font-size: 1.9rem; margin-bottom: 0.9rem; }
+        strong { font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
+        .text-muted { margin-top: 0.3rem; color: $mn-ink-soft !important; }
+    }
+
+    // ---------------------------------------------------------------- Tarjetas de planes
+    .mn_plan {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding: 2.1rem 1.9rem 1.9rem;
+        border-radius: $mn-radius;
+        background-color: #fff;
+        text-align: left;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+        transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s;
+        &:hover { transform: translateY(-6px); box-shadow: 0 24px 48px rgba(0, 0, 0, 0.12); }
+
+        .mn_plan_tag {
+            min-height: 1.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            color: #bf4800;
+            margin-bottom: 0.35rem;
+        }
+        .mn_plan_name { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.028em; margin-bottom: 0.15rem; color: $mn-ink; }
+        .mn_plan_region { font-size: 0.875rem; color: $mn-ink-soft; min-height: 1.3rem; }
+        .mn_plan_speed {
+            display: flex;
+            align-items: baseline;
+            gap: 0.4rem;
+            margin: 1.3rem 0 0.2rem;
+            .mn_plan_number {
+                font-size: clamp(3.4rem, 6vw, 4.6rem);
+                font-weight: 700;
+                letter-spacing: -0.05em;
+                line-height: 0.95;
+                background: linear-gradient(120deg, $mn-blue 10%, $mn-sky 90%);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+            }
+            .mn_plan_unit { font-size: 1.25rem; font-weight: 600; color: $mn-ink; }
+        }
+        .mn_plan_caption { font-size: 0.875rem; color: $mn-ink-soft; }
+        .mn_plan_features {
+            list-style: none;
+            padding: 0;
+            margin: 1.3rem 0 1.5rem;
+            border-top: 1px solid #d2d2d7;
+            li {
+                display: flex;
+                justify-content: space-between;
+                gap: 1rem;
+                padding: 0.72rem 0;
+                border-bottom: 1px solid #e8e8ed;
+                font-size: 0.9375rem;
+                span:first-child { color: $mn-ink-soft; }
+                span:last-child { font-weight: 600; text-align: right; }
+            }
+        }
+        .mn_plan_foot {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .mn_plan_price {
+            font-size: 0.9375rem;
+            color: $mn-ink-soft;
+            line-height: 1.25;
+            strong { display: block; font-size: 1.45rem; font-weight: 700; letter-spacing: -0.02em; color: $mn-ink; }
+        }
+        .btn { border-radius: 980px; padding: 0.5rem 1.25rem; font-weight: 400; white-space: nowrap; }
+    }
+    // El plan destacado va en oscuro.
+    .mn_plan_featured {
+        background-color: $mn-night;
+        color: #f5f5f7;
+        .mn_plan_tag { color: #ff9f0a; }
+        .mn_plan_name { color: #f5f5f7 !important; }
+        .mn_plan_region, .mn_plan_caption, .mn_plan_price, .mn_plan_features li span:first-child { color: #a1a1a6; }
+        .mn_plan_unit, .mn_plan_price strong, .mn_plan_features li span:last-child { color: #f5f5f7 !important; }
+        .mn_plan_number { background: linear-gradient(120deg, #2997ff 10%, #6ee0ff 90%); -webkit-background-clip: text; background-clip: text; }
+        .mn_plan_features { border-top-color: #424245; li { border-bottom-color: #2a2f3a; } }
+    }
+    // Los planes se ven mejor sobre gris.
+    .s_mn_plans { background-color: $mn-paper; }
+
+    // ---------------------------------------------------------------- Llamada a la acción
+    main .s_call_to_action {
+        text-align: center;
+        .row { justify-content: center; }
+        [class*="col-lg-9"], [class*="col-lg-3"] { flex: 0 0 100%; max-width: 100%; text-align: center !important; }
+        h2 { font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.03em; }
+        .lead { color: $mn-ink-soft; margin-bottom: 1.2rem !important; }
+    }
+
+    // ---------------------------------------------------------------- Formularios
+    main .form-control, main .form-select {
+        border-radius: 12px;
+        border-color: #d2d2d7;
+        padding: 0.72rem 0.95rem;
+        &:focus { border-color: $mn-blue; box-shadow: 0 0 0 4px rgba(0, 109, 183, 0.15); }
+    }
+}

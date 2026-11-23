@@ -7,6 +7,18 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
 
 ## Para retomar (22/11/2026)
 
+- **Sitio web con estilo nuevo (23/11/2026, `mirabilenet_web` 19.0.2.2.0):**
+  - Estilo limpio de titulares grandes, mosaicos y tarjetas (`static/src/scss/sitio.scss`).
+    Portada nueva: dos portadas (fibra y videovigilancia), mosaico de cuatro servicios y los
+    bloques dinámicos de siempre. Todo sigue siendo bloques editables con «Editar».
+  - Tarjetas de planes nuevas (`mn_plan`): aparecen solas al publicar un plan con precio.
+  - Ilustraciones propias en SVG (`static/img/`): mirabilenet.com no tiene fotos. Copia en
+    `Static/web/`.
+  - En `mira_nativo_test` se quitó la copia de la portada editada a mano (era un bloque de
+    prueba); respaldo en `traslado_odoo/respaldo_antes_sitio_web`. 31 pruebas, 0 fallos.
+  - **Falta:** publicar planes con nombres presentables (hoy son los perfiles importados),
+    cargar el contenido (servicios, ventajas, cifras, cobertura), traducir el menú y el pie
+    que quedaron en inglés, y cambiar las ilustraciones por fotos propias si se quiere.
 - **Cotizaciones por WhatsApp y en n8n (23/11/2026, módulo nuevo `mirabilenet_cotizador_whatsapp`):**
   - Herramientas del bot en la API de n8n: `/kits`, `/products` y `/quotation`. El bot manda el
     PDF directo; con alertas (stock, precio antiguo) queda en borrador y avisa al vendedor.

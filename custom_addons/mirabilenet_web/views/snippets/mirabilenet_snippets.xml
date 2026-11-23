@@ -2,7 +2,7 @@
 <odoo>
     <!-- Generado por la herramienta del sitio: bloques dinámicos de MIRABILENET. -->
     <template id="s_mn_services" name="Servicios (MIRABILENET)">
-    <section class="s_mn_services s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_services" data-name="Servicios (MIRABILENET)" data-mn-filter="servicios" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_service_cards" data-number-of-records="4" data-column-classes="col-12 col-md-6 col-lg-3" data-extra-classes="g-4">
+    <section class="s_mn_services s_mn_dynamic s_dynamic o_colored_level pt80 pb80" data-snippet="s_mn_services" data-name="Servicios (MIRABILENET)" data-mn-filter="servicios" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_service_cards" data-number-of-records="4" data-column-classes="col-12 col-md-6 col-lg-3" data-extra-classes="g-4">
         <div class="s_dynamic_snippet_container container">
             <div class="row s_nb_column_fixed">
                 <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
@@ -25,7 +25,7 @@
     </section>
     </template>
     <template id="s_mn_plans" name="Planes de internet (MIRABILENET)">
-    <section class="s_mn_plans s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_plans" data-name="Planes de internet (MIRABILENET)" data-mn-filter="planes" data-template-key="mirabilenet_web.dynamic_filter_template_product_template_mn_plans" data-number-of-records="4" data-column-classes="col-12 col-md-6 col-lg-4" data-extra-classes="g-4">
+    <section class="s_mn_plans s_mn_dynamic s_dynamic o_colored_level pt80 pb80" data-snippet="s_mn_plans" data-name="Planes de internet (MIRABILENET)" data-mn-filter="planes" data-template-key="mirabilenet_web.dynamic_filter_template_product_template_mn_plans" data-number-of-records="4" data-column-classes="col-12 col-md-6 col-lg-4" data-extra-classes="g-4">
         <div class="s_dynamic_snippet_container container">
             <div class="row s_nb_column_fixed">
                 <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
@@ -48,7 +48,7 @@
     </section>
     </template>
     <template id="s_mn_coverage" name="Cobertura (MIRABILENET)">
-    <section class="s_mn_coverage s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_coverage" data-name="Cobertura (MIRABILENET)" data-mn-filter="cobertura" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_coverage_cards" data-number-of-records="16" data-column-classes="col-6 col-md-4 col-lg-3" data-extra-classes="g-3">
+    <section class="s_mn_coverage s_mn_dynamic s_dynamic o_colored_level pt80 pb80" data-snippet="s_mn_coverage" data-name="Cobertura (MIRABILENET)" data-mn-filter="cobertura" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_coverage_cards" data-number-of-records="16" data-column-classes="col-6 col-md-4 col-lg-3" data-extra-classes="g-3">
         <div class="s_dynamic_snippet_container container">
             <div class="row s_nb_column_fixed">
                 <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
@@ -71,7 +71,7 @@
     </section>
     </template>
     <template id="s_mn_projects" name="Proyectos (MIRABILENET)">
-    <section class="s_mn_projects s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_projects" data-name="Proyectos (MIRABILENET)" data-mn-filter="proyectos" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_project_cards" data-number-of-records="4" data-column-classes="col-12 col-md-6 col-lg-4" data-extra-classes="g-4">
+    <section class="s_mn_projects s_mn_dynamic s_dynamic o_colored_level pt80 pb80" data-snippet="s_mn_projects" data-name="Proyectos (MIRABILENET)" data-mn-filter="proyectos" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_project_cards" data-number-of-records="4" data-column-classes="col-12 col-md-6 col-lg-4" data-extra-classes="g-4">
         <div class="s_dynamic_snippet_container container">
             <div class="row s_nb_column_fixed">
                 <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
@@ -94,7 +94,7 @@
     </section>
     </template>
     <template id="s_mn_faq" name="Preguntas frecuentes (MIRABILENET)">
-    <section class="s_mn_faq s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_faq" data-name="Preguntas frecuentes (MIRABILENET)" data-mn-filter="preguntas" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_faq_list" data-number-of-records="16" data-column-classes="col-12" data-extra-classes="g-2">
+    <section class="s_mn_faq s_mn_dynamic s_dynamic o_colored_level pt80 pb80" data-snippet="s_mn_faq" data-name="Preguntas frecuentes (MIRABILENET)" data-mn-filter="preguntas" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_faq_list" data-number-of-records="16" data-column-classes="col-12" data-extra-classes="g-2">
         <div class="s_dynamic_snippet_container container">
             <div class="row s_nb_column_fixed">
                 <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
@@ -117,7 +117,7 @@
     </section>
     </template>
     <template id="s_mn_advantages" name="Ventajas (MIRABILENET)">
-    <section class="s_mn_advantages s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_advantages" data-name="Ventajas (MIRABILENET)" data-mn-filter="ventajas" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_advantage_list" data-number-of-records="4" data-column-classes="col-12 col-md-4" data-extra-classes="g-4">
+    <section class="s_mn_advantages s_mn_dynamic s_dynamic o_colored_level pt80 pb80" data-snippet="s_mn_advantages" data-name="Ventajas (MIRABILENET)" data-mn-filter="ventajas" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_advantage_list" data-number-of-records="4" data-column-classes="col-12 col-md-4" data-extra-classes="g-4">
         <div class="s_dynamic_snippet_container container">
             <div class="row s_nb_column_fixed">
                 <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
@@ -136,7 +136,7 @@
     </section>
     </template>
     <template id="s_mn_figures" name="Cifras (MIRABILENET)">
-    <section class="s_mn_figures s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_figures" data-name="Cifras (MIRABILENET)" data-mn-filter="cifras" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_figure_list" data-number-of-records="4" data-column-classes="col-6 col-md-3" data-extra-classes="g-4">
+    <section class="s_mn_figures s_mn_dynamic s_dynamic o_colored_level pt80 pb80" data-snippet="s_mn_figures" data-name="Cifras (MIRABILENET)" data-mn-filter="cifras" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_figure_list" data-number-of-records="4" data-column-classes="col-6 col-md-3" data-extra-classes="g-4">
         <div class="s_dynamic_snippet_container container">
             <div class="row s_nb_column_fixed">
                 <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
@@ -155,7 +155,7 @@
     </section>
     </template>
     <template id="s_mn_allies" name="Tecnologías y aliados (MIRABILENET)">
-    <section class="s_mn_allies s_mn_dynamic s_dynamic o_colored_level pt48 pb48" data-snippet="s_mn_allies" data-name="Tecnologías y aliados (MIRABILENET)" data-mn-filter="aliados" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_ally_list" data-number-of-records="16" data-column-classes="col-auto" data-extra-classes="g-2">
+    <section class="s_mn_allies s_mn_dynamic s_dynamic o_colored_level pt80 pb80" data-snippet="s_mn_allies" data-name="Tecnologías y aliados (MIRABILENET)" data-mn-filter="aliados" data-template-key="mirabilenet_web.dynamic_filter_template_mirabilenet_web_ally_list" data-number-of-records="16" data-column-classes="col-auto" data-extra-classes="g-2">
         <div class="s_dynamic_snippet_container container">
             <div class="row s_nb_column_fixed">
                 <section class="s_dynamic_snippet_title oe_unremovable oe_unmovable d-flex justify-content-between flex-column flex-md-row mb-lg-0 pb-3 pb-md-0 s_col_no_resize">
@@ -187,20 +187,26 @@
     </template>
     <template id="dynamic_filter_template_product_template_mn_plans" name="MIRABILENET: Planes de internet">
         <t t-foreach="records" t-as="data" data-column-classes="col-12 col-md-6 col-lg-4" data-extra-classes="g-4">
-            <div t-attf-class="card h-100 shadow-sm text-center #{'border-primary' if data_index == 1 else ''}">
-                <div class="card-body">
-                    <span t-if="data_index == 1" class="badge text-bg-primary mb-2">Más contratado</span>
-                    <h3 class="h5" t-out="data.get('name')"/>
-                    <p t-if="data.get('mn_price')" class="display-6 mb-0">
-                        <small class="h5">Bs</small> <span t-out="data['mn_price']"/>
-                        <small class="h6 text-muted">/mes</small>
-                    </p>
-                    <p t-if="data.get('mn_down')" class="mt-3 mb-1"><strong t-out="data['mn_down']"/> Mbps de bajada</p>
-                    <p t-if="data.get('mn_up')" class="mb-1"><strong t-out="data['mn_up']"/> Mbps de subida</p>
-                    <p t-if="data.get('mn_tv')" class="mb-1">Incluye servicio de TV</p>
-                    <p t-if="data.get('mn_region')" class="text-muted small" t-out="data['mn_region']"/>
-                    <a t-att-href="data.get('mn_url', '/contacto?tipo=cotizacion')"
-                       t-attf-class="btn mt-2 #{'btn-primary' if data_index == 1 else 'btn-outline-primary'}">Lo quiero</a>
+            <div t-attf-class="mn_plan #{'mn_plan_featured' if data_index == 1 else ''}">
+                <div class="mn_plan_tag"><t t-if="data_index == 1">Más contratado</t></div>
+                <h3 class="mn_plan_name" t-out="data.get('name')"/>
+                <div class="mn_plan_region" t-out="data.get('mn_region') or 'Todas las regiones'"/>
+                <div t-if="data.get('mn_down')" class="mn_plan_speed">
+                    <span class="mn_plan_number" t-out="data['mn_down']"/>
+                    <span class="mn_plan_unit">Mbps</span>
+                </div>
+                <div t-if="data.get('mn_down')" class="mn_plan_caption">de bajada</div>
+                <ul class="mn_plan_features">
+                    <li t-if="data.get('mn_up')"><span>Subida</span><span><t t-out="data['mn_up']"/> Mbps</span></li>
+                    <li t-if="data.get('mn_tv')"><span>Televisión</span><span>Incluida</span></li>
+                    <li><span>Instalación</span><span>Se cotiza aparte</span></li>
+                </ul>
+                <div class="mn_plan_foot">
+                    <div class="mn_plan_price">
+                        <t t-if="data.get('mn_price')">Desde<strong>Bs <t t-out="data['mn_price']"/>/mes</strong></t>
+                        <t t-else="">Precio<strong>A cotizar</strong></t>
+                    </div>
+                    <a t-att-href="data.get('mn_url', '/contacto?tipo=cotizacion')" class="btn btn-primary">Lo quiero</a>
                 </div>
             </div>
         </t>

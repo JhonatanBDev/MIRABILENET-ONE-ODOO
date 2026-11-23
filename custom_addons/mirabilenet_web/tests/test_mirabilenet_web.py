@@ -354,10 +354,13 @@ class TestWebPages(WebCommon, HttpCase):
         self.assertIn("W-PUBLICADO", plans)
         self.assertNotIn("W-RESERVADO", plans)
         self.assertNotIn("W-SINPRECIO", plans)
-        self.assertIn(">150<", plans.replace(" ", "").replace("\n", ""))
+        self.assertIn("Bs150/mes", plans.replace(" ", "").replace("\n", ""))
         self.assertIn("plan=W-PUBLICADO", plans)
+        self.assertIn("mn_plan", plans)
         self.settings.show_prices = False
-        self.assertNotIn(">150<", self._dynamic("planes").replace(" ", "").replace("\n", ""))
+        without = self._dynamic("planes").replace(" ", "").replace("\n", "")
+        self.assertNotIn("150/mes", without)
+        self.assertIn("Acotizar", without)
 
     def test_legal_pages_exist_only_when_loaded(self):
         for path in ("/privacidad", "/cookies", "/terminos"):
