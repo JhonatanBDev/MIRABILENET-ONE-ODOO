@@ -12,7 +12,7 @@ DIR="./respaldos"
 mkdir -p "$DIR"
 
 docker compose exec -T odoo_db sh -c "pg_dump -U \$POSTGRES_USER -Fc $DB" > "$DIR/$DB-$STAMP.dump"
-docker compose run --rm --no-deps -v "$(pwd)/respaldos:/salida" --entrypoint sh odoo \
+docker compose run --rm --no-deps --user 0 -v "$(pwd)/respaldos:/salida" --entrypoint sh odoo \
     -c "tar -czf /salida/$DB-$STAMP-filestore.tar.gz -C /var/lib/odoo/filestore $DB"
 
 # Un respaldo que no se puede leer no es un respaldo: se comprueba antes de subirlo.

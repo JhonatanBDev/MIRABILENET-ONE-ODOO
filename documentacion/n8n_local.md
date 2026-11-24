@@ -103,6 +103,6 @@ entorno.
 ## Para producción (VPS)
 
 En el VPS, n8n ya corre junto al sistema actual. Al pasar a Odoo:
-- los flujos deben llamar a Odoo por la red interna de Docker (`http://odoo:8069`);
+- los flujos deben llamar a Odoo por la red interna de Docker (`http://odoo:8000`, el `http_port` de `deploy/odoo.conf.example`);
 - el parámetro del webhook debe apuntar a `http://n8n:5678/webhook/mirabilenet-entrante`;
 - los dos tokens van en `.env.odoo` (ver `deploy/.env.odoo.example`).

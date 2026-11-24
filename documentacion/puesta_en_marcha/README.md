@@ -18,9 +18,13 @@ confirma con el usuario uno por uno.
 - `docker-compose.cambio.yml`: el día del cambio le da el nombre `api` en esa red.
 - `odoo.conf.example` y `.env.odoo.example`: se copian sin `.example` en el VPS. Las claves
   maestras, los tokens y las contraseñas van solo en esas copias, nunca en Git ni en la imagen.
+  Permisos 600 en las dos; `odoo.conf` con dueño uid 100 (`chown 100:0 odoo.conf`), que es el
+  usuario `odoo` del contenedor: si es de root, Odoo no lo puede leer. `.env.odoo` queda de root
+  (lo lee Docker).
 - `nginx/odoo.conf`: bloque para el nginx del sistema anterior, con límites de peticiones en
   formularios, ingreso y webhook. La API de n8n no se expone a internet.
-- `respaldo.sh` y `restaurar.sh`.
+- `respaldo.sh` y `restaurar.sh`. Corren sus contenedores temporales con `--user 0` para poder
+  escribir y leer en `respaldos/` (de root, permisos 700: tiene datos de clientes).
 
 ## Para subir al VPS
 

@@ -15,6 +15,6 @@ if docker compose exec -T odoo_db sh -c 'psql -U $POSTGRES_USER -lqt' | cut -d'|
 fi
 docker compose exec -T odoo_db sh -c "createdb -U \$POSTGRES_USER $NUEVA"
 docker compose exec -T odoo_db sh -c "pg_restore -U \$POSTGRES_USER -d $NUEVA --no-owner /respaldos/$(basename "$DUMP")"
-docker compose run --rm --no-deps -v "$(pwd)/respaldos:/entrada" --entrypoint sh odoo -c \
-    "mkdir -p /var/lib/odoo/filestore/$NUEVA && tar -xzf /entrada/$(basename "$FILES") -C /tmp && cp -a /tmp/$ORIGEN/. /var/lib/odoo/filestore/$NUEVA/"
+docker compose run --rm --no-deps --user 0 -v "$(pwd)/respaldos:/entrada" --entrypoint sh odoo -c \
+    "mkdir -p /var/lib/odoo/filestore/$NUEVA && tar -xzf /entrada/$(basename "$FILES") -C /tmp && cp -a /tmp/$ORIGEN/. /var/lib/odoo/filestore/$NUEVA/ && chown -R odoo:odoo /var/lib/odoo/filestore/$NUEVA"
 echo "Restaurado en $NUEVA. Comprobar: módulos instalados, últimas facturas y adjuntos."

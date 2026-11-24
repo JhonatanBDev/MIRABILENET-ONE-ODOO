@@ -124,7 +124,7 @@ puede enviarlo.
 - En una PC nueva: crear las tres credenciales e importar los flujos (ver
   `INSTALAR_EN_OTRA_PC.md`, paso 9).
 - La clave de Gemini es de una cuenta con cupo limitado; revisar el plan antes de producción.
-- En el servidor, los flujos deben llamar a Odoo por la red interna (`http://odoo:8069`) y el
+- En el servidor, los flujos deben llamar a Odoo por la red interna (`http://odoo:8000`, el `http_port` de `deploy/odoo.conf.example`) y el
   parámetro `mirabilenet.n8n_inbound_webhook_url` debe apuntar al n8n del servidor.
 
 ## 8. Claves maestras

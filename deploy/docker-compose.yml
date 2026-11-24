@@ -14,7 +14,9 @@ services:
     environment:
       POSTGRES_DB: postgres
     volumes:
-      - odoo_pg:/var/lib/postgresql/data
+      # Desde PostgreSQL 18 la imagen exige el volumen en /var/lib/postgresql (no en .../data):
+      # con la ruta vieja se niega a arrancar.
+      - odoo_pg:/var/lib/postgresql
       - ./respaldos:/respaldos
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
