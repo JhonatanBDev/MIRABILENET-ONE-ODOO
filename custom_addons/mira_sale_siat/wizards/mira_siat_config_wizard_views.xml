@@ -48,7 +48,7 @@
                     </p>
                     <field name="branch_ids">
                         <list editable="bottom">
-                            <field name="branch_id" column_invisible="1"/>
+                            <field name="branch_id" column_invisible="1" force_save="1"/>
                             <field name="code"/>
                             <field name="name"/>
                             <field name="address"/>

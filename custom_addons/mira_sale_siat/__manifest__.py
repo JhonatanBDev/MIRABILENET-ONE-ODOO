@@ -1,6 +1,6 @@
 {
     "name": "Mira_Sale: Facturación SIAT (Sistema Proveedor)",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.0.1",
     "summary": "Facturación Computarizada en Línea ante el SIAT de Bolivia, "
                "multiempresa, con contingencia, anulación y auditoría.",
     "description": "Subsistema fiscal de Mira_Sale, conectado directamente al SIAT del SIN. "

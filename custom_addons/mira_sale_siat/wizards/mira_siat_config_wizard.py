@@ -196,6 +196,10 @@ class MiraSiatConfigWizard(models.TransientModel):
                 raise UserError(_("Complete nombre, dirección y municipio de cada sucursal."))
             vals = {"code": line.code, "name": line.name, "address": line.address,
                     "municipality": line.municipality, "phone": line.phone}
+            if not line.branch_id:
+                # La pantalla puede no devolver la sucursal ya creada: se busca por número.
+                line.branch_id = Branch.search([("company_id", "=", self.company_id.id),
+                                                ("code", "=", line.code)], limit=1)
             if line.branch_id:
                 line.branch_id.write(vals)
             else:

@@ -546,6 +546,22 @@ class TestSiatFeatures(MiraSiatCommon):
         wizard.action_back()
         self.assertEqual(wizard.step, "defaults")
 
+    def test_config_wizard_reuses_existing_branch(self):
+        """Reabrir el asistente y pedir otra caja no intenta crear de nuevo la sucursal 0."""
+        company = self.company_a
+        branches = self.env["mira.siat.branch"].search([("company_id", "=", company.id)])
+        wizard = self.env["mira.siat.config.wizard"].with_company(company).create({})
+        main = branches.filtered(lambda b: b.code == 0)
+        line = wizard.branch_ids.filtered(lambda l: l.code == 0)
+        # Como llega desde la pantalla: sin la sucursal ya creada, con una caja más.
+        line.write({"branch_id": False, "pos_count": len(main.pos_ids) + 1,
+                    "address": line.address or "Calle 1",
+                    "municipality": line.municipality or "Tarija"})
+        wizard._apply_branches()
+        self.assertEqual(self.env["mira.siat.branch"].search(
+            [("company_id", "=", company.id)]), branches)
+        self.assertEqual(len(main.pos_ids), line.pos_count)
+
     def test_config_wizard_warns_in_production(self):
         wizard = self.env["mira.siat.config.wizard"].with_company(self.company_a).create({})
         wizard.step = "sync"
