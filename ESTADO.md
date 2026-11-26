@@ -7,6 +7,20 @@ Historial completo: `documentacion/historial_mirabilenet.md`.
 
 ## Para retomar (22/11/2026)
 
+- **Autorización SIAT: pruebas del SIN en PILOTO (25-26/11/2026, VPS):** se corren en el VPS
+  (`/opt/mirabilenet-odoo`, base `mirabilenet`) con `documentacion/herramientas/siat_pruebas/`
+  (`etapas_1_a_3.py`, `etapas_facturas.py`, `cadena_paralela.sh`; avance en
+  `siat_pruebas/pv0.log` y `pv1.log` del VPS). Caja 1 registrada ante el SIN (código 1).
+  Hechas: I (2/2), II (1.800, 0 fallos), III (200, 0 fallos). En curso, un proceso por punto
+  de venta: IV (125 por PV), VII (anular 125), XI (revertir 125), V/VI eventos 1-4. **El SIN
+  de pruebas tarda ~30 s por factura y ~35 s por paquete:** `mira_siat.read_timeout` = 120 en
+  el VPS (antes 30). VI pide en el PV 1 paquetes de **exactamente 500 facturas** (10 por
+  caso) y en el PV 0 menos de 500. **Pendiente:** eventos 5-7 (facturas manuales) necesitan
+  un CAFC de PILOTO: el `101C133D30E91C` (1-50) que dio el usuario es de producción
+  («Cafc no encontrado»); revisar en el detalle de la etapa VI qué CAFC pide el SIN. Las
+  etapas «V.3» (servicios v3) dan 503 en el SIN: falta ver su detalle. Corrección del
+  asistente SIAT (sucursal 0 repetida) aplicada en el VPS: `mira_sale_siat` 19.0.1.0.1.
+
 - **Aviso de listas de precios en Ajustes (23/11/2026, `mirabilenet_pos`):** al abrir Ajustes
   salía «se archivarán todas las listas de precios activas» y, al guardar cualquier ajuste,
   Odoo archivaba la lista de las sucursales (la caja habría cobrado los planes). Ahora el
